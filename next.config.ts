@@ -4,6 +4,8 @@ const nextConfig: NextConfig = {
   // Avsluttende skråstrek håndteres i src/proxy.ts sammen med migrerings-redirects,
   // slik at gamle WordPress-URL-er (/om-oss/kontakt/) går til endelig mål i ETT hopp.
   skipTrailingSlashRedirect: true,
+  // Redaksjonelle markdown-filer leses fra disk på serveren
+  outputFileTracingIncludes: { "/**": ["./content/**/*"] },
   poweredByHeader: false,
   images: {
     formats: ["image/avif", "image/webp"],

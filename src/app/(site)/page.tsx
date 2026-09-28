@@ -1,11 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ProjectTeaser } from "@/components/blocks";
 import { JsonLd } from "@/components/JsonLd";
 import { content } from "@/lib/content/repository";
 import { localBusiness } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { displayPhone } from "@/lib/site/settings";
 import { primaryCta } from "@/lib/site/navigation";
+import { projectImages } from "@/lib/site/pages";
 
 export const metadata = buildMetadata({
   title: "Kontorcompaniet – fra idé til ferdig arbeidsplass",
@@ -23,9 +25,11 @@ const steps = [
 ] as const;
 
 export default async function HomePage() {
-  const [settings, solutions, brands, people] = await Promise.all([
+  const [settings, solutions, brands, people, categories, projects] = await Promise.all([
     content.getSiteSettings(), content.listSolutions(), content.listBrands(), content.listPeople(),
+    content.listCategories(), content.listProjects(),
   ]);
+  const featured = projects.find((p) => p.featured);
   const advisor = people.find((p) => p.handles.includes("salg")) ?? people[0];
   const p1 = solutions.filter((s) => s.priority === "P1" && s.group === "rom");
 
@@ -67,10 +71,31 @@ export default async function HomePage() {
 
       <section className="band sand tight" aria-labelledby="h-sol">
         <div className="wrap">
-          <div className="sec-head"><div className="stack"><span className="eyebrow">Løsninger</span><h2 id="h-sol">Hva trenger dere hjelp med?</h2></div></div>
-          <ul className="chips">{p1.map((s) => <li key={s.slug}><span>{s.name}</span></li>)}</ul>
+          <div className="sec-head"><div className="stack"><span className="eyebrow">Løsninger</span><h2 id="h-sol">Hva trenger dere hjelp med?</h2></div><Link className="textlink" href="/losninger">Alle løsninger</Link></div>
+          <ul className="chips">{p1.map((s) => <li key={s.slug}><Link href={`/losninger/${s.slug}`}>{s.name}</Link></li>)}</ul>
         </div>
       </section>
+
+      <section className="band" aria-labelledby="h-kat">
+        <div className="wrap">
+          <div className="sec-head">
+            <div className="stack"><span className="eyebrow">Møbler</span><h2 id="h-kat">Møbler fra produsenter vi kjenner</h2></div>
+            <Link className="textlink" href="/merkevarer">Alle {brands.length} merker</Link>
+          </div>
+          <ul className="rows">
+            {categories.map((c) => (
+              <li key={c.slug}><Link href={`/produkter/${c.slug}`}><span className="row-title">{c.name}</span>
+                <span className="row-text">{brands.filter((b) => b.hasPage && b.categories.includes(c.slug)).map((b) => b.name).slice(0, 4).join(", ")}</span></Link></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {featured && (
+        <section className="band tight" aria-label="Prosjekt">
+          <div className="wrap"><ProjectTeaser project={featured} image={projectImages[featured.slug]?.[0]} /></div>
+        </section>
+      )}
 
       <section className="band" aria-labelledby="h-proc">
         <div className="wrap">

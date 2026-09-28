@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "redirects:build": "tsx scripts/build-redirects.ts",
-    "db:test": "bash scripts/db-test.sh"
+    "db:test": "bash scripts/db-test.sh",
+    "gates": "tsx --conditions=react-server scripts/gate-report.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

@@ -2,42 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { captureAttribution, readAttribution, track } from "@/lib/client/attribution";
 import type { FollowUp, ScoutNeed, SummaryLine } from "@/lib/scout/need";
 
 type Step = "input" | "confirm" | "contact" | "done";
 type Parsed = { need: ScoutNeed; summary: SummaryLine[]; questions: FollowUp[] };
 
 const EXAMPLE = "Vi trenger ca. 30 ergonomiske kontorstoler fra HÅG eller RH, maks 4–5 000 kr per stol. Oslo/Drammen. Vi trenger dem før november.";
-const ATTR_KEY = "kc_attr";
-
-function readAttribution(): Record<string, string> {
-  try {
-    const saved = sessionStorage.getItem(ATTR_KEY);
-    if (saved) return JSON.parse(saved);
-  } catch { /* lagring kan være blokkert */ }
-  return {};
-}
-
-/** Lagrer UTM/referrer/landingsside for denne økten (sendes kun med skjemaet brukeren selv sender) */
-function captureAttribution() {
-  try {
-    if (sessionStorage.getItem(ATTR_KEY)) return;
-    const p = new URLSearchParams(location.search);
-    const a: Record<string, string> = { landing_page: location.pathname };
-    for (const k of ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid"]) {
-      const v = p.get(k);
-      if (v) a[k] = v.slice(0, 300);
-    }
-    if (document.referrer && !document.referrer.startsWith(location.origin)) a.referrer = document.referrer.slice(0, 300);
-    sessionStorage.setItem(ATTR_KEY, JSON.stringify(a));
-  } catch { /* ignorer */ }
-}
-
-function track(name: "scout_started") {
-  try {
-    navigator.sendBeacon?.("/api/events", new Blob([JSON.stringify({ name, path: location.pathname })], { type: "application/json" }));
-  } catch { /* ignorer */ }
-}
 
 export function ScoutFlow({ voiceEnabled, initialText = "", phone }: { voiceEnabled: boolean; initialText?: string; phone: string }) {
   const [step, setStep] = useState<Step>("input");

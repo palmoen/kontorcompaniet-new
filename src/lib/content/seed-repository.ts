@@ -1,6 +1,6 @@
 import { defaultSiteSettings } from "@/lib/site/settings";
 import type { ContentRepository } from "./repository";
-import { seedBrands, seedCategories, seedPeople, seedProjects, seedSolutions, seedTestimonials } from "./seed";
+import { seedBrands, seedCategories, seedPeople, seedProducts, seedProjects, seedSolutions, seedTestimonials } from "./seed";
 
 export const seedRepository: ContentRepository = {
   async getSiteSettings() { return defaultSiteSettings; },
@@ -8,7 +8,10 @@ export const seedRepository: ContentRepository = {
   async listBrands() { return seedBrands; },
   async listSolutions() { return [...seedSolutions].sort((a, b) => a.sort - b.sort); },
   async listProjects() { return seedProjects; },
-  async listProductCards() { return []; }, // produktkort legges inn i fase 3/4
+  async listProductCards(filter) {
+    return seedProducts.filter((p) =>
+      (!filter?.brandSlug || p.brandSlug === filter.brandSlug) && (!filter?.categorySlug || p.categorySlug === filter.categorySlug));
+  },
   async listTestimonials() {
     return seedTestimonials
       .filter((t) => t.permissionConfirmed)

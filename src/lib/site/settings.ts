@@ -26,7 +26,7 @@ export type SiteSettings = {
 export const defaultSiteSettings: SiteSettings = {
   companyName: "Kontorcompaniet",
   legalName: "Kontorcompaniet AS",
-  orgNumber: null,
+  orgNumber: "930 584 630",
   streetAddress: "Tollbugata 115",
   addressNote: "Inngang A, 2. etg.",
   postalCode: "3041",

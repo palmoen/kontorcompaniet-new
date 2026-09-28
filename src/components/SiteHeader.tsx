@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { liveNav, primaryCta } from "@/lib/site/navigation";
+import { ProjectListLink } from "./AddToProject";
 import { MenuButton } from "./MenuButton";
 
 export function SiteHeader() {
@@ -15,6 +16,7 @@ export function SiteHeader() {
             <Link key={item.href} href={item.href}>{item.label}</Link>
           ))}
         </nav>
+        <ProjectListLink />
         <Link className="btn btn-primary header-cta" href={primaryCta.href}>{primaryCta.label}</Link>
         <MenuButton />
       </div>

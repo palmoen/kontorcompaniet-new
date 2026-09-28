@@ -113,6 +113,14 @@ export function article(opts: { headline: string; path: string; datePublished?: 
   };
 }
 
+export function faqPage(items: { q: string; a: string }[]): Thing {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  };
+}
+
 /** Trygg serialisering for <script type="application/ld+json"> (hindrer </script>-injeksjon) */
 export function serializeJsonLd(data: Thing | Thing[]): string {
   return JSON.stringify(data).replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/&/g, "\\u0026");

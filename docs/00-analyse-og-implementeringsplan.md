@@ -318,13 +318,24 @@ Prioritet: **de nye sidene og Møbelscout.** Produktsidene er en egen, senere fa
 | **0b — Designprototype** ✅ | Forside, kategori, merke, prosjekt og Møbelscout (landing, flyt og treff) | Visuell retning godkjent |
 | **1 — Fundament** ✅ | Next.js 16, designsystem, Supabase-skjema med RLS (testet), SEO-grunnmur, redirect-motor (alle gamle URL-er testet), repository-lag, admin-skall, CI med Lighthouse-budsjett | Grønn CI, Lighthouse-budsjett aktivt |
 | **2 — Møbelscout vertical slice** ✅ | Input (tekst og tale) → AI → bekreftelse → kontakt → Scout → mock-kilde → match (inkl. delvis treff) → resultat → «Interessant» → admin → sporing i hele trakten ([05 – drift](05-mobelscout-drift.md)) | Full trakt ende til ende med tester |
-| **3 — Offentlige kjernesider** | Forside, løsninger (P1), kategorier som rådgivningssider med produktkort, merkesider, prosjekter (Norwegian først), om oss, kontakt, `/mobelscout`, `/brukt` og `/baerekraft` | Hele brukerreisen med ekte innhold og leads |
+| **3 — Offentlige kjernesider** ✅ (innhold under gjennomgang) | Forside, 12 løsninger, 9 kategorier som rådgivningssider med 26 produktkort, 52 merkesider, Norwegian-prosjektet, om oss, brukt, bærekraft, inspirasjon (2 migrerte artikler), salgsbetingelser og informasjonskapsler (utkast). Skjema → `crm.leads` med «Legg til i prosjekt»-liste. Alle redirect-mål svarer 200 (testet) | Hele brukerreisen med ekte innhold og leads. Indeksering styres av kvalitetsporten (`npm run gates`) |
 | **4 — Innhold og admin** | Prosjekter, løsninger og artikler. Admin for merker, kategorier, prosjekter, produktkort, redirects og SEO | Kontorcompaniet redigerer selv |
 | **5 — Lansering** | Redirect-tester (produkt-URL-er → merke/kategori), staging-crawl, sjekkliste | Live uten 404 på verdifulle URL-er |
 | **6 — Møbelscout-kilder og varsling** | Manuelle og egne kilder, partnerfeeder, samlet varsling, Donna/CRM via `domain_events` | Treff fra ekte kilder |
 | **7 — Produktsider** (senere) | Kuraterte `/produkt/`-sider (~50), prioritert etter Search Console-trafikk. Redirect-kartet genereres på nytt med `PRODUCT_PAGES_LIVE = True` | Modellsøk rangerer igjen |
 
 Fase 2 og 3 kan gå parallelt etter fase 1. Møbelscout er lagt først fordi den har mest ny logikk og mest forretningsverdi.
+
+## Status kvalitetsport (fase 3)
+
+`npm run gates` viser hvilke sider som indekseres. Per 2026-09-28 består 2 av 76 (de to migrerte artiklene). Resten har `noindex, follow` til innholdet er godt nok. Det er bevisst: vi fyller ikke på med generisk tekst.
+
+- **Løsninger og kategorier:** 200–400 ord i dag, porten krever 400. Trenger konkrete erfaringer, eksempler og tall fra dere.
+- **Løsninger uten prosjekt** (akustikk, ergonomi, stillerom, gjenbruk, leasing, service): trenger minst ett prosjekt koblet til.
+- **Merkesider:** HÅG, Vitra, Fora Form og Dencon er nær 250 ord. De øvrige 48 er enkle sider (redirect-mål) uten egen tekst.
+- **Norwegian:** trenger minst 4 bilder (har 2) og bekreftet tillatelse for sitatet.
+
+Før lansering må minst forside, hubsider, løsninger P1 og kategoriene bestå, siden disse erstatter indekserte URL-er.
 
 ## Åpne punkter
 
@@ -334,3 +345,6 @@ Fase 2 og 3 kan gå parallelt etter fase 1. Møbelscout er lagt først fordi den
 4. **Kundesitater:** bekreft at de kan brukes med navn og tittel.
 5. **Katalogen** (først aktuelt i fase 7): bekreft KEEP/ARCHIVE og velg nye modeller. **For v1:** hvilke produkter skal vises som kort på merke- og kategorisidene?
 6. **Kategorinavn:** «Kantinestoler» (i dag «Stoler») og «Sofa og lounge».
+7. **Salgsbetingelser:** utkastet er tilpasset fra dagens kjøpsbetingelser (nettbutikkdelene fjernet). Må gjennomgås før publisering.
+8. **Bilderettigheter:** interiør- og produktbildene er hentet fra dagens nettsted (trolig produsentbilder). Bekreft at de kan brukes videre.
+9. **Ice-prosjektet:** forsidebildet er fra Ice i Nydalen. Med fakta og tillatelse kan det bli prosjekt nummer to.

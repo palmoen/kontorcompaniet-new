@@ -23,7 +23,7 @@ export type CreateScoutInput = {
 };
 
 export type EventName =
-  | "cta_click" | "scout_started" | "scout_parsed" | "scout_confirmed" | "scout_activated" | "match_found" | "match_approved"
+  | "cta_click" | "contact_started" | "contact_submitted" | "scout_started" | "scout_parsed" | "scout_confirmed" | "scout_activated" | "match_found" | "match_approved"
   | "match_presented" | "match_viewed" | "match_interested" | "match_rejected" | "opportunity_qualified"
   | "scout_won" | "scout_lost" | "order_value_recorded";
 

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { displayPhone, type SiteSettings } from "@/lib/site/settings";
-import { liveNav } from "@/lib/site/navigation";
+import { footerNav, legalNav, liveNav } from "@/lib/site/navigation";
 
 export function SiteFooter({ settings }: { settings: SiteSettings }) {
   const year = new Date().getFullYear();
@@ -26,16 +26,21 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
             <ul>{liveNav().map((i) => <li key={i.href}><Link href={i.href}>{i.label}</Link></li>)}</ul>
           </div>
           <div>
+            <h2>Mer fra oss</h2>
+            <ul>{footerNav.map((i) => <li key={i.href}><Link href={i.href}>{i.label}</Link></li>)}</ul>
+          </div>
+          <div>
             <h2>Følg oss</h2>
             <ul>{social.map(([name, url]) => <li key={name}><a href={url} rel="noopener">{name[0].toUpperCase() + name.slice(1)}</a></li>)}</ul>
           </div>
           <div>
             <h2>Sertifisert</h2>
-            <ul>{settings.certifications.map((c) => <li key={c}>{c}</li>)}</ul>
+            <ul>{settings.certifications.map((c) => <li key={c}><Link href="/baerekraft">{c}</Link></li>)}</ul>
           </div>
         </div>
         <div className="legal">
-          <span>© {year} {settings.legalName} · Siden {settings.foundedYear}</span>
+          <span>© {year} {settings.legalName}{settings.orgNumber ? ` · Org.nr. ${settings.orgNumber}` : ""} · Siden {settings.foundedYear}</span>
+          <ul className="legal-links">{legalNav.map((i) => <li key={i.href}><Link href={i.href}>{i.label}</Link></li>)}</ul>
         </div>
       </div>
     </footer>

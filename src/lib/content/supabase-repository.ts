@@ -69,7 +69,7 @@ export const supabaseRepository: ContentRepository = {
   async listSolutions(): Promise<Solution[]> {
     const rows = await select<Row>("solutions_v", (q) => q.order("sort"));
     return rows.map((r) => ({
-      slug: String(r.slug), name: String(r.name), group: r.group as Solution["group"], summary: str(r.summary),
+      slug: String(r.slug), name: String(r.name), group: r.group as Solution["group"], summary: str(r.summary), categories: [],
       priority: r.priority as Solution["priority"], sort: Number(r.sort),
       seoTitle: str(r.seo_title), seoDescription: str(r.seo_description),
       robotsOverride: r.robots_override as Solution["robotsOverride"], canonicalOverride: str(r.canonical_override),
@@ -100,7 +100,7 @@ export const supabaseRepository: ContentRepository = {
     });
     return rows.map((r) => ({
       slug: String(r.slug), name: String(r.name), brandSlug: String(r.brand_slug), brandName: String(r.brand_name),
-      categorySlug: String(r.category_slug), tagline: str(r.tagline), certifications: (r.certifications as string[]) ?? [],
+      categorySlug: String(r.category_slug), tagline: str(r.tagline), image: null, featured: Boolean(r.featured), certifications: (r.certifications as string[]) ?? [],
       hasPage: Boolean(r.has_page), updatedAt: String(r.updated_at),
     }));
   },

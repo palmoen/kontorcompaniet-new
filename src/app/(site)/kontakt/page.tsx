@@ -1,5 +1,6 @@
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
+import { LeadForm } from "@/components/LeadForm";
 import { content } from "@/lib/content/repository";
 import { localBusiness } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -50,6 +51,17 @@ export default async function ContactPage() {
               </div>
             )}
           </div>
+        </div>
+      </section>
+      <section className="band sand" id="skjema" aria-labelledby="h-skjema">
+        <div className="wrap lead-grid">
+          <div className="stack" style={{ ["--st" as string]: "1rem" }}>
+            <h2 id="h-skjema">Send oss en henvendelse</h2>
+            <p className="muted measure">
+              Fortell kort hva dere trenger. Har dere lagt produkter i prosjektlisten, sendes den med. Vi svarer innen én arbeidsdag.
+            </p>
+          </div>
+          <LeadForm showList phone={displayPhone(s.phone)} />
         </div>
       </section>
       <JsonLd data={localBusiness(s)} />

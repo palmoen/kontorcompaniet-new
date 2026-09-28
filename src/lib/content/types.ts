@@ -36,7 +36,9 @@ export type ProductCard = {
   brandName: string;
   categorySlug: string;
   tagline?: string | null;
+  image?: string | null;
   certifications: string[];
+  featured?: boolean;
   hasPage: boolean; // v1: alltid false
   updatedAt: string;
 };
@@ -46,6 +48,7 @@ export type Solution = SeoFields & {
   name: string;
   group: "rom" | "tjeneste";
   summary?: string | null;
+  categories: string[]; // kategorislugs løsningen henger sammen med
   priority: "P1" | "P2";
   sort: number;
   updatedAt: string;
