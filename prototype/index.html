@@ -147,6 +147,10 @@ section.band.tight{padding-block:clamp(40px, 5vw, 72px)}
 .pcard .brand{font-family:var(--f-mono);font-size:var(--s-micro);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
 .pcard .name{font-family:var(--f-display);font-stretch:110%;font-weight:600;font-size:1.15rem;line-height:1.2}
 .pcard .fit{color:var(--ink-2);font-size:var(--s-small)}
+.pcard .ask{margin-top:8px;font-weight:600;font-size:var(--s-small);display:inline-flex;gap:.4em;align-items:center}
+.pcard .ask::after{content:"→";transition:transform .2s var(--ease)}
+.pcard:hover .ask{color:var(--signal-deep)}
+.pcard:hover .ask::after{transform:translateX(3px)}
 .pcard .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
 .tag{font-size:.74rem;border:1px solid var(--line);border-radius:99px;padding:2px 9px;color:var(--ink-2);background:var(--paper)}
 
@@ -624,171 +628,6 @@ dialog .db{padding:20px 24px 24px}
 </div>
 
 <!-- =====================================================================
-     PRODUKTSIDE – HÅG Capisco 8106
-     ===================================================================== -->
-<div class="route" data-route="produkt" hidden>
-  <div class="wrap">
-    <nav class="crumbs" aria-label="Brødsmuler"><a href="#forside">Forside</a><span aria-hidden="true">/</span><a href="#kategori">Kontorstoler</a><span aria-hidden="true">/</span><span>HÅG Capisco 8106</span></nav>
-    <div class="pdp">
-      <div class="gallery">
-        <div class="main"><img src="assets/capisco-side.webp" alt="HÅG Capisco 8106 sett fra siden, sort tekstil" width="370" height="650"></div>
-        <div class="thumb"><img src="assets/capisco-3.webp" alt="HÅG Capisco 8106 sett forfra" loading="lazy"></div>
-        <div class="thumb ctx"><img src="assets/int-skrivebord.webp" alt="Kontorstol ved hev/senk-skrivebord" loading="lazy"><span>I bruk</span></div>
-      </div>
-      <div class="pdp-info">
-        <div class="stack" style="--st:.6rem">
-          <a href="#merke" class="eyebrow" style="text-decoration:none">HÅG</a>
-          <h1>HÅG Capisco 8106</h1>
-          <p class="tagline">Sadelstolen du kan sitte på forfra, bakfra og sidelengs, eller nesten stående ved et hevet bord.</p>
-        </div>
-        <div>
-          <p class="hint" style="margin-bottom:8px">Passer til</p>
-          <div class="fitlist"><span class="tag">Aktivt arbeid</span><span class="tag">Hev/senk-pulter</span><span class="tag">Kreative miljøer</span><span class="tag">Korte og lange økter</span></div>
-        </div>
-        <div class="cta-stack">
-          <a class="btn btn-primary" href="#" data-open="quote" data-product="HÅG Capisco 8106">Be om tilbud</a>
-          <a class="btn btn-secondary" href="#" data-open="advisor" data-product="HÅG Capisco 8106">Snakk med rådgiver</a>
-          <button class="btn-quiet" type="button" data-add="HÅG Capisco 8106" style="justify-self:start">+ Legg til i prosjekt</button>
-        </div>
-        <dl class="keyfacts">
-          <div><dt>Design</dt><dd>Peter Opsvik</dd></div>
-          <div><dt>Garanti</dt><dd class="num">10 år</dd></div>
-          <div><dt>Mekanisme</dt><dd>HÅG inBalance</dd></div>
-          <div><dt>Maks brukervekt</dt><dd class="num">136 kg</dd></div>
-        </dl>
-        <div class="advisor"><div class="avatar">PM</div><p><b>Vil dere prøve den først?</b>Kom innom showroomet i Drammen, eller få en prøvestol levert til kontoret.</p></div>
-      </div>
-    </div>
-  </div>
-
-  <nav class="kobl" aria-label="Denne siden henger sammen med" style="margin-top:clamp(40px,5vw,72px)">
-    <div class="wrap">
-      <span class="kobl-label">Henger sammen med</span>
-      <ol>
-        <li><span class="here"><span class="kt">Produkt</span><span class="kn">Capisco 8106</span></span></li>
-        <li><a href="#merke"><span class="kt">Merke</span><span class="kn">HÅG</span></a></li>
-        <li><a href="#prosjekt"><span class="kt">Prosjekter</span><span class="kn">2 prosjekter</span></a></li>
-        <li><a href="#kategori"><span class="kt">Løsning</span><span class="kn">Ergonomi</span></a></li>
-        <li><a href="#" data-open="advisor" data-product="HÅG Capisco 8106"><span class="kt">Rådgiver</span><span class="kn">Pål Moen</span></a></li>
-        <li class="scout"><a href="#mobelscout"><span class="kt">Møbelscout</span><span class="kn">Brukt Capisco</span></a></li>
-      </ol>
-    </div>
-  </nav>
-
-  <nav class="subnav" aria-label="På denne siden">
-    <div class="wrap">
-      <a href="#p-om" data-scroll>Om stolen</a><a href="#p-egenskaper" data-scroll>Egenskaper</a><a href="#p-ergonomi" data-scroll>Ergonomi</a><a href="#p-muligheter" data-scroll>Muligheter</a><a href="#p-mal" data-scroll>Mål</a><a href="#p-miljo" data-scroll>Miljø og dokumentasjon</a><a href="#p-prosjekter" data-scroll>Prosjekter<span class="c">2</span></a><a href="#p-relatert" data-scroll>Relatert</a>
-    </div>
-  </nav>
-
-  <section class="band" id="p-om" aria-labelledby="h-om">
-    <div class="wrap two-col">
-      <div class="stack"><span class="eyebrow">Om stolen</span><h2 id="h-om">Laget for å bevege seg</h2></div>
-      <div class="stack" style="--st:1rem">
-        <p class="measure">Capisco er designet av Peter Opsvik og er en av HÅGs mest kjente stoler. Det sadelformede setet gjør at du kan sitte forfra i en vanlig arbeidsstilling, bakvendt lent mot ryggen, sidelengs, eller nesten stående ved et hevet bord. Tanken er enkel: den beste sittestillingen er alltid den neste.</p>
-        <p class="measure muted">Den passer særlig godt der hev/senk-pulter brukes aktivt, i kreative miljøer og for alle som vil variere stillingen gjennom dagen. Vi hjelper dere vurdere om Capisco passer som hovedstol eller som et supplement i landskapet.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="band tight" id="p-egenskaper" aria-labelledby="h-eg">
-    <div class="wrap">
-      <div class="sec-head"><div class="stack"><span class="eyebrow">Egenskaper</span><h2 id="h-eg">Det som skiller Capisco</h2></div></div>
-      <div class="features">
-        <div><h3>Sadelsete</h3><p>Gir plass til flere sittestillinger og en åpnere vinkel i hoften.</p></div>
-        <div><h3>HÅG inBalance</h3><p>Ryggen og setet følger bevegelsene dine. Motstanden justeres etter kroppsvekt.</p></div>
-        <div><h3>Separat rygghøyde</h3><p>Ryggstøtten justeres uavhengig av sittehøyden.</p></div>
-        <div><h3>Justerbar setedybde</h3><p>2–3 fingerbredder mellom knehase og setekant, uansett stilling.</p></div>
-        <div><h3>Låsbar vipp</h3><p>Fast stilling når du trenger stabilitet i konsentrert arbeid.</p></div>
-        <div><h3>Buede fotplater</h3><p>Femarmet aluminiumsfot på Ø73 cm med plass til føttene.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="band sand" id="p-ergonomi" aria-labelledby="h-erg">
-    <div class="wrap two-col">
-      <div class="stack"><span class="eyebrow">Ergonomi</span><h2 id="h-erg">Riktig innstilt på fem minutter</h2></div>
-      <div class="stack" style="--st:1rem">
-        <p class="measure">Juster i denne rekkefølgen første gang: sittehøyde, setedybde, rygghøyde og til slutt vippespenning. Ved levering stiller vi inn stolene sammen med de ansatte.</p>
-        <p><a class="textlink" href="https://guides.kontorcompaniet.no/hag/capisco-8106/">Åpne brukerguiden for Capisco 8106</a></p>
-      </div>
-    </div>
-  </section>
-
-  <section class="band tight" id="p-muligheter" aria-labelledby="h-mul">
-    <div class="wrap two-col">
-      <div class="stack" style="--st:.8rem"><span class="eyebrow">Muligheter</span><h2 id="h-mul">Tilpasses i tilbudet</h2><p class="muted">Dette viser hva som finnes. Vi hjelper dere velge riktig utførelse når vi lager tilbudet.</p></div>
-      <div class="options">
-        <div class="option"><b>Tekstiler og farger</b><span class="muted">Stort utvalg fra HÅGs tekstilkart, også gjenvunnet ull og skinn.</span></div>
-        <div class="option"><b>Fotkryss</b><span class="muted">Flere farger og materialer.</span></div>
-        <div class="option"><b>Høyde</b><span class="muted">Varianter for vanlig skrivebordshøyde og for ståbord.</span></div>
-        <div class="option"><b>Tilvalg</b><span class="muted">Armlener, nakkestøtte og hjul for ulike gulv.</span></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="band tight" id="p-mal" aria-labelledby="h-mal">
-    <div class="wrap two-col">
-      <div class="stack"><span class="eyebrow">Mål</span><h2 id="h-mal">Spesifikasjoner</h2></div>
-      <div style="overflow-x:auto">
-        <table class="specs">
-          <tbody>
-            <tr><th scope="row">Sittehøyde</th><td>47–65,5 cm</td></tr>
-            <tr><th scope="row">Setedybde</th><td>37–46 cm</td></tr>
-            <tr><th scope="row">Setebredde</th><td>49 cm</td></tr>
-            <tr><th scope="row">Fotkryss</th><td>Ø 73 cm</td></tr>
-            <tr><th scope="row">Maks brukervekt</th><td>136 kg</td></tr>
-            <tr><th scope="row">Garanti</th><td>10 år</td></tr>
-          </tbody>
-        </table>
-        <p class="hint" style="margin-top:10px">Kilde: HÅG. Verdiene gjelder standardutførelse.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="band sand" id="p-miljo" aria-labelledby="h-miljo">
-    <div class="wrap two-col">
-      <div class="stack"><span class="eyebrow">Miljø og dokumentasjon</span><h2 id="h-miljo">Dokumentert, ikke bare lovet</h2></div>
-      <div class="stack" style="--st:1.2rem">
-        <div class="certs"><span class="cert">EPD</span><span class="cert">Møbelfakta</span><span class="cert">Norsk design</span> <span class="example">Eksempeldata</span></div>
-        <ul class="docs">
-          <li><div><b>Miljøvaredeklarasjon (EPD)</b><br><span>PDF fra produsent</span></div><a class="textlink" href="#p-miljo">Last ned</a></li>
-          <li><div><b>Produktdatablad</b><br><span>Mål, materialer og tilvalg</span></div><a class="textlink" href="#p-miljo">Last ned</a></li>
-          <li><div><b>Brukerguide</b><br><span>guides.kontorcompaniet.no</span></div><a class="textlink" href="https://guides.kontorcompaniet.no/hag/capisco-8106/">Åpne</a></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="band" id="p-prosjekter" aria-labelledby="h-pp">
-    <div class="wrap">
-      <div class="sec-head"><div class="stack"><span class="eyebrow">I prosjekter</span><h2 id="h-pp">Brukt i 2 av prosjektene våre <span class="example">Eksempelkobling</span></h2></div><a class="textlink" href="#prosjekt">Alle prosjekter</a></div>
-      <div class="grid g-2">
-        <a class="prj" href="#prosjekt"><div class="im"><img src="assets/norwegian-hq.webp" alt="Norwegians hovedkontor på Fornebu" loading="lazy"></div><div class="meta"><span>Norwegian</span><span>Fornebu</span></div><h3>750 arbeidsplasser på Fornebu</h3></a>
-        <a class="prj" href="#prosjekt"><div class="im"><img src="assets/ice.webp" alt="Kontorlandskap hos Ice" loading="lazy"></div><div class="meta"><span>Ice</span><span>Nydalen</span></div><h3>Nye lokaler i Nydalen</h3></a>
-      </div>
-    </div>
-  </section>
-
-  <section class="band sand" id="p-relatert" aria-labelledby="h-rel">
-    <div class="wrap">
-      <div class="sec-head"><div class="stack"><span class="eyebrow">Relatert</span><h2 id="h-rel">Mer fra HÅG, og alternativer</h2></div><a class="textlink" href="#kategori">Alle kontorstoler</a></div>
-      <div class="grid g-4">
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/futu.webp" alt="HÅG Futu Mesh" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Futu Mesh</span><span class="fit">Hele arbeidsdagen</span></div></a>
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/tribute.webp" alt="HÅG Tribute" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Tribute</span><span class="fit">Høy rygg, med eller uten nakkestøtte</span></div></a>
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/sofi.webp" alt="HÅG Sofi Mesh" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Sofi Mesh</span><span class="fit">Allsidig og norskprodusert</span></div></a>
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/id-trim.webp" alt="Vitra ID Trim" loading="lazy"></div><div class="pb"><span class="brand">Vitra · alternativ</span><span class="name">ID Trim</span><span class="fit">Fleksible arbeidsplasser</span></div></a>
-      </div>
-    </div>
-  </section>
-
-  <div class="split-band">
-    <div class="new"><div class="inner"><span class="eyebrow">Nytt</span><h2>Trenger dere mange?</h2><p class="muted">Vi setter sammen riktig utførelse, leverer og stiller inn stolene hos dere.</p><a class="btn btn-primary" href="#" data-open="quote" data-product="HÅG Capisco 8106">Be om tilbud</a></div></div>
-    <div class="used"><div class="inner"><span class="eyebrow">Brukt</span><h2>Vil dere heller ha brukt Capisco?</h2><p class="muted">Møbelscout leter etter brukte stoler for dere og sier fra når vi finner et parti som passer.</p><a class="btn btn-secondary" href="#mobelscout" data-scout-prefill="Vi ser etter brukte HÅG Capisco kontorstoler.">Sett Møbelscout på saken</a></div></div>
-  </div>
-</div>
-
-<!-- =====================================================================
      KATEGORISIDE – Kontorstoler
      ===================================================================== -->
 <div class="route" data-route="kategori" hidden>
@@ -834,12 +673,12 @@ dialog .db{padding:20px 24px 24px}
     <div class="wrap">
       <div class="sec-head"><div class="stack" style="--st:.8rem"><span class="eyebrow">Nytt</span><h2 id="h-rec">Våre anbefalte kontorstoler</h2><p class="muted">Et utvalg vi kjenner godt. Vi leverer hele sortimentet til merkene lenger ned.</p></div></div>
       <div class="grid g-3">
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/capisco-side.webp" alt="HÅG Capisco 8106" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Capisco 8106</span><span class="fit">Aktiv sitting og hev/senk-pulter</span><div class="tags"><span class="tag">10 års garanti</span></div></div></a>
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/futu.webp" alt="HÅG Futu Mesh" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Futu Mesh</span><span class="fit">Hele arbeidsdagen, pustende rygg</span><div class="tags"><span class="tag">EPD</span><span class="tag">Greenguard</span></div></div></a>
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/tribute.webp" alt="HÅG Tribute" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Tribute</span><span class="fit">Lange dager, høy rygg og nakkestøtte</span><div class="tags"><span class="tag">EPD</span><span class="tag">Møbelfakta</span></div></div></a>
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/sofi.webp" alt="HÅG Sofi Mesh" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Sofi Mesh</span><span class="fit">Allsidig, norskprodusert</span><div class="tags"><span class="tag">10 års garanti</span></div></div></a>
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/creed.webp" alt="HÅG Creed" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Creed 6006</span><span class="fit">Fullpolstret med høy ryggstøtte</span><div class="tags"><span class="tag">EPD</span><span class="tag">Greenguard</span></div></div></a>
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/id-trim.webp" alt="Vitra ID Trim" loading="lazy"></div><div class="pb"><span class="brand">Vitra</span><span class="name">ID Trim</span><span class="fit">Fleksible og delte arbeidsplasser</span><div class="tags"><span class="tag">EPD</span></div></div></a>
+        <a class="pcard" href="#" data-open="quote" data-product="HÅG Capisco 8106" aria-label="Be om tilbud på HÅG Capisco 8106"><div class="ph"><img src="assets/capisco-side.webp" alt="HÅG Capisco 8106" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Capisco 8106</span><span class="fit">Aktiv sitting og hev/senk-pulter</span><div class="tags"><span class="tag">10 års garanti</span></div><span class="ask">Be om tilbud</span></div></a>
+        <a class="pcard" href="#" data-open="quote" data-product="HÅG Futu Mesh" aria-label="Be om tilbud på HÅG Futu Mesh"><div class="ph"><img src="assets/futu.webp" alt="HÅG Futu Mesh" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Futu Mesh</span><span class="fit">Hele arbeidsdagen, pustende rygg</span><div class="tags"><span class="tag">EPD</span><span class="tag">Greenguard</span></div><span class="ask">Be om tilbud</span></div></a>
+        <a class="pcard" href="#" data-open="quote" data-product="HÅG Tribute" aria-label="Be om tilbud på HÅG Tribute"><div class="ph"><img src="assets/tribute.webp" alt="HÅG Tribute" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Tribute</span><span class="fit">Lange dager, høy rygg og nakkestøtte</span><div class="tags"><span class="tag">EPD</span><span class="tag">Møbelfakta</span></div><span class="ask">Be om tilbud</span></div></a>
+        <a class="pcard" href="#" data-open="quote" data-product="HÅG Sofi Mesh" aria-label="Be om tilbud på HÅG Sofi Mesh"><div class="ph"><img src="assets/sofi.webp" alt="HÅG Sofi Mesh" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Sofi Mesh</span><span class="fit">Allsidig, norskprodusert</span><div class="tags"><span class="tag">10 års garanti</span></div><span class="ask">Be om tilbud</span></div></a>
+        <a class="pcard" href="#" data-open="quote" data-product="HÅG Creed" aria-label="Be om tilbud på HÅG Creed"><div class="ph"><img src="assets/creed.webp" alt="HÅG Creed" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Creed 6006</span><span class="fit">Fullpolstret med høy ryggstøtte</span><div class="tags"><span class="tag">EPD</span><span class="tag">Greenguard</span></div><span class="ask">Be om tilbud</span></div></a>
+        <a class="pcard" href="#" data-open="quote" data-product="Vitra ID Trim" aria-label="Be om tilbud på Vitra ID Trim"><div class="ph"><img src="assets/id-trim.webp" alt="Vitra ID Trim" loading="lazy"></div><div class="pb"><span class="brand">Vitra</span><span class="name">ID Trim</span><span class="fit">Fleksible og delte arbeidsplasser</span><div class="tags"><span class="tag">EPD</span></div><span class="ask">Be om tilbud</span></div></a>
       </div>
     </div>
   </section>
@@ -848,11 +687,11 @@ dialog .db{padding:20px 24px 24px}
     <div class="wrap">
       <div class="sec-head"><div class="stack"><span class="eyebrow">Etter behov</span><h2 id="h-need">Hva er viktigst for dere?</h2></div></div>
       <div class="needs">
-        <a href="#produkt"><b>Aktiv sitting ved hev/senk-pult</b><span>Capisco</span></a>
-        <a href="#produkt"><b>Lange dager foran skjerm</b><span>Futu Mesh · Tribute</span></a>
-        <a href="#produkt"><b>Delte arbeidsplasser</b><span>ID Trim · Sofi Mesh</span></a>
-        <a href="#produkt"><b>Ledere og cellekontor</b><span>Tribute 9031 · Creed</span></a>
-        <a href="#produkt"><b>Dokumentert miljøprofil</b><span>Futu · Creed · Tribute</span></a>
+        <a href="#kategori"><b>Aktiv sitting ved hev/senk-pult</b><span>Capisco</span></a>
+        <a href="#kategori"><b>Lange dager foran skjerm</b><span>Futu Mesh · Tribute</span></a>
+        <a href="#kategori"><b>Delte arbeidsplasser</b><span>ID Trim · Sofi Mesh</span></a>
+        <a href="#kategori"><b>Ledere og cellekontor</b><span>Tribute 9031 · Creed</span></a>
+        <a href="#kategori"><b>Dokumentert miljøprofil</b><span>Futu · Creed · Tribute</span></a>
         <a href="#mobelscout"><b>Lavere budsjett eller ombruk</b><span>Møbelscout</span></a>
       </div>
     </div>
@@ -924,7 +763,7 @@ dialog .db{padding:20px 24px 24px}
       <span class="kobl-label">Henger sammen med</span>
       <ol>
         <li><span class="here"><span class="kt">Merke</span><span class="kn">HÅG</span></span></li>
-        <li><a href="#produkt"><span class="kt">Produkter</span><span class="kn">6 modeller</span></a></li>
+        <li><a href="#kategori"><span class="kt">Produkter</span><span class="kn">6 modeller (kort)</span></a></li>
         <li><a href="#prosjekt"><span class="kt">Prosjekter</span><span class="kn">2 prosjekter</span></a></li>
         <li><a href="#kategori"><span class="kt">Kategori</span><span class="kn">Kontorstoler</span></a></li>
         <li class="scout"><a href="#mobelscout"><span class="kt">Møbelscout</span><span class="kn">Brukt HÅG</span></a></li>
@@ -946,13 +785,13 @@ dialog .db{padding:20px 24px 24px}
     <div class="wrap">
       <div class="sec-head"><div class="stack"><span class="eyebrow">Produktfamilier</span><h2 id="h-fam">HÅG hos Kontorcompaniet</h2></div></div>
       <div class="families">
-        <a href="#produkt">Capisco<small>SADELSTOL</small></a><a href="#produkt">Tribute<small>KONTORSTOL</small></a><a href="#produkt">Futu<small>KONTORSTOL</small></a><a href="#produkt">Sofi<small>KONTORSTOL</small></a><a href="#produkt">Creed<small>KONTORSTOL</small></a><a href="#produkt">Celi<small>KANTINE/MØTE</small></a>
+        <a href="#kategori">Capisco<small>SADELSTOL</small></a><a href="#kategori">Tribute<small>KONTORSTOL</small></a><a href="#kategori">Futu<small>KONTORSTOL</small></a><a href="#kategori">Sofi<small>KONTORSTOL</small></a><a href="#kategori">Creed<small>KONTORSTOL</small></a><a href="#kategori">Celi<small>KANTINE/MØTE</small></a>
       </div>
       <div class="grid g-4" style="margin-top:36px">
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/capisco-side.webp" alt="HÅG Capisco 8106" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Capisco 8106</span><span class="fit">Aktiv sitting</span></div></a>
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/futu.webp" alt="HÅG Futu Mesh" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Futu Mesh</span><span class="fit">Hele arbeidsdagen</span></div></a>
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/tribute.webp" alt="HÅG Tribute" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Tribute</span><span class="fit">Høy rygg</span></div></a>
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/celi.webp" alt="HÅG Celi" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Celi 9100</span><span class="fit">Kantine og møterom</span></div></a>
+        <a class="pcard" href="#" data-open="quote" data-product="HÅG Capisco 8106" aria-label="Be om tilbud på HÅG Capisco 8106"><div class="ph"><img src="assets/capisco-side.webp" alt="HÅG Capisco 8106" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Capisco 8106</span><span class="fit">Aktiv sitting</span><span class="ask">Be om tilbud</span></div></a>
+        <a class="pcard" href="#" data-open="quote" data-product="HÅG Futu Mesh" aria-label="Be om tilbud på HÅG Futu Mesh"><div class="ph"><img src="assets/futu.webp" alt="HÅG Futu Mesh" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Futu Mesh</span><span class="fit">Hele arbeidsdagen</span><span class="ask">Be om tilbud</span></div></a>
+        <a class="pcard" href="#" data-open="quote" data-product="HÅG Tribute" aria-label="Be om tilbud på HÅG Tribute"><div class="ph"><img src="assets/tribute.webp" alt="HÅG Tribute" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Tribute</span><span class="fit">Høy rygg</span><span class="ask">Be om tilbud</span></div></a>
+        <a class="pcard" href="#" data-open="quote" data-product="HÅG Celi" aria-label="Be om tilbud på HÅG Celi"><div class="ph"><img src="assets/celi.webp" alt="HÅG Celi" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Celi 9100</span><span class="fit">Kantine og møterom</span><span class="ask">Be om tilbud</span></div></a>
       </div>
     </div>
   </section>
@@ -1006,7 +845,7 @@ dialog .db{padding:20px 24px 24px}
       <ol>
         <li><span class="here"><span class="kt">Prosjekt</span><span class="kn">Norwegian</span></span></li>
         <li><a href="#forside"><span class="kt">Løsninger</span><span class="kn">Kontorlandskap · Møterom · Kantine</span></a></li>
-        <li><a href="#produkt"><span class="kt">Produkter</span><span class="kn">4 produkter</span></a></li>
+        <li><a href="#kategori"><span class="kt">Produkter</span><span class="kn">4 produkter</span></a></li>
         <li><a href="#merke"><span class="kt">Merker</span><span class="kn">HÅG · Fora Form</span></a></li>
         <li><a href="#" data-open="advisor" data-product="Prosjekt som Norwegian"><span class="kt">Rådgiver</span><span class="kn">Pål Moen</span></a></li>
       </ol>
@@ -1049,10 +888,10 @@ dialog .db{padding:20px 24px 24px}
         <div><h3>Merker</h3><ul><li><a href="#merke">HÅG</a></li><li><a href="#merke">Fora Form</a></li><li><a href="#merke">Dencon</a></li></ul></div>
       </div>
       <div class="grid g-4" style="margin-top:40px">
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/futu.webp" alt="HÅG Futu Mesh" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Futu Mesh</span></div></a>
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/bud-unite.webp" alt="Fora Form Bud Unite" loading="lazy"></div><div class="pb"><span class="brand">Fora Form</span><span class="name">Bud Unite</span></div></a>
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/delta.webp" alt="Dencon Delta konferansebord" loading="lazy"></div><div class="pb"><span class="brand">Dencon</span><span class="name">Delta konferansebord</span></div></a>
-        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/city.webp" alt="Fora Form City" loading="lazy"></div><div class="pb"><span class="brand">Fora Form</span><span class="name">City</span></div></a>
+        <a class="pcard" href="#" data-open="quote" data-product="HÅG Futu Mesh" aria-label="Be om tilbud på HÅG Futu Mesh"><div class="ph"><img src="assets/futu.webp" alt="HÅG Futu Mesh" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Futu Mesh</span><span class="ask">Be om tilbud</span></div></a>
+        <a class="pcard" href="#" data-open="quote" data-product="Fora Form Bud Unite" aria-label="Be om tilbud på Fora Form Bud Unite"><div class="ph"><img src="assets/bud-unite.webp" alt="Fora Form Bud Unite" loading="lazy"></div><div class="pb"><span class="brand">Fora Form</span><span class="name">Bud Unite</span><span class="ask">Be om tilbud</span></div></a>
+        <a class="pcard" href="#" data-open="quote" data-product="Dencon Delta konferansebord" aria-label="Be om tilbud på Dencon Delta konferansebord"><div class="ph"><img src="assets/delta.webp" alt="Dencon Delta konferansebord" loading="lazy"></div><div class="pb"><span class="brand">Dencon</span><span class="name">Delta konferansebord</span><span class="ask">Be om tilbud</span></div></a>
+        <a class="pcard" href="#" data-open="quote" data-product="Fora Form City" aria-label="Be om tilbud på Fora Form City"><div class="ph"><img src="assets/city.webp" alt="Fora Form City" loading="lazy"></div><div class="pb"><span class="brand">Fora Form</span><span class="name">City</span><span class="ask">Be om tilbud</span></div></a>
       </div>
     </div>
   </section>
@@ -1271,13 +1110,13 @@ dialog .db{padding:20px 24px 24px}
 
 <nav class="protobar" aria-label="Prototype-sider">
   <b>Prototype 0b</b>
-  <a href="#forside">Forside</a><a href="#produkt">Produkt</a><a href="#kategori">Kategori</a><a href="#merke">Merke</a><a href="#prosjekt">Prosjekt</a><a href="#mobelscout">Møbelscout</a><a href="#scout-resultat">Scout-treff</a>
+  <a href="#forside">Forside</a><a href="#kategori">Kategori</a><a href="#merke">Merke</a><a href="#prosjekt">Prosjekt</a><a href="#mobelscout">Møbelscout</a><a href="#scout-resultat">Scout-treff</a>
 </nav>
 
 <script>
 (() => {
   const routes = [...document.querySelectorAll('.route')];
-  const navMap = {forside:null, produkt:'produkter', kategori:'produkter', merke:'produkter', prosjekt:'prosjekter', mobelscout:'mobelscout', 'scout-resultat':'mobelscout'};
+  const navMap = {forside:null, kategori:'produkter', merke:'produkter', prosjekt:'prosjekter', mobelscout:'mobelscout', 'scout-resultat':'mobelscout'};
 
   function show(name, scroll = true) {
     if (!routes.some(r => r.dataset.route === name)) name = 'forside';

@@ -139,7 +139,8 @@ Schema: `Service` + `BreadcrumbList` (+ `FAQPage` bare med reell FAQ).
 │ │HÅG       │ │HÅG       │ │HÅG       │ │Vitra     │   merke · modell         │
 │ │Capisco   │ │Futu Mesh │ │Tribute   │ │ID Trim   │   én linje «best til»    │
 │ │Aktiv sit.│ │Hele dagen│ │Leder/lang│ │Fleksibel │   • miljømerke           │
-│ └──────────┘ └──────────┘ └──────────┘ └──────────┘   (ingen pris, ingen kurv)│
+│ │Be om tilb│ │Be om tilb│ │Be om tilb│ │Be om tilb│   kort → tilbudsdialog   │
+│ └──────────┘ └──────────┘ └──────────┘ └──────────┘   (v1: ingen produktside)│
 ├──────────────────────────────────────────────────────────────────────────────┤
 │ H2 Etter behov    Fokusarbeid → … · Aktiv sitting → … · Delte arbeidsplasser  │
 │                   → … · Store/små brukere → …   (lenker til produkter)       │
@@ -163,7 +164,11 @@ Schema: `CollectionPage` + `ItemList` + `BreadcrumbList` (+ `FAQPage` bare med r
 
 ---
 
-## 4. Produktside `/produkt/{slug}`: B2B, ikke en nettbutikk uten kjøpsknapp
+## 4. Produktside `/produkt/{slug}`: UTSATT til egen fase
+
+> Ikke med i v1. I v1 er et produkt et **produktkort** (bilde, merke, navn, «passer til», miljømerker), og kortet åpner «Be om tilbud» med produktet forhåndsutfylt. Skissen under er grunnlaget når produktsidene bygges.
+
+### (Senere) B2B produktside, ikke en nettbutikk uten kjøpsknapp
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐

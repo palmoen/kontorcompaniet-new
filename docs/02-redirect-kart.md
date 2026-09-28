@@ -6,14 +6,22 @@
 
 ## Oppsummering
 
+> **Produktsider er utsatt (beslutning 2026-09-28).** Første versjon har ingen `/produkt/`-sider. Alle produkt-URL-er går **midlertidig** til merkesiden (når merket får egen side) eller kategorisiden. Kolonnen `senere_produktside` viser hvilken produktside hver URL skal til når produktsidene bygges. Da settes `PRODUCT_PAGES_LIVE = True` i skriptet og kartet genereres på nytt.
+
 | Handling | Antall | Hva |
 |---|---|---|
-| **KEEP** | 20 | 15 produktsider + forside, om oss, prosjekter, kontakt og produkter. Samme URL på ny plattform |
-| **301** | 93 | Kategorier, merker, sider, innlegg og attributtarkiver. **Produkter:** 16 arkiverte → relevant produkt eller kategori, 2 duplikater, 1 slug-retting (Eames DSR), 4 bruktvarer → `/brukt` og Sedus Se:flex (404 i dag) → `/merkevarer/sedus` |
-| **MERGE** | 45 | 35 produkt-URL-er → 10 produktfamilier, 8 kategorier → 4, 2 vilkårssider → 1 |
+| **KEEP** | 5 | Forside, om oss, prosjekter, kontakt og produkter. Samme URL på ny plattform |
+| **301** | 108 | Kategorier, merker, sider, innlegg og attributtarkiver, pluss **39 produkt-URL-er** (midlertidig til merke eller kategori, samt arkiverte, bruktvarer og Sedus) |
+| **MERGE** | 45 | 35 produkt-URL-er (midlertidig til merke eller kategori), 8 kategorier → 4, 2 vilkårssider → 1 |
 | **410** | 35 | 23 system- og plugin-sider, 6 leveringstid-arkiver, 6 opprinnelsesland-arkiver |
 | **AVVENTER** | 41 | Firmagaver. Venter på MerchMaker-struktur ([inventar](migration/firmagaver-inventar.csv)) |
 | **UAVKLART** | 0 | |
+
+**Midlertidige mål for produkt-URL-er:** `/merkevarer/dencon` (20), `/merkevarer/evoline` (16), `/merkevarer/vitra` (11), `/merkevarer/fora-form` (11), `/merkevarer/hag` (10), `/merkevarer/muuto` (3), `/merkevarer/abstracta` (3), `/produkter/kantinestoler` (4: Hay, Profim og designerarkiver) og `/produkter/sofa-og-lounge` (2: Fogia).
+
+**Hvorfor merkesiden:** noen som søker etter «HÅG Capisco» eller «Dencon Delta», er nærmere merket enn kategorien. Merkesiden viser modellen som kort med «Be om tilbud».
+
+**Kostnad:** søk på konkrete modellnavn rangerer svakere til produktsidene kommer. Når Search Console-data foreligger, ser vi hvilke gamle produkt-URL-er som faktisk har trafikk. De er de første kandidatene når produktsidene bygges.
 
 Skriptet stopper hvis et mål selv er en redirect-kilde, så redirect-kjeder kan ikke oppstå. Ingen URL videresendes til forsiden. Ingen URL videresendes til en side uten faglig sammenheng.
 
@@ -30,9 +38,9 @@ Skriptet stopper hvis et mål selv er en redirect-kilde, så redirect-kjeder kan
 6. **Firmagaver:** A = samme produkt i MerchMaker, B = tilsvarende MerchMaker-kategori, C = 410 bare når ingen relevant erstatning finnes.
 7. **Search Console avgjør rekkefølgen for manuell kontroll.** Kolonnene `gsc_klikk_16m` og `backlinks` fylles inn når dataene foreligger, og alle URL-er med klikk eller lenker kontrolleres manuelt før lansering.
 
-## Produkter: kuratert katalog
+## Produkter: kuratert katalog (for fasen med produktsider)
 
-Ny plattform er ikke en nettbutikk, så katalogen **kurateres** ([`produktkatalog-vurdering.csv`](migration/produktkatalog-vurdering.csv)). Resultatet er 26 produktsider fra dagens data.
+Gjelder **når produktsidene bygges**. Frem til da er målet midlertidig merke eller kategori (se over). Ny plattform er ikke en nettbutikk, så katalogen **kurateres** ([`produktkatalog-vurdering.csv`](migration/produktkatalog-vurdering.csv)). Resultatet er 26 produktsider fra dagens data.
 
 | Ny produktside | Gamle URL-er | Beslutning |
 |---|---|---|

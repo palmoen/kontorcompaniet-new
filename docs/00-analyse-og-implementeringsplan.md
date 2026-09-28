@@ -1,6 +1,6 @@
 # Nye Kontorcompaniet.no + Møbelscout — Analyse og implementeringsplan
 
-**Status:** Fase 0 levert (v3, 2026-09-28), med presiseringen *«ikke en nettbutikk»* innarbeidet. Designprototype 0b ligger i [`prototype/`](../prototype/). Ingen applikasjonskode er skrevet.
+**Status:** Fase 0 levert (v3, 2026-09-28), med presiseringen *«ikke en nettbutikk»* innarbeidet. Designprototype 0b ligger i [`prototype/`](../prototype/). **Produktsider er utsatt** (beslutning 16). Ingen applikasjonskode er skrevet.
 **Grunnlag:** full crawl av kontorcompaniet.no 2026-09-28 + offentlige WordPress/WooCommerce-API-er.
 
 | Dokument | Innhold |
@@ -40,6 +40,7 @@
 | 13 | **Ikke nettbutikk** | WooCommerce gjenskapes ikke. Produktene brukes til SEO, inspirasjon og leads. CTA-ene er «Be om tilbud», «Snakk med rådgiver» og «Legg til i prosjekt», og aldri «Kjøp» eller «Legg i handlekurv». Pris er et valgfritt felt. Ingen varianter som SKU-er. |
 | 14 | Kuratert katalog | Hvert WooCommerce-produkt vurderes som KEEP, MERGE, REDIRECT eller ARCHIVE. Målet er ~50 svært gode produktsider, ikke flest mulig. |
 | 15 | Kjernen | Koblingen **produkt ↕ prosjekt ↕ løsning ↕ merkevare ↕ rådgivning ↕ Møbelscout** styrer datamodell, internlenking og design. |
+| 16 | **Produktsider utsatt** | Første versjon har ingen `/produkt/`-sider. Produktsidene bygges i sin helhet i en egen, senere fase. Til da vises produktene som kort (med «Be om tilbud») på kategori-, merke- og prosjektsider, og gamle produkt-URL-er går midlertidig med 301 til merke- eller kategorisiden. **Prioritet i v1: de nye sidene og Møbelscout.** |
 
 ## Hva vi ikke bygger
 
@@ -51,6 +52,7 @@
 | Pris- og variantmotor (SKU per størrelse, farge og understell) | `product_options` som *viser mulighetene*. Konfigurasjon skjer i tilbudet |
 | Løpende vedlikehold av utsalgspriser | Valgfritt «Fra x kr eks. mva.» med kontrolldato, ellers ingen pris |
 | «Legg i handlekurv» | «Legg til i prosjekt»: en forespørselsliste uten pris som sendes som én prosjektforespørsel |
+| Produktsider i v1 | Produktkort med «Be om tilbud» på kategori-, merke- og prosjektsider. Produktsidene kommer i egen fase |
 | Checkout på Scout-treff | «Dette er interessant» → Kontorcompaniet verifiserer → tilbud |
 
 ## Kjernen: koblingsmodellen
@@ -64,13 +66,15 @@
    └────┬─────┘   └──────┬──────┘   └─────┬─────┘
         │                │                │
         └──────────►┌────┴─────┐◄─────────┘
-                    │ PRODUKT  │
+                    │ PRODUKT* │
                     └────┬─────┘
                          │  «Vil dere heller ha brukt?»
                     ┌────┴──────┐
                     │MØBELSCOUT │ → treff → «Interessant» → rådgiver → tilbud
                     └───────────┘
 ```
+
+\* I v1 er produktet et kort (data, uten egen side) som vises på merke-, kategori- og prosjektsider og brukes av Møbelscout til komplettering. Når produktsidene kommer, får koblingen også en egen side.
 
 Hver kobling er en tabell i datamodellen (`project_products`, `project_solutions`, `project_brands`, `product_solutions`, `brand_categories`) og vises som en seksjon på begge sider av koblingen. Én redigering i admin, for eksempel «RH Logic ble brukt i prosjekt X», gir lenker på prosjekt-, produkt-, merke- og løsningssiden samtidig.
 
@@ -153,7 +157,7 @@ Alle URL-er er klassifisert i `url-inventar.csv`:
 
 | Type | Antall | Verdi | Behandling |
 |---|---|---|---|
-| Produkt (kontor/brukt) | 75 | **Høy** for kjente modeller | Kuratert: **26 produktsider** (16 KEEP, 35 URL-er MERGE, 2 REDIRECT). 16 ARCHIVE går til relevant produkt, og 4 bruktvarer til `/brukt` |
+| Produkt (kontor/brukt) | 75 | **Høy** for kjente modeller | **v1:** 301 midlertidig til merke- eller kategorisiden. **Senere:** 26 kuraterte produktsider (se E) |
 | Kategori | 19 | **Høy** (hovedsøkeord) | 301/MERGE til 8 nye kategorier |
 | Merke (produktkategori/brands) | 13 | Middels–høy | 301 til `/merkevarer/{merke}` |
 | Innholdssider | 20 | Høy for om oss, kontakt, prosjekter og leverandører | KEEP/301 |
@@ -165,6 +169,8 @@ Alle URL-er er klassifisert i `url-inventar.csv`:
 Search Console-data vil **justere prioriteten**, ikke ta prinsippene: URL-er med klikk eller backlinks verifiseres manuelt før lansering.
 
 ## E. Produktaudit og kuratert katalog
+
+> **Utsatt til fasen med produktsider.** Vurderingen under brukes da. I v1 brukes produktdataene bare til kort og til Møbelscout-komplettering, og gamle produkt-URL-er går midlertidig til merke- eller kategorisiden ([02 – Redirect-kart](02-redirect-kart.md)).
 
 **109 produkter i dag:** 69 kontorprodukter, 4 brukt/utstilling og 36 firmagaver. Den nye katalogen **importerer ikke alt automatisk**. Hvert produkt er vurdert i [`produktkatalog-vurdering.csv`](migration/produktkatalog-vurdering.csv):
 
@@ -304,17 +310,21 @@ Kildene tas i bruk i denne rekkefølgen: `mock` → `manual` (CSV/skjema i admin
 
 ## K. Faser
 
+Prioritet: **de nye sidene og Møbelscout.** Produktsidene er en egen, senere fase.
+
 | Fase | Innhold | Ferdig når |
 |---|---|---|
-| **0 — Data** ✅ | Crawl, inventar, redirect-kart, sitemap, datamodell, wireframes | Godkjent av deg |
-| **0b — Designprototype** ✅ levert | Statisk prototype: forside, produkt, kategori, merke, prosjekt og Møbelscout (landing, bekreftelse, resultat) | Visuell retning godkjent |
+| **0 — Data** ✅ | Crawl, inventar, redirect-kart, sitemap, datamodell, wireframes | Godkjent |
+| **0b — Designprototype** ✅ | Forside, kategori, merke, prosjekt og Møbelscout (landing, flyt og treff) | Visuell retning godkjent |
 | **1 — Fundament** | Next.js, designsystem, Supabase-skjema med RLS, SEO-primitiver, repository-lag, admin-skall, CI | Grønn CI, Lighthouse-budsjett aktivt |
-| **2 — Offentlig vertical slice** | Forside, én løsning, én kategori, tre produkter, Norwegian-prosjektet, én merkeside, kontakt/lead | Hele brukerreisen med ekte innhold |
-| **3 — Møbelscout vertical slice** | Input (tekst og tale) → AI → bekreftelse → kontakt → Scout → mock-kilde → match → resultat → «Interessant» → admin | Full trakt ende til ende med sporing |
-| **4 — Migrering** | Kuratert import (KEEP/MERGE), redaksjonell produkttekst P1 → P2, nye modellsider opp mot ~50, merker, kategorier som rådgivningssider, prosjekter, løsninger og artikler | Staging komplett, kvalitetsport grønn |
-| **5 — Admin** | Full redigering av produkter, prosjekter, redirects og SEO | Kontorcompaniet redigerer selv |
-| **6 — Lansering** | Redirect-tester, staging-crawl, sjekkliste | Live uten verditap |
-| **7 — Utvidelse** | Egne og manuelle Scout-kilder, varsling, Donna/CRM, lokale sider der data finnes | Målbar trakt til omsetning |
+| **2 — Møbelscout vertical slice** | Input (tekst og tale) → AI → bekreftelse → kontakt → Scout → mock-kilde → match (inkl. delvis treff) → resultat → «Interessant» → admin → sporing i hele trakten | Full trakt ende til ende med tester |
+| **3 — Offentlige kjernesider** | Forside, løsninger (P1), kategorier som rådgivningssider med produktkort, merkesider, prosjekter (Norwegian først), om oss, kontakt, `/mobelscout`, `/brukt` og `/baerekraft` | Hele brukerreisen med ekte innhold og leads |
+| **4 — Innhold og admin** | Prosjekter, løsninger og artikler. Admin for merker, kategorier, prosjekter, produktkort, redirects og SEO | Kontorcompaniet redigerer selv |
+| **5 — Lansering** | Redirect-tester (produkt-URL-er → merke/kategori), staging-crawl, sjekkliste | Live uten 404 på verdifulle URL-er |
+| **6 — Møbelscout-kilder og varsling** | Manuelle og egne kilder, partnerfeeder, samlet varsling, Donna/CRM via `domain_events` | Treff fra ekte kilder |
+| **7 — Produktsider** (senere) | Kuraterte `/produkt/`-sider (~50), prioritert etter Search Console-trafikk. Redirect-kartet genereres på nytt med `PRODUCT_PAGES_LIVE = True` | Modellsøk rangerer igjen |
+
+Fase 2 og 3 kan gå parallelt etter fase 1. Møbelscout er lagt først fordi den har mest ny logikk og mest forretningsverdi.
 
 ## Åpne punkter
 
@@ -322,5 +332,5 @@ Kildene tas i bruk i denne rekkefølgen: `mock` → `manual` (CSV/skjema i admin
 2. **MerchMaker-domene og URL-struktur** for firmagave-redirects.
 3. **Prosjektdata:** kunde, år, størrelse, antall arbeidsplasser, bilder og tillatelse for Norwegian, Ice, Yara, Kontorhuset og nyere prosjekter.
 4. **Kundesitater:** bekreft at de kan brukes med navn og tittel.
-5. **Katalogen:** bekreft KEEP/ARCHIVE (spesielt Dauphin, Profim og Fogia, som ikke står på leverandørlisten) og velg nye modeller opp mot ~50.
+5. **Katalogen** (først aktuelt i fase 7): bekreft KEEP/ARCHIVE og velg nye modeller. **For v1:** hvilke produkter skal vises som kort på merke- og kategorisidene?
 6. **Kategorinavn:** «Kantinestoler» (i dag «Stoler») og «Sofa og lounge».

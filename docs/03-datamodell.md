@@ -36,6 +36,8 @@ content.people (                 -- rådgivere/ansatte (kontaktside, prosjekter,
 
 ## 2. Produktkatalog (B2B, ikke nettbutikk)
 
+> **v1: produkter uten egne sider.** Tabellen `products` brukes til produktkort (navn, merke, kategori, bilde, tagline, sertifiseringer) på merke-, kategori- og prosjektsider, til forhåndsutfylt «Be om tilbud» og til Møbelscout-komplettering («24 brukt + 6 nye»). Feltene for selve produktsiden (egenskaper, ergonomi, spesifikasjoner, dokumenter og SEO-felt) finnes i skjemaet, men fylles og publiseres først i fasen med produktsider. `products.has_page bool default false` styrer om det finnes en `/produkt/`-side.
+
 Katalogen skal **informere, rangere og skape leads**. Den har ingen salgbare SKU-er, ingen lagerstyring, ingen prismotor og ingen konfigurator. Detaljert konfigurasjon skjer i tilbudsprosessen (Workshop Studio).
 
 ```sql
@@ -76,6 +78,7 @@ content.products (
   price_checked_at date null,     -- når prisen sist ble kontrollert (skjules etter X mnd)
 
   catalog_status ('draft'|'published'|'archived'),
+  has_page bool default false,     -- v1: false for alle (kort uten egen side)
   legacy_wc_ids int[],            -- sporbarhet til WooCommerce-ID-ene som ble slått sammen
   + SEO-felt
 )

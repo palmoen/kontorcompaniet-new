@@ -190,6 +190,21 @@ for lt in ("bestillingsvare-2-3-uker", "bestillingsvare-3-5-uker", "bestillingsv
     EXACT[f"/leveringstid/{lt}/"] = (None, "410", "Leveringstid-arkiv har ingen søkeintensjon")
 
 # Designer-arkiver: 1:1 til produktet når arkivet bare har ett produkt/én familie, ellers merke
+# ---------------------------------------------------------------------------
+# Produktsider er UTSATT (besluttet 2026-09-28): v1 har ingen /produkt/-sider.
+# Katalogvurderingen over beholdes for fasen der produktsidene bygges.
+# Frem til da går hver produkt-URL (og alt som pekte på en produktside) til
+# merkesiden hvis merket får egen side ved lansering, ellers til kategorisiden.
+# Settes til True når produktsidene lanseres → kartet regenereres.
+# ---------------------------------------------------------------------------
+PRODUCT_PAGES_LIVE = False
+LAUNCH_BRANDS = {"Håg": "hag", "Vitra": "vitra", "Dencon": "dencon", "Fora Form": "fora-form", "Evoline": "evoline",
+                 "Muuto": "muuto", "Abstracta": "abstracta", "Horreds": "horreds"}
+CATEGORY_TARGET = {"Kontorstoler": "kontorstoler", "Møteromsstoler": "moteromsstoler", "Stoler": "kantinestoler",
+                   "Skrivebord – El. hev/senk": "skrivebord", "Skrivebord – Fast understell": "skrivebord",
+                   "Komponenter": "skrivebord", "Møtebord": "motebord", "Oppbevaring": "oppbevaring", "Sofa": "sofa-og-lounge",
+                   "Loungestoler": "sofa-og-lounge", "Bordskjermer": "akustikk", "Skrivebord – Tilbehør": "tilbehor"}
+
 DESIGNER = {
     "alberto-meda": "/produkt/vitra-physix",
     "andersen-og-voll": "/merkevarer/fora-form",
@@ -333,6 +348,34 @@ def main():
     ]
     for rr in rules:
         rr.update({k: "" for k in out[0] if k not in rr})
+
+    # --- Produktsider utsatt: løs /produkt/-mål til merke- eller kategoriside ---
+    if not PRODUCT_PAGES_LIVE:
+        page_target: dict[str, tuple[str, str]] = {}   # /produkt/x -> (mål, begrunnelse)
+        for slug, (dec, target, _, _) in CATALOG.items():
+            pr = prods.get(slug)
+            if not pr or not target.startswith("/produkt/"):
+                continue
+            first_cat = (pr["kategorier"].split(",")[0] or "").strip()
+            if pr["merke"] in LAUNCH_BRANDS:
+                page_target[target] = (f"/merkevarer/{LAUNCH_BRANDS[pr['merke']]}", f"merkesiden ({pr['merke']})")
+            elif first_cat in CATEGORY_TARGET:
+                page_target[target] = (f"/produkter/{CATEGORY_TARGET[first_cat]}", f"kategorisiden ({first_cat})")
+            else:
+                page_target.setdefault(target, ("/produkter/skrivebord", "nærmeste kategori"))
+        for o in out:
+            path = up.urlsplit(o["new_url"]).path.rstrip("/") if o["new_url"] else ""
+            if path.startswith("/produkt/"):
+                if path not in page_target:
+                    raise SystemExit(f"Mangler midlertidig mål for {path}")
+                tgt, why = page_target[path]
+                o["senere_produktside"] = path
+                o["new_url"] = BASE + tgt
+                if o["action"] == "KEEP":
+                    o["action"] = "301"
+                o["begrunnelse"] = f"MIDLERTIDIG (produktsider utsatt) → {why}. Senere: {path}. " + o["begrunnelse"]
+            else:
+                o["senere_produktside"] = ""
 
     # --- Validering: ingen mål kan selv være en redirect-kilde (ingen kjeder) ---
     norm = lambda u: (up.urlsplit(u).path.rstrip("/") or "/")
