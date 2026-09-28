@@ -315,8 +315,9 @@ join content.products p on p.slug = v.product join content.media_assets m on m.s
 on conflict do nothing;
 
 insert into content.projects (slug, title, client_name, client_display, location_text, year, workstations, scope,
-                              challenge_md, solution_md, result_md, video_urls, featured, sort, status, published_at) values
-  ('norwegian-fornebu', 'Norwegian: 750 arbeidsplasser på Fornebu', 'Norwegian', 'named', 'Fornebu', null, 750, 'Kontor, konferanse, kantine og sosiale soner', 'Norwegian skulle samle hovedkontoret på Fornebu: 750 arbeidsplasser med tilhørende konferanse-, kantine- og sosiale møbler, i Norwegians egen fargepalett.', 'Vi dro på leverandørbesøk for å velge tekstiler og farger som passet Norwegians profil, planla leveransen i etapper og koordinerte levering og montering.', 'Fire intense uker med montering endte med ferdigbefaring og et hovedkontor klart til bruk.', array['https://vimeo.com/kontorcompaniet']::text[], true, 1, 'published', now())
+                              challenge_md, solution_md, result_md, description_md, architect_name, architect_url,
+                              video_urls, featured, sort, status, published_at) values
+  ('norwegian-fornebu', 'Norwegian: 750 arbeidsplasser på Fornebu', 'Norwegian', 'named', 'Fornebu', null, 750, 'Kontor, konferanse, kantine og sosiale soner', 'Norwegian skulle samle hovedkontoret på Fornebu: 750 arbeidsplasser med tilhørende konferanse-, kantine- og sosiale møbler, i Norwegians egen fargepalett.', 'Vi dro på leverandørbesøk for å velge tekstiler og farger som passet Norwegians profil, planla leveransen i etapper og koordinerte levering og montering.', 'Fire intense uker med montering endte med ferdigbefaring og et hovedkontor klart til bruk.', null, null, null, array['https://vimeo.com/kontorcompaniet']::text[], true, 1, 'published', now())
 on conflict (slug) do nothing;
 
 insert into content.project_solutions (project_id, solution_id)

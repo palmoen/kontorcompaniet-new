@@ -87,6 +87,8 @@ export const supabaseRepository: ContentRepository = {
       slug: String(r.slug), title: String(r.title), clientName: str(r.client_name), location: str(r.location_text),
       year: r.year == null ? null : Number(r.year), workstations: r.workstations == null ? null : Number(r.workstations),
       scope: str(r.scope), challengeMd: str(r.challenge_md), solutionMd: str(r.solution_md), resultMd: str(r.result_md),
+      descriptionMd: str(r.description_md),
+      architect: r.architect_name ? { name: String(r.architect_name), url: str(r.architect_url) } : null,
       videoUrls: (r.video_urls as string[]) ?? [], imageCount: r.hero_media_id ? 1 : 0,
       links: links.filter((l) => l.project_slug === r.slug)
         .map((l) => ({ kind: l.kind as Project["links"][number]["kind"], slug: String(l.target_slug), name: String(l.target_name) })),

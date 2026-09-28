@@ -91,9 +91,11 @@ const out: string[] = [
   "on conflict do nothing;",
   "",
   "insert into content.projects (slug, title, client_name, client_display, location_text, year, workstations, scope,",
-  "                              challenge_md, solution_md, result_md, video_urls, featured, sort, status, published_at) values",
+  "                              challenge_md, solution_md, result_md, description_md, architect_name, architect_url,",
+  "                              video_urls, featured, sort, status, published_at) values",
   values(seedProjects.map((p, i) => [p.slug, p.title, p.clientName ?? p.title, p.clientName ? "named" : "anonymous", p.location,
-    p.year, p.workstations, p.scope, p.challengeMd, p.solutionMd, p.resultMd, p.videoUrls, p.featured, i + 1]), PUBLISHED),
+    p.year, p.workstations, p.scope, p.challengeMd, p.solutionMd, p.resultMd, p.descriptionMd, p.architect?.name, p.architect?.url,
+    p.videoUrls, p.featured, i + 1]), PUBLISHED),
   "on conflict (slug) do nothing;",
   "",
 ];

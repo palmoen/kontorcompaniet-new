@@ -65,7 +65,9 @@ export type Project = SeoFields & {
   challengeMd?: string | null;
   solutionMd?: string | null;
   resultMd?: string | null;
-  videoUrls: string[];
+  descriptionMd?: string | null;          // fast beskrivelse øverst i fortellingen
+  architect?: { name: string; url?: string | null } | null;
+  videoUrls: string[];                    // Vimeo/YouTube-lenke til én film bygges inn, andre vises som lenke
   imageCount: number;
   links: { kind: "solution" | "product" | "brand"; slug: string; name: string }[];
   featured: boolean;

@@ -137,7 +137,9 @@ content.projects (               -- /prosjekter/{slug}
   slug, title, client_name, client_display ('named'|'anonymous'), industry,
   location_text, municipality, year int, area_m2 int, workstations int,
   challenge_md, solution_md, result_md,
-  hero_media_id, video_urls text[], testimonial_id,
+  description_md,                              -- fast beskrivelse («Om prosjektet»)
+  architect_name, architect_url,                -- kreditering av arkitekt
+  hero_media_id, video_urls text[], testimonial_id,   -- Vimeo/YouTube-lenke til én film bygges inn
   featured bool, sort, + SEO-felt
 )
 content.project_media (project_id, media_id, sort, caption)
