@@ -27,7 +27,3 @@ Vitra Eames Lounge Chair er kanskje verdens mest kjente lenestol, og en fin inve
 ### Tåler tekstilene kontorbruk?
 
 Vi velger tekstiler med høy slitestyrke og som er beregnet for offentlige miljøer. Vi har prøver i showroomet.
-
-### Kan vi få brukte loungemøbler?
-
-Ja, loungemøbler av god kvalitet holder lenge. Møbelscout kan lete etter brukte møbler for dere.

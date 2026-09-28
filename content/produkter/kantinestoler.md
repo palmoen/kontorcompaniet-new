@@ -18,7 +18,7 @@ Mange kantinestoler fungerer også godt i mindre møterom og på sosiale soner. 
 
 ## Designklassikere
 
-Stoler som Vitra Eames Plastic Side Chair og Hay About a Chair er mye brukt i kantiner fordi de er solide, lette å vaske og finnes i mange farger. De er også etterspurt brukt, så Møbelscout kan ofte finne et parti.
+Stoler som Vitra Eames Plastic Side Chair og Hay About a Chair er mye brukt i kantiner fordi de er solide, lette å vaske og finnes i mange farger.
 
 ## Spørsmål vi ofte får
 

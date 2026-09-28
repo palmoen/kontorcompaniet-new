@@ -20,10 +20,6 @@ I dag er elektrisk hev/senk det vanlige for kontorarbeidsplasser. Når det er en
 
 I kontorlandskap setter vi ofte sammen bord i rekker eller klynger, med felles kabling og bordskjermer mellom arbeidsplassene. Det sparer plass og gir et roligere uttrykk.
 
-## Brukte skrivebord
-
-Hev/senk-bord av god kvalitet holder lenge, og brukte bord er et godt alternativ. Møbelscout kan lete etter brukte bord, og vi fyller opp med nye når det trengs.
-
 ## Spørsmål vi ofte får
 
 ### Hvor stort bør skrivebordet være?

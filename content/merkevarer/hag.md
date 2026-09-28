@@ -13,7 +13,6 @@ Utvalget spenner fra enkle, robuste stoler for delte arbeidsplasser til stoler m
 - **Bevegelse.** HÅGs vippefunksjon gjør det naturlig å skifte stilling i løpet av dagen, noe som er bedre for kroppen enn en «perfekt» stilling.
 - **Enkel justering.** Stolene er lette å stille inn, også der arbeidsplasser deles.
 - **Holdbarhet.** Stolene holder i mange år, og reservedeler er tilgjengelige lenge. Mange HÅG-stoler kan få nye trekk og deler i stedet for å kastes.
-- **Brukt.** HÅG er mye brukt på norske kontorer, og det finnes gode brukte stoler. Møbelscout kan lete etter brukte HÅG-stoler for dere.
 
 ## Modeller vi leverer ofte
 

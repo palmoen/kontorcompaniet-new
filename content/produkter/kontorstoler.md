@@ -22,9 +22,9 @@ I showroomet vårt i Drammen kan dere prøve flere av stolene. Ved større lever
 
 For dem som sitter mye, eller som har plager, kan en stol som fremmer aktiv sitting hjelpe. HÅG Capisco er den mest kjente, men det finnes flere. Vi hjelper dere finne ut om det passer.
 
-## Brukt eller nytt?
+## Lang levetid
 
-Gode kontorstoler holder i mange år. Trenger dere mange stoler, kan Møbelscout lete etter brukte stoler av samme modell, og vi fyller opp med nye der det mangler. Eksisterende stoler kan ofte få nye hjul, sylinder eller trekk.
+Gode kontorstoler holder i mange år. Eksisterende stoler kan ofte få nye hjul, sylinder eller trekk.
 
 ## Spørsmål vi ofte får
 

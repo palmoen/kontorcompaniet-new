@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LeadSection } from "@/components/blocks";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { ConnectionLine, type Connection } from "@/components/ConnectionLine";
 import { JsonLd } from "@/components/JsonLd";
 import { Markdown } from "@/lib/content/markdown";
 import { content } from "@/lib/content/repository";
@@ -39,79 +38,96 @@ export default async function ProjectPage({ params }: PageProps<"/prosjekter/[sl
   const quote = testimonials.find((t) => t.projectSlug === slug);
   const solutions = project.links.filter((l) => l.kind === "solution");
 
-  const links: Connection[] = [
-    { type: "Prosjekt", name: project.clientName ?? project.title },
-    ...solutions.slice(0, 3).map((l) => ({ type: "Løsning", name: l.name, href: `/losninger/${l.slug}` })),
-    ...project.links.filter((l) => l.kind === "brand").slice(0, 1).map((l) => ({ type: "Merke", name: l.name, href: `/merkevarer/${l.slug}` })),
-  ];
+  const brands = project.links.filter((l) => l.kind === "brand");
   const facts = [
-    project.clientName && ["Kunde", project.clientName],
-    project.location && ["Sted", project.location],
-    project.workstations && ["Arbeidsplasser", String(project.workstations)],
-    project.year && ["År", String(project.year)],
+    project.workstations && [String(project.workstations), "arbeidsplasser"],
+    project.location && [project.location, "sted"],
+    project.year && [String(project.year), "levert"],
+    project.clientName && [project.clientName, "kunde"],
   ].filter(Boolean) as [string, string][];
+  const chapters = [
+    ["Utgangspunktet", project.challengeMd],
+    ["Slik løste vi det", project.solutionMd],
+    ["Resultatet", project.resultMd],
+  ].filter(([, md]) => md) as [string, string][];
+  const gallery = p.images.slice(1);
 
   return (
     <>
-      <div className="wrap"><Breadcrumbs crumbs={[{ name: "Prosjekter", path: "/prosjekter" }, { name: project.clientName ?? project.title, path }]} /></div>
-      <section className="project-head">
-        <div className="wrap">
-          <h1>{project.title}</h1>
-          {p.doc?.data.lead && <p className="lead measure">{p.doc.data.lead}</p>}
-          {facts.length > 0 && (
-            <dl className="project-facts">
-              {facts.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
-            </dl>
+      <article className="case">
+        <header className="case-hero">
+          <div className="wrap"><Breadcrumbs crumbs={[{ name: "Prosjekter", path: "/prosjekter" }, { name: project.clientName ?? project.title, path }]} /></div>
+          <div className="wrap case-title">
+            <p className="kicker">Prosjekt{project.location ? ` · ${project.location}` : ""}</p>
+            <h1>{project.title}</h1>
+            {p.doc?.data.lead && <p className="lead">{p.doc.data.lead}</p>}
+          </div>
+          {p.images[0] && (
+            <div className="case-media"><Image src={p.images[0]} alt={p.doc?.data.imageAlt ?? project.title} fill priority sizes="100vw" quality={70} /></div>
           )}
-        </div>
-        {p.images[0] && (
-          <div className="wrap"><div className="project-hero"><Image src={p.images[0]} alt={p.doc?.data.imageAlt ?? project.title} fill priority sizes="100vw" quality={70} /></div></div>
-        )}
-      </section>
-      <ConnectionLine items={links} />
+        </header>
 
-      <section className="band">
-        <div className="wrap story">
-          {project.challengeMd && <div><h2>Utgangspunktet</h2><Markdown source={project.challengeMd} /></div>}
-          {project.solutionMd && <div><h2>Slik løste vi det</h2><Markdown source={project.solutionMd} /></div>}
-          {project.resultMd && <div><h2>Resultatet</h2><Markdown source={project.resultMd} /></div>}
-        </div>
-      </section>
-
-      {p.images.length > 1 && (
-        <section className="band tight">
-          <div className="wrap gallery">
-            {p.images.slice(1).map((src) => (
-              <div key={src} className="gimg"><Image src={src} alt={project.title} fill sizes="(max-width: 700px) 100vw, 50vw" quality={70} /></div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {quote && (
-        <section className="band tight">
-          <figure className="wrap quote">
-            <blockquote><p>«{quote.quote}»</p></blockquote>
-            <figcaption>{quote.personName}{quote.personTitle ? `, ${quote.personTitle}` : ""}, {quote.company}</figcaption>
-          </figure>
-        </section>
-      )}
-
-      {project.videoUrls.length > 0 && (
-        <section className="band tight">
-          <div className="wrap"><p>Se <a className="textlink" href={project.videoUrls[0]} rel="noopener">filmer fra prosjektene våre på Vimeo</a>.</p></div>
-        </section>
-      )}
-
-      {solutions.length > 0 && (
-        <section className="band tight">
+        {facts.length > 0 && (
           <div className="wrap">
-            <h2 className="list-head">Les mer om</h2>
-            <ul className="chips">{solutions.map((l) => <li key={l.slug}><Link href={`/losninger/${l.slug}`}>{l.name}</Link></li>)}</ul>
+            <dl className="case-facts">
+              {facts.map(([v, k]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
+            </dl>
+          </div>
+        )}
+
+        <section className="band" aria-label="Om prosjektet">
+          <div className="wrap case-body">
+            <aside className="case-aside">
+              {project.scope && <div><h2>Omfang</h2><p>{project.scope}</p></div>}
+              {solutions.length > 0 && (
+                <div>
+                  <h2>Leveranse</h2>
+                  <ul>{solutions.map((l) => <li key={l.slug}><Link href={`/losninger/${l.slug}`}>{l.name}</Link></li>)}</ul>
+                </div>
+              )}
+              {brands.length > 0 && (
+                <div>
+                  <h2>Merker</h2>
+                  <ul>{brands.map((l) => <li key={l.slug}><Link href={`/merkevarer/${l.slug}`}>{l.name}</Link></li>)}</ul>
+                </div>
+              )}
+            </aside>
+            <ol className="case-story">
+              {chapters.map(([title, md]) => <li key={title}><h2>{title}</h2><Markdown source={md} /></li>)}
+            </ol>
           </div>
         </section>
-      )}
 
+        {gallery.length > 0 && (
+          <section className="band tight" aria-label="Bilder fra prosjektet">
+            <div className={`wrap case-gallery n${Math.min(gallery.length, 3)}`}>
+              {gallery.map((src, i) => (
+                <div key={src} className="gimg"><Image src={src} alt={`${project.title}, bilde ${i + 2}`} fill sizes="(max-width: 700px) 100vw, 60vw" quality={70} /></div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {quote && (
+          <section className="band case-quote-band">
+            <figure className="wrap case-quote">
+              <blockquote><p>{quote.quote}</p></blockquote>
+              <figcaption><b>{quote.personName}</b>{quote.personTitle ? `, ${quote.personTitle}` : ""}<br />{quote.company}</figcaption>
+            </figure>
+          </section>
+        )}
+
+        {project.videoUrls.length > 0 && (
+          <section className="band tight">
+            <div className="wrap">
+              <div className="case-video">
+                <p>Vi filmer mange av prosjektene våre.</p>
+                <a className="btn btn-secondary" href={project.videoUrls[0]} rel="noopener">Se filmene på Vimeo</a>
+              </div>
+            </div>
+          </section>
+        )}
+      </article>
       <LeadSection settings={settings} advisor={advisor} kind="project_request" context={{ project: slug }} title="Skal dere gjøre noe lignende?" />
       <JsonLd data={article({ headline: project.title, path, image: p.images[0], dateModified: project.updatedAt })} />
     </>

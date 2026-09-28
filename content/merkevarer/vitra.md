@@ -11,7 +11,6 @@ Vitra er et sveitsisk familieeid selskap som har produsert møbler siden 1950. V
 - **Kontorstoler med karakter.** ID-serien, tegnet av Antonio Citterio, finnes i mange varianter og passer både i landskap og på cellekontor. Physix er en stol med fleksibel rygg som følger bevegelsene dine.
 - **Designklassikere som varer.** Eames Plastic Side Chair er en solid og lettstelt stol som fungerer i kantine, møterom og på sosiale soner. Eames Lounge Chair er et ikon, og en investering som holder i generasjoner.
 - **Helhet.** Med Vitra kan vi sette sammen et kontor der stoler, bord og loungemøbler hører sammen.
-- **Gjenbruk.** Vitra-møbler holder verdien godt og er etterspurt brukt. Møbelscout kan lete etter brukte Vitra-møbler for dere.
 
 ## Når vi foreslår Vitra
 

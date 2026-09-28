@@ -43,7 +43,6 @@ export default async function BrandPage({ params }: PageProps<"/merkevarer/[slug
     { type: "Merke", name: brand.name },
     ...p.categories.slice(0, 2).map((c) => ({ type: "Produkter", name: c.name, href: `/produkter/${c.slug}` })),
     ...p.projects.slice(0, 1).map((pr) => ({ type: "Prosjekt", name: pr.clientName ?? pr.title, href: `/prosjekter/${pr.slug}` })),
-    { type: "Brukt", name: `Brukt ${brand.name}`, href: `/mobelscout?behov=${encodeURIComponent(`Vi ser etter brukte møbler fra ${brand.name}. Antall: `)}`, scout: true },
   ];
 
   return (

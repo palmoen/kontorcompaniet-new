@@ -37,14 +37,11 @@ export default async function CategoryPage({ params }: PageProps<"/produkter/[ka
   const featuredBrands = p.brands.filter((b) => b.hasPage);
   const otherBrands = p.brands.filter((b) => !b.hasPage);
 
-  const scoutHref = `/mobelscout?behov=${encodeURIComponent(`Vi ser etter brukte ${category.name.toLowerCase()}. Antall: `)}`;
-
   const links: Connection[] = [
     { type: "Produkter", name: category.name },
     ...p.solutions.slice(0, 2).map((s) => ({ type: "Løsning", name: s.name, href: `/losninger/${s.slug}` })),
     ...featuredBrands.slice(0, 1).map((b) => ({ type: "Merke", name: b.name, href: `/merkevarer/${b.slug}` })),
     ...p.projects.slice(0, 1).map((pr) => ({ type: "Prosjekt", name: pr.clientName ?? pr.title, href: `/prosjekter/${pr.slug}` })),
-    { type: "Brukt", name: "Møbelscout", href: scoutHref, scout: true },
   ];
 
   return (
@@ -53,7 +50,6 @@ export default async function CategoryPage({ params }: PageProps<"/produkter/[ka
       <PageIntro title={category.name} lead={doc.data.lead} image={doc.data.image} imageAlt={doc.data.imageAlt}>
         <div className="btn-row">
           <a className="btn btn-primary" href="#foresporsel">Be om tilbud</a>
-          <Link className="btn-quiet" href={scoutHref}>Se etter brukt med Møbelscout</Link>
         </div>
       </PageIntro>
       <ConnectionLine items={links} />

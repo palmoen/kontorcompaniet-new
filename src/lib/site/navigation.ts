@@ -8,7 +8,6 @@ export const mainNav: NavItem[] = [
   { label: "Løsninger", href: "/losninger", ready: true },
   { label: "Produkter", href: "/produkter", ready: true },
   { label: "Prosjekter", href: "/prosjekter", ready: true },
-  { label: "Møbelscout", href: "/mobelscout", ready: true },
   { label: "Om oss", href: "/om-oss", ready: true },
   { label: "Kontakt", href: "/kontakt", ready: true },
 ];
@@ -21,6 +20,7 @@ export const liveNav = () => mainNav.filter((i) => i.ready);
 export const footerNav: NavItem[] = [
   { label: "Merkevarer", href: "/merkevarer", ready: true },
   { label: "Brukte møbler", href: "/brukt", ready: true },
+  { label: "Møbelscout", href: "/mobelscout", ready: true },
   { label: "Miljø og bærekraft", href: "/baerekraft", ready: true },
   { label: "Inspirasjon og råd", href: "/inspirasjon", ready: true },
 ];
