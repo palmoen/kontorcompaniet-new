@@ -60,6 +60,8 @@ describe.skipIf(!url)("Møbelscout ende-til-ende (database)", () => {
     expect(rh).toMatchObject({ covered_qty: 24, price: 3490, status: "candidate" });
     expect(matches.find((m) => m.brand === "Vitra")).toBeUndefined(); // utstillingsmodell ikke ønsket + over budsjett
     expect(matches[0].brand).toBe("RH");
+    const [futu] = await sql`select m.completion from scout.matches m join scout.items i on i.id = m.item_id where m.request_id = ${requestId} and i.brand = 'HÅG' and i.model = 'Futu'`;
+    expect(futu.completion.text).toContain("med nye HÅG Futu"); // samme merke som treffet
   });
 
   it("kunden ser ingenting før Kontorcompaniet har godkjent", async () => {

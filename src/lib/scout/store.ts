@@ -132,7 +132,7 @@ export function scoutStore(sql: Sql) {
       }));
     },
 
-    /** Nytt produkt for komplettering: publisert katalogprodukt i samme kategori, helst samme merke */
+    /** Nytt produkt for komplettering: publisert katalogprodukt i samme kategori. Merkene prioriteres i rekkefølgen de er gitt. */
     async completionProduct(scoutCategory: string, brands: string[]): Promise<{ slug: string; name: string } | null> {
       const map: Record<string, string> = {
         office_chair: "kontorstoler", meeting_chair: "moteromsstoler", canteen_chair: "kantinestoler", desk: "skrivebord",
@@ -144,7 +144,7 @@ export function scoutStore(sql: Sql) {
         select p.slug, p.name from content.products p
         join content.categories c on c.id = p.primary_category_id join content.brands b on b.id = p.brand_id
         where p.status = 'published' and c.slug = ${cat}
-        order by (lower(b.name) = any(${sql.array(brands.map((b) => b.toLowerCase()))})) desc, p.featured desc, p.sort
+        order by array_position(array(select lower(x) from unnest(${sql.array(brands)}::text[]) x), lower(b.name)) nulls last, p.featured desc, p.sort
         limit 1`;
       return row ?? null;
     },

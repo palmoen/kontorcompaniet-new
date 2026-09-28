@@ -19,8 +19,15 @@ export async function runMatching(store: ScoutStore, scope: { requestId?: string
     const results: MatchResult[] = [];
     for (const [idx, line] of req.need.items.entries()) {
       const items = await store.inventory({ itemIds: scope.itemIds, categories: [line.category] });
-      const completion = await store.completionProduct(line.category, line.brands);
+      // Komplettering: helst samme merke som varen i treffet, deretter kundens ønskede merker
+      const completionCache = new Map<string, Awaited<ReturnType<typeof store.completionProduct>>>();
+      const completionFor = async (brand: string | null) => {
+        const key = brand ?? "";
+        if (!completionCache.has(key)) completionCache.set(key, await store.completionProduct(line.category, [...(brand ? [brand] : []), ...line.brands]));
+        return completionCache.get(key)!;
+      };
       for (const item of items) {
+        const completion = await completionFor(item.brand);
         let semanticBonus = 0;
         if (ai?.judgeEquivalent && semanticBudget > 0 && needsSemanticCheck(line, item)) {
           semanticBudget--;

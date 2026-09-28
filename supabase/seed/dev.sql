@@ -11,3 +11,6 @@ insert into content.categories (slug, name, status) values ('kontorstoler', 'Kon
 insert into content.products (slug, name, brand_id, primary_category_id, status, featured)
 select 'rh-logic', 'RH Logic', b.id, c.id, 'published', true from content.brands b, content.categories c where b.slug = 'rh' and c.slug = 'kontorstoler'
 on conflict (slug) do nothing;
+insert into content.products (slug, name, brand_id, primary_category_id, status)
+select 'hag-futu', 'HÅG Futu', b.id, c.id, 'published' from content.brands b, content.categories c where b.slug = 'hag' and c.slug = 'kontorstoler'
+on conflict (slug) do nothing;
