@@ -11,7 +11,8 @@
 - **SEO:** hver side bruker `buildMetadata()` (canonical, robots) og relevante JSON-LD-byggere fra `src/lib/seo/jsonld.ts`. Nye sidetyper skal gjennom kvalitetsporten i `src/lib/seo/quality.ts` og legges i `src/app/sitemap.ts`.
 - **Navigasjon:** lenk aldri til sider som ikke finnes. Slå på `ready` i `src/lib/site/navigation.ts` når siden lanseres.
 - **Redirects:** kilden er `docs/migration/redirect-map.csv`. Etter endring: `npm run redirects:build`. Alt skal gå i ett hopp.
-- **Database:** nye migreringer i `supabase/migrations/`, med RLS på alle tabeller. Anon leser kun `public.*_v`-views. Test med `npm run db:test`.
+- **Database:** nye migreringer i `supabase/migrations/`, med RLS på alle tabeller. Anon leser kun `public.*_v`-views – nye views i public må ha eksplisitt `revoke all … from public, anon, authenticated` + `grant select` (Supabase gir ellers anon skriverett). Test med `npm run db:test`. Produksjon: `npm run db:push` (docs/06).
+- **Innhold i Supabase:** `supabase/seed/content.sql` genereres fra `src/lib/content/seed.ts` (`npm run content:seed`) og må holdes i synk. Nye felt i seed-modus må også finnes i Supabase-modus (`supabase-repository.ts` + view).
 - **Møbelscout:** kildedata (`scout.items`: URL, kildepris, kilde) vises ALDRI til kunden. Kunden ser kun `scout.result_v` (presentasjon + kundepris). Kilder aktiveres kun med juridisk godkjenning. Ingen scraping som bryter vilkår.
 - Språk i UI og innhold: norsk bokmål, jordnært og konkret. Ingen generisk AI-SEO-tekst.
 

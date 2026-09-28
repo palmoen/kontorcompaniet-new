@@ -10,6 +10,7 @@ type Row = Record<string, unknown>;
 type Query = PromiseLike<{ data: unknown[] | null; error: { message: string } | null }> & {
   order(column: string): Query;
   eq(column: string, value: string): Query;
+  in(column: string, values: string[]): Query;
 };
 
 async function select<T extends Row>(view: string, refine?: (q: Query) => Query): Promise<T[]> {
@@ -22,6 +23,9 @@ async function select<T extends Row>(view: string, refine?: (q: Query) => Query)
 }
 
 const str = (v: unknown) => (v == null ? null : String(v));
+
+/** Bilder i public/ lagres med rot-sti («/images/…»). Supabase Storage er ikke tatt i bruk ennå. */
+const mediaUrl = (path: string) => (path.startsWith("/") ? path : null);
 
 export const supabaseRepository: ContentRepository = {
   async getSiteSettings(): Promise<SiteSettings> {
@@ -67,9 +71,10 @@ export const supabaseRepository: ContentRepository = {
     }));
   },
   async listSolutions(): Promise<Solution[]> {
-    const rows = await select<Row>("solutions_v", (q) => q.order("sort"));
+    const [rows, links] = await Promise.all([select<Row>("solutions_v", (q) => q.order("sort")), select<Row>("solution_categories_v", (q) => q.order("sort"))]);
     return rows.map((r) => ({
-      slug: String(r.slug), name: String(r.name), group: r.group as Solution["group"], summary: str(r.summary), categories: [],
+      slug: String(r.slug), name: String(r.name), group: r.group as Solution["group"], summary: str(r.summary),
+      categories: links.filter((l) => l.solution_slug === r.slug).map((l) => String(l.category_slug)),
       priority: r.priority as Solution["priority"], sort: Number(r.sort),
       seoTitle: str(r.seo_title), seoDescription: str(r.seo_description),
       robotsOverride: r.robots_override as Solution["robotsOverride"], canonicalOverride: str(r.canonical_override),
@@ -98,9 +103,13 @@ export const supabaseRepository: ContentRepository = {
       if (filter?.categorySlug) x = x.eq("category_slug", filter.categorySlug);
       return x;
     });
+    // products_v gir bare publiserbare bilder (rettighetsavklart + alt-tekst); media_v gir stien
+    const mediaIds = [...new Set(rows.map((r) => str(r.primary_media_id)).filter((id): id is string => id != null))];
+    const media = mediaIds.length ? await select<Row>("media_v", (q) => q.in("id", mediaIds)) : [];
+    const paths = new Map(media.map((m) => [String(m.id), mediaUrl(String(m.storage_path))]));
     return rows.map((r) => ({
       slug: String(r.slug), name: String(r.name), brandSlug: String(r.brand_slug), brandName: String(r.brand_name),
-      categorySlug: String(r.category_slug), tagline: str(r.tagline), image: null, featured: Boolean(r.featured), certifications: (r.certifications as string[]) ?? [],
+      categorySlug: String(r.category_slug), tagline: str(r.tagline), image: paths.get(String(r.primary_media_id)) ?? null, featured: Boolean(r.featured), certifications: (r.certifications as string[]) ?? [],
       hasPage: Boolean(r.has_page), updatedAt: String(r.updated_at),
     }));
   },

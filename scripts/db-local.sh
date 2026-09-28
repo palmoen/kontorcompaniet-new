@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Lokal Postgres for utvikling og e2e: migreringer + dev-seed.
+# Lokal Postgres for utvikling og e2e: migreringer + innholdsseed + dev-seed.
 # Bruk: eval "$(bash scripts/db-local.sh start)"  → setter DATABASE_URL
 #       bash scripts/db-local.sh stop
 set -euo pipefail
@@ -17,6 +17,7 @@ case "${1:-start}" in
       PSQL=(psql "$URL" -v ON_ERROR_STOP=1 -q -X)
       "${PSQL[@]}" -f "$ROOT/supabase/tests/00_supabase_stub.sql" >/dev/null
       for f in "$ROOT"/supabase/migrations/*.sql; do "${PSQL[@]}" -f "$f" >/dev/null; done
+      "${PSQL[@]}" -f "$ROOT/supabase/seed/content.sql" >/dev/null
       "${PSQL[@]}" -f "$ROOT/supabase/seed/dev.sql" >/dev/null
     elif ! $RUNAS "$PGBIN/pg_ctl" -D "$DIR/data" status >/dev/null 2>&1; then
       $RUNAS "$PGBIN/pg_ctl" -D "$DIR/data" -o "-p $PORT -k $DIR -c listen_addresses=localhost" -l "$DIR/log" -w start >/dev/null

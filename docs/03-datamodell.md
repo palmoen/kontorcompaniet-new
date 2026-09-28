@@ -132,6 +132,7 @@ content.solutions (              -- /losninger/{slug}
   body_source ('mdx'|'db'), body_mdx_path, body_blocks jsonb,   -- flyttes fra MDX til DB uten ny kode
   hero_media_id, sort, + SEO-felt
 )
+content.solution_categories (solution_id, category_id, sort)   -- «Produkter» på løsningssiden
 content.projects (               -- /prosjekter/{slug}
   slug, title, client_name, client_display ('named'|'anonymous'), industry,
   location_text, municipality, year int, area_m2 int, workstations int,
@@ -359,7 +360,7 @@ Tilgangen går via server-kode som validerer `result_token`. Viewet eksponeres i
 
 ## 8. Offentlige views (det eneste anon kan lese)
 
-`public.products_v`, `public.categories_v`, `public.brands_v`, `public.projects_v`, `public.solutions_v`, `public.articles_v`, `public.people_v`, `public.site_settings_v` og `public.redirects_v` (for middleware).
+`public.products_v`, `public.categories_v`, `public.brands_v`, `public.projects_v`, `public.solutions_v`, `public.solution_categories_v`, `public.articles_v`, `public.people_v`, `public.site_settings_v` og `public.redirects_v` (for middleware).
 Alle filtrerer på `status = 'published'`, og `seo_status_v` beregner indekserbarhet (kvalitetsport) per rad.
 
 ## 9. RLS-matrise (kortversjon)

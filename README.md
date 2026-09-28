@@ -10,6 +10,7 @@ Neste generasjon Kontorcompaniet.no + Møbelscout.
 - [`docs/03-datamodell.md`](docs/03-datamodell.md): Supabase-skjema
 - [`docs/04-wireframes.md`](docs/04-wireframes.md): sideanatomi
 - [`docs/05-mobelscout-drift.md`](docs/05-mobelscout-drift.md): Møbelscout-oppsett, kilder, cron, prising og måling
+- [`docs/06-supabase-oppsett.md`](docs/06-supabase-oppsett.md): Supabase-prosjektet: migreringer, innholdsseed, auth, admin-brukere og miljøvariabler
 - [`docs/migration/`](docs/migration/): URL-inventar, produkter, firmagaver og merker (crawl 2026-09-28)
 - [`tools/audit/`](tools/audit/): crawler og analyse
 
@@ -32,6 +33,8 @@ npm run dev                       # http://localhost:3000
 | `TEST_DATABASE_URL=$DATABASE_URL npm test` | Enhetstester + Møbelscout-integrasjonstester mot databasen |
 | `SITE_INDEXABLE=true npm run build && npm run test:e2e` | Produksjonsbygg + Playwright (SEO, alle gamle URL-er, layout) |
 | `npm run redirects:build` | `docs/migration/redirect-map.csv` → `src/generated/redirects.json` |
+| `npm run content:seed` | `src/lib/content/seed.ts` → `supabase/seed/content.sql` (startinnhold for Supabase) |
+| `npm run db:link` / `npm run db:push` | Koble Supabase CLI til prosjektet / legg migreringer + innholdsseed på det ([docs/06](docs/06-supabase-oppsett.md)) |
 
 ### Arkitektur (fase 1)
 

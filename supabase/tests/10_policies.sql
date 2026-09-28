@@ -87,3 +87,32 @@ do $$ begin
 exception when insufficient_privilege then null; end $$;
 reset role;
 select 'OK: admin-RPC' as resultat;
+
+-- 7) Supabase-oppsett: RLS på alle interne tabeller, anon kan aldri skrive via public
+do $$ declare t text; begin
+  select string_agg(format('%I.%I', n.nspname, c.relname), ', ') into t
+  from pg_class c join pg_namespace n on n.oid = c.relnamespace
+  where c.relkind in ('r', 'p') and n.nspname in ('content', 'crm', 'scout', 'ops', 'migration') and not c.relrowsecurity;
+  assert t is null, 'tabeller uten RLS: ' || t;
+  select string_agg(format('%s på %I', p.privilege_type, p.table_name), ', ') into t
+  from information_schema.role_table_grants p
+  where p.table_schema = 'public' and p.grantee in ('anon', 'PUBLIC') and p.privilege_type <> 'SELECT';
+  assert t is null, 'anon har skriverettigheter i public: ' || t;
+  select string_agg(format('%I.%I', n.nspname, c.relname), ', ') into t
+  from pg_class c join pg_namespace n on n.oid = c.relnamespace
+  where n.nspname = 'public' and c.relkind = 'r';
+  assert t is null, 'tabeller i public (skal kun være views): ' || t;
+end $$;
+
+-- 8) løsning ↔ kategori: kun publiserte ender
+insert into content.solutions (slug, name, "group", status) values ('moterom', 'Møterom', 'rom', 'published'), ('skjult', 'Skjult', 'rom', 'draft');
+insert into content.categories (slug, name, status) values ('utkast-kategori', 'Utkast', 'draft');
+insert into content.solution_categories (solution_id, category_id)
+  select s.id, c.id from content.solutions s, content.categories c;
+set role anon;
+do $$ begin
+  assert (select count(*) from public.solution_categories_v) = 1, 'solution_categories_v viser upubliserte ender';
+  assert (select category_slug from public.solution_categories_v where solution_slug = 'moterom') = 'kontorstoler', 'feil kobling';
+end $$;
+reset role;
+select 'OK: Supabase-oppsett' as resultat;

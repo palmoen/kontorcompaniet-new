@@ -12,6 +12,9 @@
     "test:e2e": "playwright test",
     "redirects:build": "tsx scripts/build-redirects.ts",
     "db:test": "bash scripts/db-test.sh",
+    "content:seed": "tsx scripts/build-content-seed.ts",
+    "db:link": "npx -y supabase@2 link --project-ref rswtbsgnewhaxyimagvs",
+    "db:push": "npx -y supabase@2 db push --include-seed",
     "gates": "tsx --conditions=react-server scripts/gate-report.ts"
   },
   "dependencies": {
