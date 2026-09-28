@@ -1,0 +1,425 @@
+{
+ "urls_total": 234,
+ "html_parsed": 215,
+ "sitemap_urls": 212,
+ "types": {
+  "forside": 1,
+  "dato/kategori-arkiv": 5,
+  "system": 24,
+  "side": 20,
+  "kategori": 19,
+  "attributt-arkiv": 31,
+  "merke (yith)": 2,
+  "produkt-tag": 2,
+  "brukt": 2,
+  "produkt": 75,
+  "firmagave": 40,
+  "merke": 13
+ },
+ "status": {
+  "200": 204,
+  "301": 13,
+  "302": 1,
+  "500": 11,
+  "404": 5
+ },
+ "issues": {
+  "mangler meta description": 105,
+  "H1 i VERSALER": 11,
+  "N bilder uten alt": 215,
+  "title > 65 tegn": 206,
+  "i sitemap men ikke 200": 18,
+  "systemside indekserbar": 13,
+  "foreldreløs (ingen interne lenker inn)": 48,
+  "duplikat title": 13,
+  "200 men ikke i sitemap": 6,
+  "canonical peker annet sted": 4,
+  "mangler H1": 7,
+  "tynt innhold (<150 ord)": 56,
+  "i sitemap men noindex": 2,
+  "N H1": 1,
+  "duplikat description": 15,
+  "HTTP 500": 11,
+  "HTTP 404": 5,
+  "identisk innhold": 6
+ },
+ "indexable": 194,
+ "schema_types": {
+  "BreadcrumbList": 214,
+  "ImageObject": 191,
+  "Organization": 215,
+  "WebPage": 141,
+  "WebSite": 215,
+  "Article": 4,
+  "Person": 5,
+  "CollectionPage": 74,
+  "Product": 34,
+  "ProfilePage": 1
+ },
+ "param_urls_found": 3657,
+ "param_keys": [
+  [
+   "add-to-cart",
+   3656
+  ],
+  [
+   "action",
+   1
+  ]
+ ],
+ "images_unique": 422,
+ "image_status": {
+  "200": 422
+ },
+ "image_types": {
+  "image/png": 35,
+  "image/svg+xml": 2,
+  "image/jpeg": 301,
+  "image/webp": 84
+ },
+ "images_largest": [
+  [
+   977753,
+   "https://kontorcompaniet.no/wp-content/uploads/2024/05/Circle80-miljo.jpg"
+  ],
+  [
+   969428,
+   "https://kontorcompaniet.no/wp-content/uploads/2020/11/image008_2.png"
+  ],
+  [
+   938083,
+   "https://kontorcompaniet.no/wp-content/uploads/2024/05/Senso-Hoyrygg.jpg"
+  ],
+  [
+   886195,
+   "https://kontorcompaniet.no/wp-content/uploads/2020/10/8-1.png"
+  ],
+  [
+   789391,
+   "https://kontorcompaniet.no/wp-content/uploads/2020/10/7-1.png"
+  ],
+  [
+   750278,
+   "https://kontorcompaniet.no/wp-content/uploads/2020/10/6-1.png"
+  ],
+  [
+   743811,
+   "https://kontorcompaniet.no/wp-content/uploads/2020/10/4-1.png"
+  ],
+  [
+   713302,
+   "https://kontorcompaniet.no/wp-content/uploads/2020/10/3-1.png"
+  ],
+  [
+   710281,
+   "https://kontorcompaniet.no/wp-content/uploads/2020/10/10-1.png"
+  ],
+  [
+   707641,
+   "https://kontorcompaniet.no/wp-content/uploads/2020/10/2-1.png"
+  ],
+  [
+   652438,
+   "https://kontorcompaniet.no/wp-content/uploads/2024/05/Mute-Focus-High-Oak_Grey_Burgundy.jpg"
+  ],
+  [
+   600895,
+   "https://kontorcompaniet.no/wp-content/uploads/2020/10/1-1.png"
+  ],
+  [
+   591391,
+   "https://kontorcompaniet.no/wp-content/uploads/2024/06/samlet-eco-logo.jpg"
+  ],
+  [
+   577919,
+   "https://kontorcompaniet.no/wp-content/uploads/2024/05/hag-futu-straw-front.jpg"
+  ],
+  [
+   574848,
+   "https://kontorcompaniet.no/wp-content/uploads/2024/05/hag-futu-frist-front.jpg"
+  ]
+ ],
+ "img_tags_total": 15247,
+ "img_tags_missing_alt": 14246,
+ "img_tags_no_dimensions": 308,
+ "sitewide_links": [
+  "https://facebook.com/kontorcompaniet/",
+  "https://instagram.com/kontorcompaniet/",
+  "https://kontorcompaniet.no/",
+  "https://kontorcompaniet.no/butikk/",
+  "https://kontorcompaniet.no/handlekurv/",
+  "https://kontorcompaniet.no/kassen/",
+  "https://kontorcompaniet.no/kjopsbetingelsene/",
+  "https://kontorcompaniet.no/leverandorer/",
+  "https://kontorcompaniet.no/miljo-baerekraft/",
+  "https://kontorcompaniet.no/min-konto/",
+  "https://kontorcompaniet.no/om-oss/",
+  "https://kontorcompaniet.no/om-oss/kontakt/",
+  "https://kontorcompaniet.no/produkterogtjenester/",
+  "https://kontorcompaniet.no/prosjekter/",
+  "https://kontorcompaniet.no/sikkerhet-og-personvern/",
+  "https://linkedin.com/company/kontorcompaniet-as/"
+ ],
+ "external_links": {
+  "https://facebook.com/kontorcompaniet/": 409,
+  "https://instagram.com/kontorcompaniet/": 409,
+  "https://linkedin.com/company/kontorcompaniet-as/": 409,
+  "https://vitra.com/en-no/home": 2,
+  "https://flokk.com/en/norway/hag": 2,
+  "https://sedus.com/en/": 1,
+  "https://sitland.com/": 1,
+  "https://dencon.no/": 1,
+  "http://ragnars.se/": 1,
+  "https://frameryacoustics.com/en/products/": 1,
+  "https://vimeo.com/309974027": 1,
+  "https://vimeo.com/kontorcompaniet": 4,
+  "https://vimeo.com/": 4,
+  "https://vimeo.com/311175101": 1,
+  "https://vimeo.com/312498585": 1,
+  "https://vimeo.com/316655909": 1,
+  "https://osnes.no/": 2,
+  "https://gotessons.com/en/": 1,
+  "https://glimakra.com/": 1,
+  "https://abstracta.se/": 2,
+  "https://northern.no/no/": 1,
+  "https://glamox.com/no": 1,
+  "https://hjelle.no/": 1,
+  "https://jensen-beds.com/no/": 1,
+  "https://hjellegjerde.no/": 1,
+  "https://englesson.se/": 1,
+  "https://stressless.com/nb-no": 1,
+  "http://artwood.se/": 1,
+  "https://ergospace.no/": 1,
+  "https://idt.no/": 1,
+  "https://evoline.no/": 1,
+  "http://sarpsborgmetall.no/hjem-b-no": 1,
+  "https://eskoleia.no/": 1,
+  "http://sarpsborgmetall.no/hjem": 1,
+  "https://flokk.com/en/norway/rbm": 2,
+  "https://ncp.no/": 4,
+  "https://montanafurniture.com/da": 4,
+  "https://dencon.dk/": 4,
+  "http://sarpsborgmetall.no/hjem-": 2,
+  "https://randersradius.dk/": 2,
+  "https://lium.no/": 2,
+  "https://lammhults.se/": 1,
+  "http://horreds.se/?lang=en": 3,
+  "https://foraform.no/": 1,
+  "https://cube-design.dk/": 3,
+  "http://alki.fr/": 1,
+  "https://varierfurniture.com/en_no/": 2,
+  "https://sedus.com/": 2,
+  "http://savo.no/": 2,
+  "https://flokk.com/en/norway/rh": 1,
+  "http://kontorsentret.com/": 4,
+  "https://backapp.com/no/": 1,
+  "https://tacchini.it/en/": 2,
+  "https://magisdesign.com/": 2,
+  "https://lapalma.it/it": 2,
+  "https://hay.dk/en/country-selector": 1,
+  "https://fredericia.com/": 1,
+  "https://foraform.no/no": 2,
+  "https://arper.com/ww/en/": 1,
+  "https://alias.design/": 2,
+  "https://trece.se/": 1,
+  "https://primaoffice.se/": 1,
+  "https://fischer-international.no/": 1,
+  "http://fantoni.it/en/home/": 2,
+  "https://normann-copenhagen.com/en": 1,
+  "https://linkedin.com/authwall?trk=gf&trkInfo=AQHqgBZgyZYvJQAAAXWNQ6TwW6NzzOY5Z_R6FRG-4P4viwI12MqEGwoVdswQeI4D_zLV4l2rGhLnyXiX0ZZRONSeKiXeMYTKiF0sDKxMN5cIipymTL1PlW3F16yktAqebBfMB10=&originalReferer=https://kontorcompaniet.no/&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fpalmoen": 1,
+  "https://linkedin.com/authwall?trk=gf&trkInfo=AQHqgBZgyZYvJQAAAXWNQ6TwW6NzzOY5Z_R6FRG-4P4viwI12MqEGwoVdswQeI4D_zLV4l2rGhLnyXiX0ZZRONSeKiXeMYTKiF0sDKxMN5cIipymTL1PlW3F16yktAqebBfMB10=&originalReferer=https://kontorcompaniet.no/&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fcaroline-raaum-bakkelund-b7638a19b%2F": 1,
+  "https://linkedin.com/authwall?trk=gf&trkInfo=AQGkAum3nfxP9wAAAXWNJtnYcay9_Y9wGFSB8FLXnTmCqu71LpYuPCQPLjEiUEGmkc45JkOT20D9OPl_THAHMSjRpazSOd2Ln1EtELvFRWLwaWnDJ-iMUTGRt48iawSL8G6Bow8=&originalReferer=https://kontorcompaniet.no/&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fpalmoen": 1,
+  "https://linkedin.com/authwall?trk=gf&trkInfo=AQHfPfde_bG84AAAAXWNRiWQnCbtCJv5iP_RRHAVEXyYAdBONoEJeKbyb0b6GsTi3w2Upcm2oqelnUmLrqlA3YPXH0m1KOQHLnNe6WhfKnXM34IrukvgIlA3W-GrwPeQYY1w8iU=&originalReferer=https://kontorcompaniet.no/&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fcompany%2Fkontorcompaniet-as%2F": 2,
+  "http://lovdata.no/": 1,
+  "https://grontpunkt.no/medlemskap/produsentansvar": 1
+ },
+ "products": {
+  "total": 109,
+  "segments": {
+   "firmagave": 36,
+   "kontor": 69,
+   "brukt": 4
+  },
+  "brands": {
+   "Vitra": 8,
+   "Håg": 7,
+   "Profim": 1,
+   "Dencon": 20,
+   "Fora Form": 9,
+   "Hay": 1,
+   "Evoline": 16,
+   "Horreds": 3,
+   "Abstracta": 3,
+   "Fogia": 1,
+   "Muuto": 3,
+   "Dauphin": 1
+  },
+  "variable": 51,
+  "no_image": 0,
+  "desc_under_50_words": 89,
+  "slug_suffix": [
+   "retro-kjolebag-med-paskesnadder-2",
+   "olasekken-sott-og-salt-i-kjolesekken-2",
+   "olasekken-med-snadder-2",
+   "olasekken-med-paskegodt-2",
+   "paskeegg-23-cm-merkevarer-2",
+   "paskeegg-30-cm-smagodt-og-sjokolade-2",
+   "paskeegg-30-cm-smagodt-2",
+   "fora-form-kvart-motebord-240x120-2",
+   "horreds-mute-focus-low-utstillingsprodukt-2",
+   "dencon-skrivebord-120x80-cm-2",
+   "dencon-skrivebord-140x80-cm-2",
+   "muuto-outline-3-seter-3",
+   "muuto-outline-3-seter-2",
+   "hag-sofi-mesh-7500-2"
+  ],
+  "families_multi": {
+   "gullegg med italienske sjokoladekuler": [
+    "gullegg-med-italienske-sjokoladekuler-20-cm",
+    "gullegg-med-italienske-sjokoladekuler-18-cm",
+    "gullegg-med-italienske-sjokoladekuler-15-cm"
+   ],
+   "gullegg med merkesjokolade": [
+    "gullegg-med-merkesjokolade-20-cm",
+    "gullegg-med-merkesjokolade-18-cm",
+    "gullegg-med-merkesjokolade-15-cm"
+   ],
+   "påskeegg": [
+    "paskeegg-23-cm-merkevarer-2",
+    "paskeegg-18-cm-merkevarer",
+    "paskeegg-15-cm-merkevarer",
+    "paskeegg-23-cm-smagodt-og-ipb-850g",
+    "paskeegg-12-cm-klassikere",
+    "paskeegg-30-cm-smagodt-og-sjokolade-2",
+    "paskeegg-13-cm-smagodt-og-sjokolade",
+    "paskeegg-18-cm-smagodt-og-sjokolade",
+    "paskeegg-15-cm-smagodt-og-sjokolade",
+    "paskeegg-30-cm-smagodt-2",
+    "paskeegg-23-cm-smagodt",
+    "paskeegg-18-cm-smagodt",
+    "paskeegg-15-cm-smagodt",
+    "paskeegg-12-cm-smagodt"
+   ],
+   "dencon delta konferansebord": [
+    "dencon-delta-konferansebord-220x100-cm",
+    "dencon-delta-konferansebord-200x100-cm",
+    "dencon-delta-konferansebord-180x90-cm",
+    "dencon-delta-konferansebord-180x80-cm",
+    "dencon-delta-konferansebord-160x80-cm",
+    "dencon-delta-konferansebord-140x80-cm"
+   ],
+   "fora form kvart møtebord": [
+    "fora-form-kvart-motebord-260x120",
+    "fora-form-kvart-motebord-240x120-2",
+    "fora-form-kvart-motebord-240x120"
+   ],
+   "evoline rj45 cat6 utp": [
+    "evoline-rj45-cat6-utp-75m-gra",
+    "evoline-rj45-cat6-utp-5m-gra",
+    "evoline-rj45-cat6-utp-3m-gra"
+   ],
+   "evoline skjøtekabel": [
+    "evoline-skjotekabel-3m",
+    "evoline-skjotekabel-25m",
+    "evoline-skjotekabel-1m"
+   ],
+   "evoline tilførselskabel": [
+    "evoline-tilforselskabel-3m-sort",
+    "evoline-tilforselskabel-2m-sort",
+    "evoline-tilforselskabel-1m-sort"
+   ],
+   "evoline express": [
+    "evoline-express-4xel-klikksystem",
+    "evoline-express-3xschuko-klikksystem",
+    "evoline-express-2xel-klikksystem"
+   ],
+   "horreds mute focus low (utstillingsprodukt)": [
+    "horreds-mute-focus-low-utstillingsprodukt-2",
+    "horreds-mute-focus-low-utstillingsprodukt"
+   ],
+   "abstracta soneo bordskjerm": [
+    "abstracta-soneo-bordskjerm-1600x650x30-mm",
+    "abstracta-soneo-bordskjerm-1400x650x30-mm",
+    "abstracta-soneo-bordskjerm-1200x650x30-mm"
+   ],
+   "dencon uttrekksskap": [
+    "dencon-uttrekksskap-3xa4",
+    "dencon-utrekksskap-2xa4"
+   ],
+   "dencon skap": [
+    "dencon-skap-4xa4",
+    "dencon-skap-3xa4",
+    "dencon-skap"
+   ],
+   "dencon skrivebord": [
+    "dencon-skrivebord-120x80-cm-2",
+    "dencon-skrivebord-140x80-cm-2",
+    "dencon-skrivebord-fast-hoyde-140x80-cm"
+   ],
+   "dencon el. hev/senk skrivebord": [
+    "dencon-skrivebord-120x80-cm",
+    "dencon-skrivebord-140x80-cm",
+    "dencon-skrivebord-160x80-cm"
+   ],
+   "muuto outline 3 seter": [
+    "muuto-outline-3-seter-3",
+    "muuto-outline-3-seter-2",
+    "muuto-outline-3-seter"
+   ]
+  },
+  "http_500": [
+   "vitra-eames-plastic-sidechair-dsr",
+   "vitra-eames-loungechair",
+   "profim-noor-6050",
+   "hag-celi-9100",
+   "hag-creed-6006-kontorstol",
+   "hag-tribute-9021-kontorstol",
+   "hag-tribute-9031-kontorstol",
+   "fora-form-bud-unite-konferansestol",
+   "fora-form-senso-2-seter-hoy",
+   "fora-form-senso-3-seter-hoy",
+   "evoline-circle80-disq"
+  ]
+ },
+ "content_dupes": [
+  [
+   "https://kontorcompaniet.no/produktkategori/kontorstoler/",
+   "https://kontorcompaniet.no/produktkategori/arbeidsplassen/kontorstoler/"
+  ],
+  [
+   "https://kontorcompaniet.no/produktkategori/komponenter/",
+   "https://kontorcompaniet.no/produktkategori/skrivebord/komponenter/"
+  ],
+  [
+   "https://kontorcompaniet.no/produktkategori/bordskjermer/",
+   "https://kontorcompaniet.no/produktkategori/arbeidsplassen/bordskjermer/"
+  ]
+ ],
+ "title_dupes": {
+  "Nettbutikk - Kontorinnredning til din bedrift | Kontorcompaniet AS": [
+   "https://kontorcompaniet.no/butikk/",
+   "https://kontorcompaniet.no/butikk/kategori/kontorstoler/"
+  ],
+  "Muuto Outline 3 seter - Kontorinnredning til din bedrift | Kontorcompaniet AS": [
+   "https://kontorcompaniet.no/produkt/muuto-outline-3-seter/",
+   "https://kontorcompaniet.no/produkt/muuto-outline-3-seter-2/",
+   "https://kontorcompaniet.no/produkt/muuto-outline-3-seter-3/"
+  ],
+  "Horreds Mute Focus Low (Utstillingsprodukt) - Kontorinnredning til din bedrift | Kontorcompaniet AS": [
+   "https://kontorcompaniet.no/produkt/horreds-mute-focus-low-utstillingsprodukt/",
+   "https://kontorcompaniet.no/produkt/horreds-mute-focus-low-utstillingsprodukt-2/"
+  ],
+  "Kontorstoler Arkiver - Kontorinnredning til din bedrift | Kontorcompaniet AS": [
+   "https://kontorcompaniet.no/produktkategori/kontorstoler/",
+   "https://kontorcompaniet.no/produktkategori/arbeidsplassen/kontorstoler/"
+  ],
+  "Komponenter Arkiver - Kontorinnredning til din bedrift | Kontorcompaniet AS": [
+   "https://kontorcompaniet.no/produktkategori/komponenter/",
+   "https://kontorcompaniet.no/produktkategori/skrivebord/komponenter/"
+  ],
+  "Bordskjermer Arkiver - Kontorinnredning til din bedrift | Kontorcompaniet AS": [
+   "https://kontorcompaniet.no/produktkategori/bordskjermer/",
+   "https://kontorcompaniet.no/produktkategori/arbeidsplassen/bordskjermer/"
+  ]
+ }
+}
