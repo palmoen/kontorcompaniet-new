@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NEXT_PUBLIC_SITE_URL: https://kontorcompaniet.no
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  kvalitet:
+    name: Lint, typer, enhetstester og bygg
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - name: Redirect-kartet er synkront med CSV
+        run: npm run redirects:build && git diff --exit-code src/generated/redirects.json
+      - run: npm run build
+        env: { SITE_INDEXABLE: "true" } # produksjonslik konfigurasjon – SEO-testene krever index
+      - uses: actions/upload-artifact@v4
+        with: { name: next-build, path: .next, include-hidden-files: true, retention-days: 1 }
+
+  database:
+    name: Migreringer og RLS
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_PASSWORD: postgres }
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/db-test.sh
+        env: { DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres" }
+
+  e2e:
+    name: Ende-til-ende og SEO
+    needs: kvalitet
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with: { name: next-build, path: .next }
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+        env: { SITE_INDEXABLE: "true" }
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with: { name: playwright-report, path: playwright-report, retention-days: 7 }
+
+  lighthouse:
+    name: Lighthouse-budsjett
+    needs: kvalitet
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with: { name: next-build, path: .next }
+      - name: Desktop (feiler under 90/95/90/90)
+        env: { SITE_INDEXABLE: "true" }
+        run: npx -y @lhci/cli@0.15 autorun --config=lighthouserc.json
+      - name: Mobil (advarsel)
+        env: { SITE_INDEXABLE: "true" }
+        run: npx -y @lhci/cli@0.15 autorun --config=lighthouserc.mobile.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: lighthouse, path: .lighthouseci, retention-days: 14 }

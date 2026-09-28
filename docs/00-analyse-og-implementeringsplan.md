@@ -1,6 +1,6 @@
 # Nye Kontorcompaniet.no + Møbelscout — Analyse og implementeringsplan
 
-**Status:** Fase 0 levert (v3, 2026-09-28), med presiseringen *«ikke en nettbutikk»* innarbeidet. Designprototype 0b ligger i [`prototype/`](../prototype/). **Produktsider er utsatt** (beslutning 16). Ingen applikasjonskode er skrevet.
+**Status:** Fase 0 levert (v3, 2026-09-28), med presiseringen *«ikke en nettbutikk»* innarbeidet. Designprototype 0b ligger i [`prototype/`](../prototype/). **Produktsider er utsatt** (beslutning 16). **Fase 1 (fundament) er ferdig.**
 **Grunnlag:** full crawl av kontorcompaniet.no 2026-09-28 + offentlige WordPress/WooCommerce-API-er.
 
 | Dokument | Innhold |
@@ -316,7 +316,7 @@ Prioritet: **de nye sidene og Møbelscout.** Produktsidene er en egen, senere fa
 |---|---|---|
 | **0 — Data** ✅ | Crawl, inventar, redirect-kart, sitemap, datamodell, wireframes | Godkjent |
 | **0b — Designprototype** ✅ | Forside, kategori, merke, prosjekt og Møbelscout (landing, flyt og treff) | Visuell retning godkjent |
-| **1 — Fundament** | Next.js, designsystem, Supabase-skjema med RLS, SEO-primitiver, repository-lag, admin-skall, CI | Grønn CI, Lighthouse-budsjett aktivt |
+| **1 — Fundament** ✅ | Next.js 16, designsystem, Supabase-skjema med RLS (testet), SEO-grunnmur, redirect-motor (alle gamle URL-er testet), repository-lag, admin-skall, CI med Lighthouse-budsjett | Grønn CI, Lighthouse-budsjett aktivt |
 | **2 — Møbelscout vertical slice** | Input (tekst og tale) → AI → bekreftelse → kontakt → Scout → mock-kilde → match (inkl. delvis treff) → resultat → «Interessant» → admin → sporing i hele trakten | Full trakt ende til ende med tester |
 | **3 — Offentlige kjernesider** | Forside, løsninger (P1), kategorier som rådgivningssider med produktkort, merkesider, prosjekter (Norwegian først), om oss, kontakt, `/mobelscout`, `/brukt` og `/baerekraft` | Hele brukerreisen med ekte innhold og leads |
 | **4 — Innhold og admin** | Prosjekter, løsninger og artikler. Admin for merker, kategorier, prosjekter, produktkort, redirects og SEO | Kontorcompaniet redigerer selv |
