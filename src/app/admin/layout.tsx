@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 const sections = [
   { label: "Oversikt", href: "/admin" },
-  { label: "Møbelscout", href: "/admin#mobelscout" },
+  { label: "Møbelscout", href: "/admin/mobelscout" },
   { label: "Leads", href: "/admin#leads" },
   { label: "Innhold", href: "/admin#innhold" },
   { label: "SEO og redirects", href: "/admin#seo" },

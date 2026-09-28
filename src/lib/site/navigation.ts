@@ -8,7 +8,7 @@ export const mainNav: NavItem[] = [
   { label: "Løsninger", href: "/losninger", ready: false },
   { label: "Produkter", href: "/produkter", ready: false },
   { label: "Prosjekter", href: "/prosjekter", ready: false },
-  { label: "Møbelscout", href: "/mobelscout", ready: false },
+  { label: "Møbelscout", href: "/mobelscout", ready: true },
   { label: "Om oss", href: "/om-oss", ready: false },
   { label: "Kontakt", href: "/kontakt", ready: true },
 ];

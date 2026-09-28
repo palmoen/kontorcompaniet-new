@@ -17,7 +17,7 @@ export default async function AdminHome() {
   if (!user) redirect("/admin/logg-inn");
 
   const tiles = [
-    { id: "mobelscout", title: "Møbelscout", text: "Aktive Scouts, treff til godkjenning, kilder og prisregler. Kommer i fase 2." },
+    { id: "mobelscout", title: "Møbelscout", text: "Aktive Scouts og treff til godkjenning.", href: "/admin/mobelscout" },
     { id: "leads", title: "Leads", text: "Forespørsler fra skjema, «Be om tilbud» og Møbelscout. Kommer i fase 2–3." },
     { id: "innhold", title: "Innhold", text: "Merker, kategorier, produktkort, prosjekter, løsninger og folk. Kommer i fase 4." },
     { id: "seo", title: "SEO og redirects", text: "Redirects, 404-logg og kvalitetsport-status. Kommer i fase 4." },
@@ -29,7 +29,7 @@ export default async function AdminHome() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
         {tiles.map((t) => (
           <section key={t.id} id={t.id} style={{ border: "1px solid var(--line)", borderRadius: 6, padding: 20, background: "#fff" }}>
-            <h2 style={{ fontSize: "1.2rem" }}>{t.title}</h2>
+            <h2 style={{ fontSize: "1.2rem" }}>{"href" in t && t.href ? <a href={t.href}>{t.title}</a> : t.title}</h2>
             <p className="muted" style={{ marginTop: 8 }}>{t.text}</p>
           </section>
         ))}

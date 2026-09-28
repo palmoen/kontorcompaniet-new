@@ -5,7 +5,8 @@
       "startServerReadyPattern": "Ready",
       "url": [
         "http://localhost:3200/",
-        "http://localhost:3200/kontakt"
+        "http://localhost:3200/kontakt",
+        "http://localhost:3200/mobelscout"
       ],
       "numberOfRuns": 2,
       "settings": {

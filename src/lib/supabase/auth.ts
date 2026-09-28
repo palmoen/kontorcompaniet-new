@@ -1,6 +1,7 @@
 import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { env, hasSupabase } from "@/lib/env";
 
 export type AdminRole = "admin" | "editor" | "sales";
@@ -35,4 +36,12 @@ export async function getAdminUser(): Promise<AdminUser | null> {
   const row = (data as { display_name: string; role: AdminRole }[] | null)?.[0];
   if (!row) return null;
   return { id: user.id, email: user.email ?? null, name: row.display_name, role: row.role };
+}
+
+/** Krev innlogget admin med en av rollene (admin har alltid tilgang). Brukes i sider og serverhandlinger. */
+export async function requireAdmin(roles: AdminRole[]): Promise<AdminUser> {
+  const user = await getAdminUser();
+  if (!user) redirect("/admin/logg-inn");
+  if (user.role !== "admin" && !roles.includes(user.role)) redirect("/admin?ingen-tilgang=1");
+  return user;
 }

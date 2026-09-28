@@ -10,6 +10,7 @@
 - **Navigasjon:** lenk aldri til sider som ikke finnes. Slå på `ready` i `src/lib/site/navigation.ts` når siden lanseres.
 - **Redirects:** kilden er `docs/migration/redirect-map.csv`. Etter endring: `npm run redirects:build`. Alt skal gå i ett hopp.
 - **Database:** nye migreringer i `supabase/migrations/`, med RLS på alle tabeller. Anon leser kun `public.*_v`-views. Test med `npm run db:test`.
+- **Møbelscout:** kildedata (`scout.items`: URL, kildepris, kilde) vises ALDRI til kunden. Kunden ser kun `scout.result_v` (presentasjon + kundepris). Kilder aktiveres kun med juridisk godkjenning. Ingen scraping som bryter vilkår.
 - Språk i UI og innhold: norsk bokmål, jordnært og konkret. Ingen generisk AI-SEO-tekst.
 
 ## Kommandoer
