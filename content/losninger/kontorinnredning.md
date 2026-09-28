@@ -1,8 +1,8 @@
 ---
 description: Kontorinnredning som passer måten dere jobber på. Vi planlegger, leverer og monterer, med én kontaktperson fra befaring til ferdig kontor.
 lead: Vi planlegger, leverer og monterer hele kontoret, med én kontaktperson fra første befaring til siste stol er på plass.
-image: /images/interior/landskap.webp
-imageAlt: Kontorlandskap med lange arbeidsbord og kontorstoler
+image: /images/prosjekter/ice.webp
+imageAlt: Resepsjonen hos Ice
 ---
 ## Et kontor som passer måten dere jobber på
 
