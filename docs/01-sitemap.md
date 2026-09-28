@@ -4,6 +4,8 @@ Status: forslag til godkjenning (2026-09-28). Bygger på crawl, søkeintensjon o
 
 ## Prinsipper
 
+0. **Ikke en nettbutikk.** Produkter, kategorier og merker er rådgivnings-, inspirasjons- og SEO-sider som leder til tilbud, rådgiver eller prosjekt. Ingen handlekurv, kasse eller konto.
+
 1. **Én side per søkeintensjon.** Ingen konkurrerende sider om samme søk.
 2. **Indekseres bare med reell verdi.** Hver sidetype har en kvalitetsport. Sider som ikke består, får `noindex, follow` og holdes ute av sitemap til de er gode nok.
 3. **Prosjekter er navet.** Prosjekt ↔ løsning ↔ produkt ↔ merke ↔ tjeneste lenker begge veier.
@@ -31,18 +33,19 @@ Status: forslag til godkjenning (2026-09-28). Bygger på crawl, søkeintensjon o
 │       /losninger/levering-og-montering P2
 │       /losninger/service               P2  service, reparasjon, omtrekk
 │
-├── /produkter                      Hub: kategorier, utvalgte produkter og merker
-│   /produkter/kontorstoler          10 produkter · 9 merker på leverandørlisten
-│   /produkter/moteromsstoler         3 · konferanse-merker
-│   /produkter/kantinestoler          5 · (i dag «Stoler»)
-│   /produkter/skrivebord             5 · 6 merker
-│   /produkter/motebord               2 · 11 merker (Konferanse)
-│   /produkter/oppbevaring            2 · 10 merker
-│   /produkter/sofa-og-lounge         4 · 10 merker
-│   /produkter/akustikk               1 · 4 merker (+ bordskjermer, tavler)
-│   /produkter/tilbehor               8 · Evoline (strøm/kabel)
+├── /produkter                      Hub: kategorier, utvalgte produkter og merker (ingen nettbutikk)
+│   Kategoriene er rådgivningssider, ikke produktgrid:   produkter i dag · merker vi leverer
+│   /produkter/kontorstoler           7 · 9
+│   /produkter/moteromsstoler         2 · 11 (konferanse)
+│   /produkter/kantinestoler          5 · 8  (i dag «Stoler»)
+│   /produkter/skrivebord             1 · 6
+│   /produkter/motebord               2 · 11
+│   /produkter/oppbevaring            2 · 10
+│   /produkter/sofa-og-lounge         4 · 10
+│   /produkter/akustikk               1 · 4  (+ bordskjermer, tavler, stillerom)
+│   /produkter/tilbehor               2 · 3  (elektrifisering/ergonomi – P2)
 │
-├── /produkt/{slug}                 41 produktsider (etter sammenslåing av varianter)
+├── /produkt/{slug}                 26 kuraterte produktsider fra dagens data → mål ~50
 │
 ├── /merkevarer                     Hub: alle 52 merker gruppert per kategori
 │   /merkevarer/{merke}              Egen side ved lansering: hag, vitra, dencon, fora-form, evoline,
@@ -78,9 +81,9 @@ Status: forslag til godkjenning (2026-09-28). Bygger på crawl, søkeintensjon o
 | Sidetype | Krav for `index` + sitemap |
 |---|---|
 | Løsning | ≥ 400 ord eget innhold · ≥ 1 prosjekt · ≥ 3 relevante produkter eller merker · unik title og description |
-| Kategori | Redaksjonell intro (≥ 150 ord, ikke mal) **og** (≥ 4 produkter **eller** ≥ 3 merker vi leverer i kategorien) · unik title og description |
-| Produkt | Beskrivelse ≥ 80 ord · ≥ 1 rettighetsavklart bilde med alt-tekst · merke · kategori · spesifikasjoner |
-| Merke | Redaksjonell tekst (≥ 150 ord) **og** (≥ 3 produkter **eller** ≥ 1 prosjekt) |
+| Kategori | Rådgivende innhold (≥ 400 ord: hvordan velge, behov, ergonomi/miljø) **og** (≥ 4 produkter **eller** ≥ 3 merker vi leverer) · ≥ 1 prosjekt · unik title og description |
+| Produkt | Beskrivelse ≥ 80 ord · ≥ 1 rettighetsavklart bilde med alt-tekst · merke · kategori · ≥ 3 egenskaper eller spesifikasjoner · ≥ 1 kobling til løsning. Pris kreves **ikke** |
+| Merke | Introduksjon + «hvorfor vi bruker merket» (≥ 250 ord til sammen) **og** (≥ 3 produkter **eller** ≥ 1 prosjekt) |
 | Prosjekt | Kunde (eller anonymisert bransje) · ≥ 4 bilder · utfordring, løsning og resultat · ≥ 1 koblet løsning |
 | Artikkel | ≥ 600 ord · forfatter · publisert/oppdatert-dato · ≥ 1 lenke til løsning eller produkt |
 | Bruktvare | Tilgjengelig · bilde · tilstand · pris eller «be om pris» |
@@ -122,7 +125,7 @@ Prosjektsidene har sted (Fornebu, Skøyen, Nydalen …) og bygger lokal relevans
 | Alle | `WebSite`, `Organization` (logo, sameAs), `BreadcrumbList` |
 | Forside, kontakt | `LocalBusiness` / `FurnitureStore` (adresse, åpningstider, geo) |
 | Løsning | `Service` (provider = Organization, areaServed) |
-| Produkt | `Product` + `Brand` + `Offer` (kun når pris vises; ellers uten Offer) · `additionalProperty` for miljømerking |
+| Produkt | `Product` + `Brand` (uten `Offer`, bortsett fra når «Fra x kr» er aktivt og kontrollert) · `additionalProperty` for miljømerking og garanti |
 | Prosjekt | `Article`/`CreativeWork` med `about`, `mentions` (produkter og merker), bilder og video (`VideoObject` for Vimeo) |
 | Artikkel | `Article` (forfatter, datoer) |
 | Møbelscout | `Service` · `FAQPage` bare hvis FAQ-innholdet er reelt og synlig |

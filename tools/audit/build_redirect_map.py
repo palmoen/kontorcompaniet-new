@@ -6,7 +6,7 @@ Alle beslutninger ligger som eksplisitte regler/tabeller under, slik at de kan g
 endres uten å røre logikken. Kolonnen `gsc_klikk_16m` og `backlinks` fylles når Search Console
 og lenkedata kobles inn — da prioriteres manuell verifisering etter faktisk verdi.
 
-Handlinger:
+Handlinger (redirect):
   KEEP    URL beholdes uendret på ny plattform (200)
   301     Permanent redirect 1:1 til tilsvarende side
   MERGE   Flere gamle URL-er slås sammen til én ny (301 fra alle)
@@ -17,6 +17,7 @@ Bruk: python3 tools/audit/build_redirect_map.py docs/migration/crawl-2026-09-28
 """
 from __future__ import annotations
 
+import collections
 import csv
 import re
 import sys
@@ -26,43 +27,85 @@ from pathlib import Path
 BASE = "https://kontorcompaniet.no"
 
 # ---------------------------------------------------------------------------
-# Produkter: sammenslåing av størrelses-/duplikatvarianter og slug-rydding.
-# Alt som ikke står her beholdes som /produkt/{slug} (KEEP).
+# Produktkatalog: kuratering, ikke automatisk import.
+#
+# Ny plattform er IKKE en nettbutikk. Hver WooCommerce-produkt-URL får én beslutning:
+#   KEEP      Blir egen produktside med samme URL (/produkt/{slug})
+#   MERGE     Slås sammen med andre URL-er til én produktfamilie-side (301 fra alle)
+#   REDIRECT  Duplikat eller feil slug → 301 til eksisterende/ny kanonisk produktside
+#   ARCHIVE   Publiseres ikke (tilbehør, komponenter, svake enkeltprodukter). Data beholdes
+#             internt; URL-en får 301 til mest relevante produkt/kategori/merke
+#
+# Kolonner: (beslutning, mål-sti, prioritet P1/P2, begrunnelse)
 # ---------------------------------------------------------------------------
-PRODUCT_TARGET: dict[str, tuple[str, str, str]] = {}  # old_slug -> (new_slug, action, begrunnelse)
+CATALOG: dict[str, tuple[str, str, str, str]] = {}
 
 
-def merge(new_slug: str, olds: list[str], why: str):
+def family(target: str, olds: list[str], prio: str, why: str):
     for o in olds:
-        PRODUCT_TARGET[o] = (new_slug, "KEEP" if o == new_slug else "MERGE", why)
+        decision = "KEEP" if f"/produkt/{o}" == target else "MERGE"
+        CATALOG[o] = (decision, target, prio, why)
 
 
-merge("dencon-hev-senk-skrivebord", ["dencon-skrivebord-120x80-cm", "dencon-skrivebord-140x80-cm", "dencon-skrivebord-160x80-cm"],
-      "Størrelser blir varianter. Gammel slug sa ikke hev/senk.")
-merge("dencon-skrivebord-fast-hoyde", ["dencon-skrivebord-120x80-cm-2", "dencon-skrivebord-fast-hoyde-140x80-cm", "dencon-skrivebord-140x80-cm-2"],
-      "Størrelser blir varianter. NB: slug ...140x80-cm-2 er i dag produktet 160×80 (feil slug).")
-merge("dencon-delta-konferansebord", [f"dencon-delta-konferansebord-{s}-cm" for s in ("140x80", "160x80", "180x80", "180x90", "200x100", "220x100")],
-      "Seks størrelser → ett produkt med varianter")
-merge("dencon-skap", ["dencon-skap", "dencon-skap-3xa4", "dencon-skap-4xa4"], "Høyder (2/3/4×A4) blir varianter. Beholder eksisterende basis-slug.")
-merge("dencon-uttrekksskap", ["dencon-utrekksskap-2xa4", "dencon-uttrekksskap-3xa4"], "Varianter + rettet skrivefeil i slug (utrekk→uttrekk)")
-merge("abstracta-soneo-bordskjerm", [f"abstracta-soneo-bordskjerm-{w}x650x30-mm" for w in (1200, 1400, 1600)], "Bredder blir varianter")
-merge("fora-form-kvart-motebord", ["fora-form-kvart-motebord-240x120", "fora-form-kvart-motebord-240x120-2", "fora-form-kvart-motebord-260x120"],
-      "Duplikat (-2) + størrelser blir varianter")
-merge("fora-form-senso-hoy", ["fora-form-senso-2-seter-hoy", "fora-form-senso-3-seter-hoy"], "2- og 3-seter som varianter (VURDER: egne sider hvis GSC viser separat søkeverdi)")
-merge("muuto-outline-3-seter", ["muuto-outline-3-seter", "muuto-outline-3-seter-2", "muuto-outline-3-seter-3"], "Tre identiske titler → én side, tekstil/ben som varianter")
-merge("vitra-id-trim", ["vitra-id-trim", "vitra-id-trim-kopi"], "«-kopi» er duplikat")
-merge("hag-sofi-mesh-7500", ["hag-sofi-mesh-7500-2"], "Rydd bort -2-suffiks (basis-slug finnes ikke i dag)")
-merge("evoline-express", ["evoline-express-2xel-klikksystem", "evoline-express-3xschuko-klikksystem", "evoline-express-4xel-klikksystem"], "Antall uttak blir varianter")
-merge("evoline-rj45-cat6-kabel", ["evoline-rj45-cat6-utp-3m-gra", "evoline-rj45-cat6-utp-5m-gra", "evoline-rj45-cat6-utp-75m-gra"], "Lengder blir varianter")
-merge("evoline-skjotekabel", ["evoline-skjotekabel-1m", "evoline-skjotekabel-25m", "evoline-skjotekabel-3m"], "Lengder blir varianter")
-merge("evoline-tilforselskabel", ["evoline-tilforselskabel-1m-sort", "evoline-tilforselskabel-2m-sort", "evoline-tilforselskabel-3m-sort"], "Lengder blir varianter")
+def one(slug: str, decision: str, target: str, prio: str, why: str):
+    CATALOG[slug] = (decision, target, prio, why)
 
-PRODUCT_REVIEW = {
-    "vitra-physix-konferansestol": "Egen modell eller duplikat av vitra-physix? Avklar før lansering.",
-    "evoline-matafix-kabelsamler-20m": "Produktnavn stavet «Matafix» – verifiser mot produsent (Metafix?) før evt. slug-endring.",
-    "fora-form-senso-2-seter-hoy": "Sammenslåing 2/3-seter – bekreft.",
-    "fora-form-senso-3-seter-hoy": "Sammenslåing 2/3-seter – bekreft.",
-}
+
+P = "/produkt/"
+# Kontorstoler
+one("hag-capisco-8106", "KEEP", P + "hag-capisco-8106", "P1", "Ikonisk modell, høy søkeverdi, egen brukerguide")
+one("hag-creed-6006-kontorstol", "KEEP", P + "hag-creed-6006-kontorstol", "P1", "HÅG, EPD + miljømerker")
+one("hag-futu-mesh-1100-s", "KEEP", P + "hag-futu-mesh-1100-s", "P1", "HÅG, 10 bilder, EPD")
+one("hag-sofi-mesh-7500-2", "REDIRECT", P + "hag-sofi-mesh-7500", "P1", "Rydd bort -2 (basis-slug finnes ikke). Egen brukerguide")
+family(P + "hag-tribute", ["hag-tribute-9021-kontorstol", "hag-tribute-9031-kontorstol"], "P1",
+       "Én familieside: 9021 og 9031 (med nakkestøtte) som modellvarianter")
+one("vitra-id-trim", "KEEP", P + "vitra-id-trim", "P1", "Vitra kontorstol")
+one("vitra-id-trim-kopi", "REDIRECT", P + "vitra-id-trim", "P1", "«-kopi» (mesh-versjon) er variant av samme modell")
+family(P + "vitra-soft-pad-chair", ["vitra-soft-pad-217", "vitra-soft-pad-219"], "P2", "EA 217 og EA 219 som varianter av Soft Pad Chair")
+one("dauphin-tosync", "ARCHIVE", "/produkter/kontorstoler", "-",
+    "Rimelig lagerstol, Dauphin står ikke på leverandørlisten, 3 innlenker. BEKREFT om dere vil selge den videre")
+# Møteromsstoler
+one("fora-form-bud-unite-konferansestol", "KEEP", P + "fora-form-bud-unite-konferansestol", "P1", "Norsk design, EPD, Møbelfakta")
+one("vitra-physix", "KEEP", P + "vitra-physix", "P2", "Mangler beskrivelse i dag – må skrives")
+one("vitra-physix-konferansestol", "MERGE", P + "vitra-physix", "P2", "Samme modellfamilie; understell/tekstil er detaljer for tilbudsfasen")
+# Kantinestoler
+one("fora-form-city-4-ben", "KEEP", P + "fora-form-city-4-ben", "P1", "Norsk design, EPD")
+one("hag-celi-9100", "KEEP", P + "hag-celi-9100", "P1", "HÅG, EPD, Greenguard")
+one("hay-about-a-chair-222", "KEEP", P + "hay-about-a-chair-222", "P2", "Kjent designstol (AAC 22), 19 bilder")
+one("profim-noor-6050", "KEEP", P + "profim-noor-6050", "P2", "EPD + Greenguard. Profim står ikke på leverandørlisten – bekreft")
+one("vitra-eames-plastic-sidechair-dsr", "KEEP", P + "vitra-eames-plastic-side-chair-dsr", "P1",
+    "Høy søkeverdi. NB: ny slug er foreslått for riktig navn – beholdes gammel hvis GSC viser trafikk")
+# Skrivebord
+family(P + "dencon-skrivebord", ["dencon-skrivebord-120x80-cm", "dencon-skrivebord-140x80-cm", "dencon-skrivebord-160x80-cm",
+                                 "dencon-skrivebord-120x80-cm-2", "dencon-skrivebord-fast-hoyde-140x80-cm", "dencon-skrivebord-140x80-cm-2"],
+       "P1", "Én side: hev/senk og fast høyde, størrelser som informasjon (ikke SKU). Slugs i dag er delvis feil")
+one("dencon-bordplate-160x80", "ARCHIVE", P + "dencon-skrivebord", "-", "Komponent – dekkes på skrivebordssiden")
+one("dencon-elektrisk-hev-senk-understell", "ARCHIVE", P + "dencon-skrivebord", "-", "Komponent – dekkes på skrivebordssiden")
+one("dencon-kabelrenne", "ARCHIVE", P + "dencon-skrivebord", "-", "Tilbehør – nevnes på skrivebordssiden")
+# Møtebord
+family(P + "dencon-delta-konferansebord", [f"dencon-delta-konferansebord-{s}-cm" for s in ("140x80", "160x80", "180x80", "180x90", "200x100", "220x100")],
+       "P1", "Seks størrelser → én side")
+family(P + "fora-form-kvart-motebord", ["fora-form-kvart-motebord-240x120", "fora-form-kvart-motebord-240x120-2", "fora-form-kvart-motebord-260x120"],
+       "P1", "Duplikat + størrelser → én side. NB: «240x120» er i dag 200×120")
+one("fora-form-kabelluke-med-bronn", "ARCHIVE", P + "fora-form-kvart-motebord", "-", "Tilbehør til møtebord")
+# Oppbevaring
+family(P + "dencon-skap", ["dencon-skap", "dencon-skap-3xa4", "dencon-skap-4xa4"], "P2", "Høyder som informasjon. Beskrivelse mangler – må skrives")
+family(P + "dencon-uttrekksskap", ["dencon-utrekksskap-2xa4", "dencon-uttrekksskap-3xa4"], "P2", "Rettet skrivefeil. Beskrivelse mangler")
+# Sofa og lounge
+one("fogia-bollo", "KEEP", P + "fogia-bollo", "P2", "Norsk design (Andreas Engelsvik). 0 innlenker i dag. Fogia står ikke på leverandørlisten – bekreft")
+family(P + "fora-form-senso-hoy", ["fora-form-senso-2-seter-hoy", "fora-form-senso-3-seter-hoy"], "P1", "2- og 3-seter på én side")
+family(P + "muuto-outline-3-seter", ["muuto-outline-3-seter", "muuto-outline-3-seter-2", "muuto-outline-3-seter-3"], "P2", "Tre identiske titler → én side")
+one("vitra-eames-loungechair", "KEEP", P + "vitra-eames-loungechair", "P1", "Svært høy søkeverdi (designikon)")
+# Akustikk
+family(P + "abstracta-soneo-bordskjerm", [f"abstracta-soneo-bordskjerm-{w}x650x30-mm" for w in (1200, 1400, 1600)], "P2", "Bredder som informasjon")
+# Elektrifisering (Evoline)
+family(P + "evoline-express", ["evoline-express-2xel-klikksystem", "evoline-express-3xschuko-klikksystem", "evoline-express-4xel-klikksystem"],
+       "P2", "Systemside for strøm på arbeidsplassen")
+family(P + "evoline-circle80", ["evoline-circle80", "evoline-circle80-disq"], "P2", "DisQ (trådløs lading) som variant")
+for s in ["evoline-matafix-kabelsamler-20m", "evoline-metafix-verktoy-for-kabling", "evoline-rj45-cat6-utp-3m-gra", "evoline-rj45-cat6-utp-5m-gra",
+          "evoline-rj45-cat6-utp-75m-gra", "evoline-skjotekabel-1m", "evoline-skjotekabel-25m", "evoline-skjotekabel-3m",
+          "evoline-tilforselskabel-1m-sort", "evoline-tilforselskabel-2m-sort", "evoline-tilforselskabel-3m-sort"]:
+    one(s, "ARCHIVE", P + "evoline-express", "-", "Kabel/tilbehør uten egen søke- eller leadverdi – nevnes på Express-siden")
 
 # Brukt/utstillingsvarer: unike fysiske varer, ikke modellsider.
 USED_SLUGS = {"fora-form-senso-3-seter-hoy-pent-brukt", "horreds-mute-focus-high-utstillingsprodukt",
@@ -158,10 +201,10 @@ DESIGNER = {
     "lars-tornoe": "/produkt/fora-form-kvart-motebord",
     "oivind-iversen": "/produkt/fora-form-city-4-ben",
     "peter-opsvik": "/produkt/hag-creed-6006-kontorstol",
-    "ronan-erwan-bouroullec": "/produkt/vitra-physix-konferansestol",
+    "ronan-erwan-bouroullec": "/produkt/vitra-physix",
     "skogstadwaernes": "/produkt/fora-form-bud-unite-konferansestol",
     "stokkeaustad-form-us-with-love-gronlund-design-and-flokk-design-team": "/produkt/profim-noor-6050",
-    "svein-asbjornsen-sapdesign": "/merkevarer/hag",
+    "svein-asbjornsen-sapdesign": "/produkt/hag-tribute",
 }
 for d, tgt in DESIGNER.items():
     EXACT[f"/designer/{d}/"] = (tgt, "301", "Designer-arkiv → eneste relevante produkt/merke")
@@ -214,7 +257,7 @@ def main():
         p = up.urlsplit(url)
         path = p.path + (("?" + p.query) if p.query else "")
         typ, status = r["type"], r["status"]
-        new, action, why, review, gift_opt = None, None, "", "", ""
+        new, action, why, review, gift_opt, catalog_decision = None, None, "", "", "", ""
 
         if path in EXACT:
             new, action, why = EXACT[path]
@@ -225,19 +268,26 @@ def main():
             slug = p.path.strip("/").split("/")[1]
             if slug in GONE_PRODUCTS:
                 new, action, why = GONE_PRODUCTS[slug]
+                catalog_decision = "REDIRECT"
             elif "pizzapose" in slug:
                 opt, hint = gift_proposal(p.path)
                 new, action, why, gift_opt = None, "AVVENTER", "Firmagave, 404 i dag. " + hint, opt
             elif slug in USED_SLUGS:
-                new, action = "/brukt", "301"
+                new, action, catalog_decision = "/brukt", "301", "REDIRECT"
                 why = "Unik bruktvare. Hvis fortsatt tilgjengelig ved lansering: 301 til /brukt/{slug}, ellers /brukt"
                 review = "Sjekk lagerstatus ved lansering"
-            elif slug in PRODUCT_TARGET:
-                ns, action, why = PRODUCT_TARGET[slug]
-                new = f"/produkt/{ns}"
+            elif slug in CATALOG:
+                decision, target, prio, why = CATALOG[slug]
+                catalog_decision = decision
+                new = target
+                action = {"KEEP": "KEEP" if target == p.path.rstrip("/") else "301", "MERGE": "MERGE",
+                          "REDIRECT": "301", "ARCHIVE": "301"}[decision]
+                if decision == "KEEP" and target != p.path.rstrip("/"):
+                    why = "Ny slug: " + why
             else:
-                new, action, why = f"/produkt/{slug}", "KEEP", "Hovedregel: behold /produkt/{slug}"
-            review = review or PRODUCT_REVIEW.get(slug, "")
+                new, action, why, review = None, "UAVKLART", "Produkt uten katalogbeslutning", "JA"
+            if "BEKREFT" in why or "bekreft" in why:
+                review = review or "Bekreft med Kontorcompaniet"
             if str(status) == "500":
                 why += " · NB: svarer HTTP 500 i dag – bør fikses på dagens side nå"
         elif p.path.startswith("/produktkategori/brands/"):
@@ -259,6 +309,7 @@ def main():
             "i_sitemap": r.get("i_sitemap", ""),
             "interne_innlenker": r.get("interne_innlenker", ""),
             "action": action,
+            "katalog": catalog_decision,
             "new_url": (BASE + new) if new else "",
             "firmagave_forslag": gift_opt,
             "begrunnelse": why,
@@ -283,6 +334,35 @@ def main():
     for rr in rules:
         rr.update({k: "" for k in out[0] if k not in rr})
 
+    # --- Validering: ingen mål kan selv være en redirect-kilde (ingen kjeder) ---
+    norm = lambda u: (up.urlsplit(u).path.rstrip("/") or "/")
+    live = {norm(o["new_url"]) for o in out if o["new_url"]}          # stier som finnes på ny plattform
+    sources = {norm(o["old_url"]) for o in out if o["action"] not in ("KEEP", "AVVENTER") and norm(o["old_url"]) not in live}
+    for o in out:
+        tgt = norm(o["new_url"]) if o["new_url"] else None
+        if tgt and tgt in sources and o["action"] != "KEEP":
+            raise SystemExit(f"REDIRECT-KJEDE: {o['old_url']} -> {o['new_url']}")
+
+    # --- Produktkatalog-vurdering (én rad per gammelt produkt) ---
+    cat_rows = []
+    for slug, (decision, target, prio, why) in sorted(CATALOG.items(), key=lambda x: (x[1][1], x[0])):
+        pr = prods.get(slug, {})
+        cat_rows.append({"gammel_slug": slug, "navn": pr.get("navn", ""), "merke": pr.get("merke", ""),
+                         "beslutning": decision, "ny_side": target, "prioritet": prio,
+                         "beskrivelse_ord": pr.get("beskrivelse_ord", ""), "bilder": pr.get("bilder", ""),
+                         "epd": pr.get("epd", ""), "miljomerking": pr.get("miljomerking", ""),
+                         "status_i_dag": pr.get("http_status", ""), "begrunnelse": why})
+    missing = [s for s, r in prods.items() if r["segment"] == "kontor" and s not in CATALOG]
+    if missing:
+        raise SystemExit(f"Produkter uten katalogbeslutning: {missing}")
+    with (d.parent / "produktkatalog-vurdering.csv").open("w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(cat_rows[0]))
+        w.writeheader()
+        w.writerows(cat_rows)
+    pages = sorted({t for (dec, t, _, _) in CATALOG.values() if dec in ("KEEP", "MERGE", "REDIRECT") and t.startswith("/produkt/")})
+    print(f"Produktsider i ny katalog (fra dagens data): {len(pages)}")
+    print(collections.Counter(dec for (dec, *_ ) in CATALOG.values()))
+
     order = {"KEEP": 0, "301": 1, "MERGE": 2, "410": 3, "AVVENTER": 4, "UAVKLART": 5}
     out.sort(key=lambda x: (order.get(x["action"], 9), x["type"], x["old_url"]))
     with (d.parent / "redirect-map.csv").open("w", newline="") as f:
@@ -290,7 +370,6 @@ def main():
         w.writeheader()
         w.writerows(rules + out)
 
-    import collections
     print(collections.Counter(o["action"] for o in out))
     print(collections.Counter((o["type"], o["action"]) for o in out))
     for o in out:

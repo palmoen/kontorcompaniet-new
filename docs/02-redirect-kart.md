@@ -8,14 +8,14 @@
 
 | Handling | Antall | Hva |
 |---|---|---|
-| **KEEP** | 34 | 29 produktsider + forside, om oss, prosjekter, kontakt og produkter. Samme URL på ny plattform |
-| **301** | 74 | Kategorier, merker, sider, innlegg, designer- og miljøarkiver, alle 1:1 til nærmeste relevante side |
-| **MERGE** | 50 | 40 produkt-URL-er → 12 produkter med varianter, 8 kategorier → 4, 2 vilkårssider → 1 |
+| **KEEP** | 20 | 15 produktsider + forside, om oss, prosjekter, kontakt og produkter. Samme URL på ny plattform |
+| **301** | 93 | Kategorier, merker, sider, innlegg og attributtarkiver. **Produkter:** 16 arkiverte → relevant produkt eller kategori, 2 duplikater, 1 slug-retting (Eames DSR), 4 bruktvarer → `/brukt` og Sedus Se:flex (404 i dag) → `/merkevarer/sedus` |
+| **MERGE** | 45 | 35 produkt-URL-er → 10 produktfamilier, 8 kategorier → 4, 2 vilkårssider → 1 |
 | **410** | 35 | 23 system- og plugin-sider, 6 leveringstid-arkiver, 6 opprinnelsesland-arkiver |
 | **AVVENTER** | 41 | Firmagaver. Venter på MerchMaker-struktur ([inventar](migration/firmagaver-inventar.csv)) |
 | **UAVKLART** | 0 | |
 
-Ingen URL videresendes til forsiden. Ingen URL videresendes til en side uten faglig sammenheng.
+Skriptet stopper hvis et mål selv er en redirect-kilde, så redirect-kjeder kan ikke oppstå. Ingen URL videresendes til forsiden. Ingen URL videresendes til en side uten faglig sammenheng.
 
 ## Prinsipper
 
@@ -30,27 +30,31 @@ Ingen URL videresendes til forsiden. Ingen URL videresendes til en side uten fag
 6. **Firmagaver:** A = samme produkt i MerchMaker, B = tilsvarende MerchMaker-kategori, C = 410 bare når ingen relevant erstatning finnes.
 7. **Search Console avgjør rekkefølgen for manuell kontroll.** Kolonnene `gsc_klikk_16m` og `backlinks` fylles inn når dataene foreligger, og alle URL-er med klikk eller lenker kontrolleres manuelt før lansering.
 
-## Produktkonsolidering (MERGE)
+## Produkter: kuratert katalog
 
-| Ny kanonisk URL | Gamle URL-er |
-|---|---|
-| `/produkt/dencon-hev-senk-skrivebord` | dencon-skrivebord-120x80-cm · -140x80-cm · -160x80-cm |
-| `/produkt/dencon-skrivebord-fast-hoyde` | dencon-skrivebord-120x80-cm-2 · -fast-hoyde-140x80-cm · -140x80-cm-2 (som er 160×80) |
-| `/produkt/dencon-delta-konferansebord` | 6 størrelser (140×80 → 220×100) |
-| `/produkt/dencon-skap` | dencon-skap (beholdes) · -3xa4 · -4xa4 |
-| `/produkt/dencon-uttrekksskap` | dencon-utrekksskap-2xa4 (skrivefeil) · dencon-uttrekksskap-3xa4 |
-| `/produkt/abstracta-soneo-bordskjerm` | 1200 · 1400 · 1600 mm |
-| `/produkt/fora-form-kvart-motebord` | 240x120 (som er 200×120) · 240x120-2 · 260x120 |
-| `/produkt/fora-form-senso-hoy` | 2-seter · 3-seter ⚠️ bekreft |
-| `/produkt/muuto-outline-3-seter` | muuto-outline-3-seter (beholdes) · -2 · -3 |
-| `/produkt/vitra-id-trim` | vitra-id-trim (beholdes) · vitra-id-trim-kopi |
-| `/produkt/hag-sofi-mesh-7500` | hag-sofi-mesh-7500-2 |
-| `/produkt/evoline-express` | 2×, 3× og 4× Schuko |
-| `/produkt/evoline-rj45-cat6-kabel` | 3 m · 5 m · 7,5 m |
-| `/produkt/evoline-skjotekabel` | 1 m · 2,5 m · 3 m |
-| `/produkt/evoline-tilforselskabel` | 1 m · 2 m · 3 m |
+Ny plattform er ikke en nettbutikk, så katalogen **kurateres** ([`produktkatalog-vurdering.csv`](migration/produktkatalog-vurdering.csv)). Resultatet er 26 produktsider fra dagens data.
 
-**Manuell sjekk (5):** `vitra-physix-konferansestol` (egen modell eller duplikat?), `evoline-matafix-kabelsamler-20m` (stavemåte), Fora Form Senso 2/3-seter (samle eller ikke) og bruktvarene (lagerstatus ved lansering).
+| Ny produktside | Gamle URL-er | Beslutning |
+|---|---|---|
+| `/produkt/dencon-skrivebord` | 6 URL-er (hev/senk og fast, 120–160 cm, flere med feil slug) + 3 arkiverte komponenter | MERGE/ARCHIVE |
+| `/produkt/dencon-delta-konferansebord` | 6 størrelser | MERGE |
+| `/produkt/fora-form-kvart-motebord` | 3 (inkl. `-2`, og «240x120» som er 200×120) + arkivert kabelluke | MERGE/ARCHIVE |
+| `/produkt/hag-tribute` | 9021 og 9031 | MERGE |
+| `/produkt/vitra-soft-pad-chair` | EA 217 og EA 219 | MERGE |
+| `/produkt/vitra-physix` | physix + physix-konferansestol | MERGE |
+| `/produkt/fora-form-senso-hoy` | 2- og 3-seter | MERGE |
+| `/produkt/muuto-outline-3-seter` | 3 identiske | MERGE |
+| `/produkt/dencon-skap` · `/produkt/dencon-uttrekksskap` | 3 + 2 (skrivefeil rettet) | MERGE |
+| `/produkt/abstracta-soneo-bordskjerm` | 3 bredder | MERGE |
+| `/produkt/evoline-express` | 3 Express + **11 arkiverte kabler og verktøy** | MERGE/ARCHIVE |
+| `/produkt/evoline-circle80` | Circle80 + DisQ | MERGE |
+| `/produkt/hag-sofi-mesh-7500` | `-2` | REDIRECT |
+| `/produkt/vitra-id-trim` | `-kopi` | REDIRECT |
+| `/produkt/vitra-eames-plastic-side-chair-dsr` | `vitra-eames-plastic-sidechair-dsr` | Ny slug, **bare hvis GSC ikke viser trafikk**. Ellers beholdes den gamle |
+| `/produkter/kontorstoler` | Dauphin ToSync | ARCHIVE (bekreft) |
+| Øvrige produktsider (Capisco, Creed, Futu, Celi, Eames Lounge, Bud Unite, City, AAC 22, Noor, Bollo) | uendret URL | KEEP |
+
+**Bekreft:** Dauphin (arkiveres), Profim Noor og Fogia Bollo (beholdes, men merkene står ikke på leverandørlisten), og slug-rettingen for Eames DSR.
 
 ## Kategorier
 
@@ -87,6 +91,8 @@ Ingen URL videresendes til forsiden. Ingen URL videresendes til en side uten fag
 | `/framerykampanje/` | `/losninger/stillerom` | 301 |
 | `/?page_id=46` · `/category/uncategorized/` · `/2020/…` (4) | `/inspirasjon` | 301 |
 | `/designer/` | `/merkevarer/vitra` | 301 |
+
+Designer-arkivene går til eneste relevante produkt eller merke (f.eks. `/designer/svein-asbjornsen-sapdesign/` → `/produkt/hag-tribute`).
 
 ## Firmagaver (AVVENTER)
 

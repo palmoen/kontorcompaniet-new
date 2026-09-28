@@ -1,6 +1,8 @@
 # 04 — Wireframes og sideanatomi
 
-Status: forslag til godkjenning. Skissene viser **struktur, hierarki og innhold**, ikke endelig visuelt uttrykk. Det kommer i fase 0b (designprototype).
+Status: forslag til godkjenning. Skissene viser **struktur, hierarki og innhold**. Det visuelle uttrykket ligger i designprototypen [`prototype/`](../prototype/) (fase 0b).
+
+**Ikke en nettbutikk:** ingen handlekurv, kasse, konto, kjøpsknapper, prisfilter eller variantvelgere. Primær-CTA er «Be om tilbud», sekundær er «Snakk med rådgiver», og tertiær er «Legg til i prosjekt».
 
 Felles for alle sider:
 - **Header:** logo · Løsninger · Produkter · Prosjekter · Møbelscout · Om oss · [Start et prosjekt]. Mega-meny på desktop og fullskjermsmeny på mobil. Sticky og kompakt ved scroll.
@@ -115,85 +117,97 @@ Schema: `Service` + `BreadcrumbList` (+ `FAQPage` bare med reell FAQ).
 
 ---
 
-## 3. Kategoriside `/produkter/{kategori}` (eksempel: kontorstoler)
+## 3. Kategoriside `/produkter/{kategori}`: rådgivningsside, ikke produktgrid
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │ Brødsmuler: Produkter / Kontorstoler                                         │
-│ H1 Kontorstoler                                                              │
-│ Redaksjonell intro (150–250 ord: hva skiller en god kontorstol, hvordan vi   │
-│ hjelper dere velge, prøving i showroom)                                      │
+│ H1 Kontorstoler                                     │ STEMNINGSBILDE         │
+│ Ingress: En god kontorstol er den som blir justert  │ (prosjekt)             │
+│ riktig og brukt riktig. Vi hjelper dere velge.      │                        │
+│ [Snakk med en rådgiver]  [Prøv i showroom]          │                        │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│ FILTER (server-rendret, URL-parametere, noindex på filtrerte varianter)      │
-│ Merke ▾  Miljømerke ▾  Leveringstid ▾  Pris ▾     Sorter ▾     10 produkter │
-│ Aktive: [HÅG ×]                                                              │
+│ Hurtignavigasjon: Slik velger dere · Våre anbefalinger · Etter behov ·       │
+│                   Merker · Prosjekter · Brukt · Spørsmål                     │
 ├──────────────────────────────────────────────────────────────────────────────┤
+│ H2 Slik velger dere kontorstol                                               │
+│ 4 kort: Justerbarhet · Sittetid og arbeidsform · Kroppsstørrelser · Miljø    │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ H2 Våre anbefalte kontorstoler     (NYTT)                                    │
 │ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐                          │
-│ │  BILDE   │ │  BILDE   │ │  BILDE   │ │  BILDE   │   ProductCard:           │
-│ │          │ │          │ │          │ │          │   merke (liten)          │
-│ │HÅG       │ │HÅG       │ │Vitra     │ │HÅG       │   navn                   │
-│ │Capisco   │ │Tribute   │ │ID Trim   │ │Sofi Mesh │   «Fra 9 447 kr eks mva» │
-│ │Fra 9 447 │ │Be om pris│ │Fra 8 610 │ │Fra 8 961 │   • Møbelfakta · 2–3 u.  │
-│ └──────────┘ └──────────┘ └──────────┘ └──────────┘                          │
-│ … (ingen uendelig scroll; paginering med ekte lenker ved > 24)                │
+│ │  BILDE   │ │  BILDE   │ │  BILDE   │ │  BILDE   │   ProductCard (B2B):     │
+│ │HÅG       │ │HÅG       │ │HÅG       │ │Vitra     │   merke · modell         │
+│ │Capisco   │ │Futu Mesh │ │Tribute   │ │ID Trim   │   én linje «best til»    │
+│ │Aktiv sit.│ │Hele dagen│ │Leder/lang│ │Fleksibel │   • miljømerke           │
+│ └──────────┘ └──────────┘ └──────────┘ └──────────┘   (ingen pris, ingen kurv)│
 ├──────────────────────────────────────────────────────────────────────────────┤
-│ H2 Merker vi leverer i denne kategorien                                      │
-│ HÅG · RH · Sedus · Varier · Savo · RBM · NCP · BackApp · Kontorsenteret      │
-│ «Finner du ikke det du leter etter? Vi leverer hele sortimentet.»            │
-│ [Be om tilbud på kontorstoler]                                               │
+│ H2 Etter behov    Fokusarbeid → … · Aktiv sitting → … · Delte arbeidsplasser  │
+│                   → … · Store/små brukere → …   (lenker til produkter)       │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│ H2 Brukt eller nytt?  Møbelscout-kort: «Vi finner brukte HÅG og RH for dere» │
+│ H2 Merker vi leverer   HÅG · RH · Sedus · Varier · Savo · RBM · NCP · BackApp │
+│ «Ser dere etter en bestemt modell? Vi leverer hele sortimentet.»             │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│ H2 Prosjekter med kontorstoler fra oss   [ProjectCard ×3]                    │
+│ H2 Prosjekter          [ProjectCard ×3]                                      │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│ H2 Guide: Slik velger du kontorstol (kort, lenker til artikkel og            │
-│    guides.kontorcompaniet.no)                                                │
+│ DELT BÅND:  NYTT                          │  BRUKT                            │
+│ «Se våre anbefalte kontorstoler» ↑        │ «Vil dere heller kjøpe brukt?     │
+│ [Be om tilbud]                            │  Sett Møbelscout på saken.»       │
+│                                           │ [Start Møbelscout]                │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ H2 Spørsmål og svar (bare reelle spørsmål)                                   │
+│ Rådgiver-CTA med foto                                                        │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
-Schema: `CollectionPage` + `ItemList` + `BreadcrumbList`.
+Ingen prisfilter og ingen sortering på pris. Et enkelt filter på merke og bruksområde vises bare når kategorien har ≥ 12 produkter.
+Schema: `CollectionPage` + `ItemList` + `BreadcrumbList` (+ `FAQPage` bare med reell FAQ).
 
 ---
 
-## 4. Produktside `/produkt/{slug}` (eksempel: HÅG Capisco 8106)
+## 4. Produktside `/produkt/{slug}`: B2B, ikke en nettbutikk uten kjøpsknapp
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │ Brødsmuler: Produkter / Kontorstoler / HÅG Capisco 8106                      │
-├───────────────────────────────────────────┬──────────────────────────────────┤
-│ GALLERI                                   │ HÅG  (lenke til merkeside)        │
-│ ┌───────────────────────────────────────┐ │ H1 HÅG Capisco 8106               │
-│ │ STORT BILDE (4:5)                     │ │ Kort beskrivelse (2 linjer)       │
-│ │                                       │ │                                   │
-│ └───────────────────────────────────────┘ │ Fra 9 447 kr eks. mva.            │
-│ [▢][▢][▢][▢]  (miniatyrer, lightbox)      │                                   │
-│                                           │ Variant: Tekstil ▾  Fotkryss ▾    │
-│                                           │                                   │
-│                                           │ [Be om tilbud]                    │
-│                                           │ [+ Legg i prosjektliste]          │
-│                                           │ Snakk med en rådgiver → (navn/tlf)│
-│                                           │ ──────────────────────────────── │
-│                                           │ ✓ Leveringstid 2–3 uker           │
-│                                           │ ✓ 10 års garanti                  │
-│                                           │ ✓ Levering og montering           │
-│                                           │ • Møbelfakta · Greenguard · EPD ↓ │
-├───────────────────────────────────────────┴──────────────────────────────────┤
-│ Faner eller ankere: Om produktet · Spesifikasjoner · Miljø og dokumenter     │
-│ H2 Om produktet     Beskrivelse (≥ 80 ord)                                   │
-│ H2 Spesifikasjoner  SpecTable (mål, materialer, justeringer, vekt)           │
-│ H2 Miljø og dokumentasjon  Merker + EPD/datablad-nedlasting + brukerguide    │
-│                            (guides.kontorcompaniet.no/hag/capisco-8106)      │
+├──────────────────────────────────────────────┬───────────────────────────────┤
+│ STORT BILDE (redaksjonelt, 4:5)              │ HÅG → merkeside               │
+│                                              │ H1 HÅG Capisco 8106           │
+│                                              │ Tagline: Sadelstolen som får  │
+│                                              │ deg til å bevege deg.         │
+│                                              │                               │
+│ [▢][▢][▢] + «I bruk»-bilde fra prosjekt       │ Passer til: Aktivt arbeid ·   │
+│                                              │ Hev/senk-pulter · Kreative    │
+│                                              │ miljøer                       │
+│                                              │                               │
+│                                              │ [Be om tilbud]                │
+│                                              │ [Snakk med rådgiver]          │
+│                                              │ + Legg til i prosjekt         │
+│                                              │ ───────────────────────────── │
+│                                              │ Garanti 10 år · Norsk design  │
+│                                              │ • Møbelfakta • EPD            │
+│                                              │ (pris vises bare hvis aktivt: │
+│                                              │  «Fra 8 990 kr eks. mva.» –   │
+│                                              │  liten og nedtonet)           │
+├──────────────────────────────────────────────┴───────────────────────────────┤
+│ H2 Om stolen             Kort, god tekst (≥ 80 ord)                          │
+│ H2 Egenskaper            3–6 kort med ikon: Sadelsete · 360° rotasjon · …    │
+│ H2 Ergonomi              Hvordan den brukes riktig + lenke til brukerguide   │
+│ H2 Muligheter            Modeller · Understell · Tekstiler (VISER, ikke      │
+│                          velger) → «Vi hjelper dere velge i tilbudet»         │
+│ H2 Mål                   Kompakt spesifikasjonstabell                        │
+│ H2 Miljø og dokumentasjon  Sertifiseringer · EPD (last ned) · garanti        │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│ H2 Brukt i prosjekter    [ProjectCard ×2–3]  (fra project_products)          │
+│ H2 I prosjekter          [ProjectCard ×2] «Brukt i 2 av våre prosjekter»     │
+│ H2 Løsninger             Ergonomi · Kontorlandskap                           │
+│ H2 Mer fra HÅG           [ProductCard ×3]                                    │
+│ H2 Alternativer          [ProductCard ×3] (andre merker, samme behov)         │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│ H2 Ser dere etter brukt?  «Møbelscout kan lete etter brukte Capisco for      │
-│    dere.»  [Sett Møbelscout på saken]  (forhåndsutfyller prompt)             │
-├──────────────────────────────────────────────────────────────────────────────┤
-│ H2 Relaterte produkter  (samme familie → komplementer; aldri firmagaver)     │
+│ DELT BÅND: «Trenger dere mange?» → Rådgiver   │  «Brukt Capisco?» → Møbelscout│
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
-Mobil: galleri øverst, deretter pris, CTA og nøkkelfakta. «Be om tilbud» ligger som sticky bunnlinje.
-«Be om tilbud» åpner et kort skjema i et `dialog`-element med tilgjengelig fokusfelle (bedrift, navn, e-post, telefon valgfritt, antall, melding), og produkt og variant er forhåndsutfylt.
-Schema: `Product` + `Brand` + `Offer` (bare når pris vises) + `BreadcrumbList`.
+«Be om tilbud» åpner en kort dialog med produktet forhåndsutfylt (bedrift, navn, e-post, telefon valgfritt, antall ca. og melding) og blir en lead med `product_id`.
+«Legg til i prosjekt» legger produktet i en forespørselsliste uten pris (skuff nederst til høyre), som sendes som én prosjektforespørsel.
+Mobil: bilde → navn → «passer til» → CTA-er. En sticky bunnlinje har [Be om tilbud] og [Rådgiver].
+Schema: `Product` + `Brand` (uten `Offer` med mindre pris er aktiv og kontrollert) + `BreadcrumbList`.
 
 ---
 
@@ -237,20 +251,22 @@ Schema: `Article`/`CreativeWork` + `VideoObject` + `BreadcrumbList`.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│ Brødsmuler: Merkevarer / HÅG                                                 │
-│ LOGO   H1 HÅG                                                                │
-│ Redaksjonelt: hvem de er, hva de er kjent for (ergonomi, norsk produksjon),  │
-│ hvorfor vi fører dem, garanti og miljø.            │ Stemningsbilde          │
+│ HERO: stemningsbilde · LOGO · H1 HÅG                                         │
+│ Introduksjon (hvem, hva de er kjent for)                                     │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│ Fakta: Opprinnelse Norge · Del av Flokk · 10 års garanti · Møbelfakta        │
+│ Fakta-stripe: Norge · Del av Flokk · Opptil 10 års garanti · EPD · Møbelfakta │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│ H2 HÅG hos Kontorcompaniet   [ProductCard ×n]  (gruppert per kategori)       │
+│ H2 Hvorfor vi bruker HÅG    (Kontorcompaniets egen stemme: erfaring,         │
+│                              service, gjenbruksverdi)                        │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│ H2 Prosjekter med HÅG        [ProjectCard ×n]                                │
+│ H2 Produktfamilier          Capisco · Tribute · Futu · Sofi · Creed · Celi   │
+│ H2 Utvalgte HÅG-produkter   [ProductCard ×4]                                 │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│ H2 Brukt HÅG?  Møbelscout-kort                                               │
-│ H2 Brukerguider   → guides.kontorcompaniet.no/hag/…                          │
-│ CTA: [Be om tilbud på HÅG]                                                   │
+│ H2 HÅG i våre prosjekter    [ProjectCard ×n]                                 │
+│ H2 Ergonomi                 kort + lenke til /losninger/ergonomi og guider    │
+│ H2 Miljø                    produksjon, materialer, EPD, sertifiseringer     │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ DELT BÅND: [Be om tilbud på HÅG] / «Brukt HÅG?» → Møbelscout                 │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 Merkehub `/merkevarer`: alle 52 merker gruppert per kategori. Merker uten egen side vises som tekst eller logo uten lenke.

@@ -1,0 +1,70 @@
+gammel_slug,navn,merke,beslutning,ny_side,prioritet,beskrivelse_ord,bilder,epd,miljomerking,status_i_dag,begrunnelse
+abstracta-soneo-bordskjerm-1200x650x30-mm,Abstracta Soneo Bordskjerm 1200x650x30 mm,Abstracta,MERGE,/produkt/abstracta-soneo-bordskjerm,P2,19,4,Ja,Møbelfakta,200,Bredder som informasjon
+abstracta-soneo-bordskjerm-1400x650x30-mm,Abstracta Soneo Bordskjerm 1400x650x30 mm,Abstracta,MERGE,/produkt/abstracta-soneo-bordskjerm,P2,19,4,Ja,Møbelfakta,200,Bredder som informasjon
+abstracta-soneo-bordskjerm-1600x650x30-mm,Abstracta Soneo Bordskjerm 1600x650x30 mm,Abstracta,MERGE,/produkt/abstracta-soneo-bordskjerm,P2,19,4,Ja,Møbelfakta,200,Bredder som informasjon
+dencon-delta-konferansebord-140x80-cm,Dencon Delta Konferansebord 140×80 cm,Dencon,MERGE,/produkt/dencon-delta-konferansebord,P1,42,5,,FSC,200,Seks størrelser → én side
+dencon-delta-konferansebord-160x80-cm,Dencon Delta Konferansebord 160×80 cm,Dencon,MERGE,/produkt/dencon-delta-konferansebord,P1,42,5,,FSC,200,Seks størrelser → én side
+dencon-delta-konferansebord-180x80-cm,Dencon Delta Konferansebord 180×80 cm,Dencon,MERGE,/produkt/dencon-delta-konferansebord,P1,42,5,,FSC,200,Seks størrelser → én side
+dencon-delta-konferansebord-180x90-cm,Dencon Delta Konferansebord 180×90 cm,Dencon,MERGE,/produkt/dencon-delta-konferansebord,P1,42,5,,FSC,200,Seks størrelser → én side
+dencon-delta-konferansebord-200x100-cm,Dencon Delta Konferansebord 200×100 cm,Dencon,MERGE,/produkt/dencon-delta-konferansebord,P1,42,5,,FSC,200,Seks størrelser → én side
+dencon-delta-konferansebord-220x100-cm,Dencon Delta Konferansebord 220×100 cm,Dencon,MERGE,/produkt/dencon-delta-konferansebord,P1,42,5,,FSC,200,Seks størrelser → én side
+dencon-skap,Dencon Skap 2xA4,Dencon,KEEP,/produkt/dencon-skap,P2,0,3,,FSC,200,Høyder som informasjon. Beskrivelse mangler – må skrives
+dencon-skap-3xa4,Dencon Skap 3xA4,Dencon,MERGE,/produkt/dencon-skap,P2,0,3,,FSC,200,Høyder som informasjon. Beskrivelse mangler – må skrives
+dencon-skap-4xa4,Dencon Skap 4xA4,Dencon,MERGE,/produkt/dencon-skap,P2,0,3,,FSC,200,Høyder som informasjon. Beskrivelse mangler – må skrives
+dencon-bordplate-160x80,Dencon Bordplate 160×80,Dencon,ARCHIVE,/produkt/dencon-skrivebord,-,0,1,,FSC,200,Komponent – dekkes på skrivebordssiden
+dencon-elektrisk-hev-senk-understell,Dencon Elektrisk hev/senk understell,Dencon,ARCHIVE,/produkt/dencon-skrivebord,-,0,1,,,200,Komponent – dekkes på skrivebordssiden
+dencon-kabelrenne,Dencon Kabelrenne,Dencon,ARCHIVE,/produkt/dencon-skrivebord,-,0,1,,,200,Tilbehør – nevnes på skrivebordssiden
+dencon-skrivebord-120x80-cm,Dencon El. hev/senk Skrivebord 120×80 cm,Dencon,MERGE,/produkt/dencon-skrivebord,P1,40,1,,FSC,200,"Én side: hev/senk og fast høyde, størrelser som informasjon (ikke SKU). Slugs i dag er delvis feil"
+dencon-skrivebord-120x80-cm-2,Dencon Skrivebord 120×80 cm,Dencon,MERGE,/produkt/dencon-skrivebord,P1,40,1,,FSC,200,"Én side: hev/senk og fast høyde, størrelser som informasjon (ikke SKU). Slugs i dag er delvis feil"
+dencon-skrivebord-140x80-cm,Dencon El. hev/senk Skrivebord 140×80 cm,Dencon,MERGE,/produkt/dencon-skrivebord,P1,40,1,,FSC,200,"Én side: hev/senk og fast høyde, størrelser som informasjon (ikke SKU). Slugs i dag er delvis feil"
+dencon-skrivebord-140x80-cm-2,Dencon Skrivebord 160×80 cm,Dencon,MERGE,/produkt/dencon-skrivebord,P1,40,1,,FSC,200,"Én side: hev/senk og fast høyde, størrelser som informasjon (ikke SKU). Slugs i dag er delvis feil"
+dencon-skrivebord-160x80-cm,Dencon El. hev/senk Skrivebord 160×80 cm,Dencon,MERGE,/produkt/dencon-skrivebord,P1,40,1,,FSC,200,"Én side: hev/senk og fast høyde, størrelser som informasjon (ikke SKU). Slugs i dag er delvis feil"
+dencon-skrivebord-fast-hoyde-140x80-cm,Dencon Skrivebord 140×80 cm,Dencon,MERGE,/produkt/dencon-skrivebord,P1,40,1,,FSC,200,"Én side: hev/senk og fast høyde, størrelser som informasjon (ikke SKU). Slugs i dag er delvis feil"
+dencon-utrekksskap-2xa4,Dencon Uttrekksskap 2xA4,Dencon,MERGE,/produkt/dencon-uttrekksskap,P2,0,3,,FSC,200,Rettet skrivefeil. Beskrivelse mangler
+dencon-uttrekksskap-3xa4,Dencon Uttrekksskap 3xA4,Dencon,MERGE,/produkt/dencon-uttrekksskap,P2,0,3,,FSC,200,Rettet skrivefeil. Beskrivelse mangler
+evoline-circle80,Evoline Circle80,Evoline,KEEP,/produkt/evoline-circle80,P2,63,3,,,200,DisQ (trådløs lading) som variant
+evoline-circle80-disq,Evoline Circle80 DisQ,Evoline,MERGE,/produkt/evoline-circle80,P2,99,3,,,500,DisQ (trådløs lading) som variant
+evoline-express-2xel-klikksystem,Evoline Express 2 x Schuko Klikksystem,Evoline,MERGE,/produkt/evoline-express,P2,38,1,,,200,Systemside for strøm på arbeidsplassen
+evoline-express-3xschuko-klikksystem,Evoline Express 3 x Schuko Klikksystem,Evoline,MERGE,/produkt/evoline-express,P2,38,1,,,200,Systemside for strøm på arbeidsplassen
+evoline-express-4xel-klikksystem,Evoline Express 4 x Schuko Klikksystem,Evoline,MERGE,/produkt/evoline-express,P2,38,1,,,200,Systemside for strøm på arbeidsplassen
+evoline-matafix-kabelsamler-20m,Evoline Matafix Kabelsamler 20m,Evoline,ARCHIVE,/produkt/evoline-express,-,0,4,,,200,Kabel/tilbehør uten egen søke- eller leadverdi – nevnes på Express-siden
+evoline-metafix-verktoy-for-kabling,Evoline Metafix Verktøy for kabling,Evoline,ARCHIVE,/produkt/evoline-express,-,0,1,,,200,Kabel/tilbehør uten egen søke- eller leadverdi – nevnes på Express-siden
+evoline-rj45-cat6-utp-3m-gra,"Evoline RJ45 Cat6 UTP 3m, grå",Evoline,ARCHIVE,/produkt/evoline-express,-,0,1,,,200,Kabel/tilbehør uten egen søke- eller leadverdi – nevnes på Express-siden
+evoline-rj45-cat6-utp-5m-gra,"Evoline RJ45 Cat6 UTP 5m, grå",Evoline,ARCHIVE,/produkt/evoline-express,-,0,1,,,200,Kabel/tilbehør uten egen søke- eller leadverdi – nevnes på Express-siden
+evoline-rj45-cat6-utp-75m-gra,"Evoline RJ45 Cat6 UTP 7,5m, grå",Evoline,ARCHIVE,/produkt/evoline-express,-,0,1,,,200,Kabel/tilbehør uten egen søke- eller leadverdi – nevnes på Express-siden
+evoline-skjotekabel-1m,Evoline Skjøtekabel 1m,Evoline,ARCHIVE,/produkt/evoline-express,-,0,1,,,200,Kabel/tilbehør uten egen søke- eller leadverdi – nevnes på Express-siden
+evoline-skjotekabel-25m,"Evoline Skjøtekabel 2,5m",Evoline,ARCHIVE,/produkt/evoline-express,-,0,1,,,200,Kabel/tilbehør uten egen søke- eller leadverdi – nevnes på Express-siden
+evoline-skjotekabel-3m,Evoline Skjøtekabel 3m,Evoline,ARCHIVE,/produkt/evoline-express,-,0,1,,,200,Kabel/tilbehør uten egen søke- eller leadverdi – nevnes på Express-siden
+evoline-tilforselskabel-1m-sort,Evoline Tilførselskabel 1m,Evoline,ARCHIVE,/produkt/evoline-express,-,0,1,,,200,Kabel/tilbehør uten egen søke- eller leadverdi – nevnes på Express-siden
+evoline-tilforselskabel-2m-sort,Evoline Tilførselskabel 2m,Evoline,ARCHIVE,/produkt/evoline-express,-,0,1,,,200,Kabel/tilbehør uten egen søke- eller leadverdi – nevnes på Express-siden
+evoline-tilforselskabel-3m-sort,Evoline Tilførselskabel 3m,Evoline,ARCHIVE,/produkt/evoline-express,-,0,2,,,200,Kabel/tilbehør uten egen søke- eller leadverdi – nevnes på Express-siden
+fogia-bollo,Fogia Bollo,Fogia,KEEP,/produkt/fogia-bollo,P2,26,4,,,200,Norsk design (Andreas Engelsvik). 0 innlenker i dag. Fogia står ikke på leverandørlisten – bekreft
+fora-form-bud-unite-konferansestol,Fora Form Bud Unite Konferansestol,Fora Form,KEEP,/produkt/fora-form-bud-unite-konferansestol,P1,89,3,Ja,Møbelfakta,500,"Norsk design, EPD, Møbelfakta"
+fora-form-city-4-ben,Fora Form City 4 ben,Fora Form,KEEP,/produkt/fora-form-city-4-ben,P1,58,3,Ja,Møbelfakta,200,"Norsk design, EPD"
+fora-form-kabelluke-med-bronn,Fora Form Kabelluke med brønn,Fora Form,ARCHIVE,/produkt/fora-form-kvart-motebord,-,0,1,,,200,Tilbehør til møtebord
+fora-form-kvart-motebord-240x120,Fora Form Kvart Møtebord 200×120,Fora Form,MERGE,/produkt/fora-form-kvart-motebord,P1,65,1,Ja,Møbelfakta,200,Duplikat + størrelser → én side. NB: «240x120» er i dag 200×120
+fora-form-kvart-motebord-240x120-2,Fora Form Kvart Møtebord 240×120,Fora Form,MERGE,/produkt/fora-form-kvart-motebord,P1,65,1,Ja,Møbelfakta,200,Duplikat + størrelser → én side. NB: «240x120» er i dag 200×120
+fora-form-kvart-motebord-260x120,Fora Form Kvart Møtebord 260×120,Fora Form,MERGE,/produkt/fora-form-kvart-motebord,P1,65,1,Ja,Møbelfakta,200,Duplikat + størrelser → én side. NB: «240x120» er i dag 200×120
+fora-form-senso-2-seter-hoy,Fora Form Senso 2-seter Høy,Fora Form,MERGE,/produkt/fora-form-senso-hoy,P1,81,4,Ja,Møbelfakta,500,2- og 3-seter på én side
+fora-form-senso-3-seter-hoy,Fora Form Senso 3-seter Høy,Fora Form,MERGE,/produkt/fora-form-senso-hoy,P1,81,3,Ja,Møbelfakta,500,2- og 3-seter på én side
+hag-capisco-8106,Håg Capsico 8106,Håg,KEEP,/produkt/hag-capisco-8106,P1,50,4,,,200,"Ikonisk modell, høy søkeverdi, egen brukerguide"
+hag-celi-9100,Håg Celi 9100,Håg,KEEP,/produkt/hag-celi-9100,P1,51,8,Ja,"Greenguard, Møbelfakta",500,"HÅG, EPD, Greenguard"
+hag-creed-6006-kontorstol,Håg Creed 6006 Kontorstol,Håg,KEEP,/produkt/hag-creed-6006-kontorstol,P1,64,4,Ja,"Greenguard, Møbelfakta",500,"HÅG, EPD + miljømerker"
+hag-futu-mesh-1100-s,Håg Futu Mesh 1100-S,Håg,KEEP,/produkt/hag-futu-mesh-1100-s,P1,72,10,Ja,"Greenguard, Møbelfakta",200,"HÅG, 10 bilder, EPD"
+hag-sofi-mesh-7500-2,Håg Sofi Mesh 7500,Håg,REDIRECT,/produkt/hag-sofi-mesh-7500,P1,50,4,,,200,Rydd bort -2 (basis-slug finnes ikke). Egen brukerguide
+hag-tribute-9021-kontorstol,Håg Tribute 9021 Kontorstol,Håg,MERGE,/produkt/hag-tribute,P1,67,4,Ja,"Greenguard, Møbelfakta",500,Én familieside: 9021 og 9031 (med nakkestøtte) som modellvarianter
+hag-tribute-9031-kontorstol,Håg Tribute 9031 Kontorstol,Håg,MERGE,/produkt/hag-tribute,P1,67,4,Ja,"Greenguard, Møbelfakta",500,Én familieside: 9021 og 9031 (med nakkestøtte) som modellvarianter
+hay-about-a-chair-222,Hay About a Chair 222,Hay,KEEP,/produkt/hay-about-a-chair-222,P2,80,19,,,200,"Kjent designstol (AAC 22), 19 bilder"
+muuto-outline-3-seter,Muuto Outline 3 seter,Muuto,KEEP,/produkt/muuto-outline-3-seter,P2,42,2,,,200,Tre identiske titler → én side
+muuto-outline-3-seter-2,Muuto Outline 3 seter,Muuto,MERGE,/produkt/muuto-outline-3-seter,P2,41,2,,,200,Tre identiske titler → én side
+muuto-outline-3-seter-3,Muuto Outline 3 seter,Muuto,MERGE,/produkt/muuto-outline-3-seter,P2,42,2,,,200,Tre identiske titler → én side
+profim-noor-6050,Profim Noor 6050,Profim,KEEP,/produkt/profim-noor-6050,P2,53,7,Ja,"Greenguard, Møbelfakta",500,EPD + Greenguard. Profim står ikke på leverandørlisten – bekreft
+vitra-eames-loungechair,Vitra Eames Loungechair,Vitra,KEEP,/produkt/vitra-eames-loungechair,P1,61,3,Ja,,500,Svært høy søkeverdi (designikon)
+vitra-eames-plastic-sidechair-dsr,Vitra Eames Plastic Sidechair DSR,Vitra,KEEP,/produkt/vitra-eames-plastic-side-chair-dsr,P1,0,16,Ja,,500,Høy søkeverdi. NB: ny slug er foreslått for riktig navn – beholdes gammel hvis GSC viser trafikk
+vitra-id-trim,Vitra ID Trim,Vitra,KEEP,/produkt/vitra-id-trim,P1,45,3,Ja,,200,Vitra kontorstol
+vitra-id-trim-kopi,Vitra ID Mesh,Vitra,REDIRECT,/produkt/vitra-id-trim,P1,55,2,Ja,,200,«-kopi» (mesh-versjon) er variant av samme modell
+vitra-physix,Vitra Physix,Vitra,KEEP,/produkt/vitra-physix,P2,0,7,Ja,,200,Mangler beskrivelse i dag – må skrives
+vitra-physix-konferansestol,Vitra Softshell 5-star base,Vitra,MERGE,/produkt/vitra-physix,P2,0,7,Ja,,200,Samme modellfamilie; understell/tekstil er detaljer for tilbudsfasen
+vitra-soft-pad-217,Vitra Soft Pad 217,Vitra,MERGE,/produkt/vitra-soft-pad-chair,P2,0,1,,,200,EA 217 og EA 219 som varianter av Soft Pad Chair
+vitra-soft-pad-219,Vitra Soft Pad 219,Vitra,MERGE,/produkt/vitra-soft-pad-chair,P2,34,2,,,200,EA 217 og EA 219 som varianter av Soft Pad Chair
+dauphin-tosync,Dauphin ToSync,Dauphin,ARCHIVE,/produkter/kontorstoler,-,19,1,,,200,"Rimelig lagerstol, Dauphin står ikke på leverandørlisten, 3 innlenker. BEKREFT om dere vil selge den videre"

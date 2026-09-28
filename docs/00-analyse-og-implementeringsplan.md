@@ -1,6 +1,6 @@
 # Nye Kontorcompaniet.no + Møbelscout — Analyse og implementeringsplan
 
-**Status:** Fase 0 levert til godkjenning (v2, 2026-09-28). Ingen applikasjonskode er skrevet.
+**Status:** Fase 0 levert (v3, 2026-09-28), med presiseringen *«ikke en nettbutikk»* innarbeidet. Designprototype 0b ligger i [`prototype/`](../prototype/). Ingen applikasjonskode er skrevet.
 **Grunnlag:** full crawl av kontorcompaniet.no 2026-09-28 + offentlige WordPress/WooCommerce-API-er.
 
 | Dokument | Innhold |
@@ -12,6 +12,8 @@
 | [04 – Wireframes](04-wireframes.md) | Sideanatomi for forside, løsning, kategori, produkt, prosjekt, merke og Møbelscout |
 | [`migration/redirect-map.csv`](migration/redirect-map.csv) | Komplett redirect-kart, én rad per URL |
 | [`migration/crawl-2026-09-28/url-inventar.csv`](migration/crawl-2026-09-28/url-inventar.csv) | Alle 234 crawlede URL-er med status, metadata og avvik |
+| [`migration/produktkatalog-vurdering.csv`](migration/produktkatalog-vurdering.csv) | KEEP/MERGE/REDIRECT/ARCHIVE per WooCommerce-produkt |
+| [`prototype/`](../prototype/) | Designprototype 0b (statisk HTML): forside, produkt, kategori, merke, prosjekt og Møbelscout |
 | [`migration/crawl-2026-09-28/produkter.csv`](migration/crawl-2026-09-28/produkter.csv) | Alle 109 produkter med data, kvalitet og status |
 | [`migration/firmagaver-inventar.csv`](migration/firmagaver-inventar.csv) | 41 firmagave-URL-er med A/B/C-forslag |
 | [`migration/merkevarer-inventar.csv`](migration/merkevarer-inventar.csv) | 52 merker: kategori, produkter og om de står på leverandørsiden |
@@ -24,7 +26,7 @@
 | # | Tema | Beslutning |
 |---|---|---|
 | 1 | Data | Full crawl først (gjort). Search Console og GA4 kobles inn senere for å prioritere etter trafikk. |
-| 2 | Produkt-URL-er | `/produkt/{slug}` er hovedregelen. Duplikater (-2/-3, «-kopi»), feil slug og størrelsesvarianter får ny kanonisk URL med 301. |
+| 2 | Produkt-URL-er | `/produkt/{slug}` er hovedregelen. Duplikater (-2/-3, «-kopi»), feil slug og størrelsesvarianter får ny kanonisk URL med 301. Svake produkter arkiveres med 301. |
 | 3 | Firmagaver | Tas ut av kjernen. Inventar med A (samme produkt i MerchMaker) / B (MerchMaker-kategori) / C (410). **Ikke 410 som standard, og aldri til MerchMaker-forsiden.** Implementeres når MerchMaker-strukturen er klar. |
 | 4 | CMS | Supabase + eget adminpanel + MDX i v1. Produkter, merker, prosjekter, redirects og SEO-data administreres uten deploy. Redaksjonelt innhold går via et repository-lag, slik at MDX kan flyttes til databasen uten omskriving. |
 | 5 | Database | Eget Supabase-prosjekt. Ingen deling med Workshop Studio, MerchMaker eller Donna. Integrasjoner går via API og hendelser. |
@@ -35,6 +37,42 @@
 | 10 | SEO-prioritet | Søkeintensjon → nyttig innhold → internlenking → prosjekter → produkter → merker → løsninger → teknisk SEO → strukturerte data → konvertering. |
 | 11 | Møbelscout | Strategisk leadgenerator. Hele trakten måles fra start, og omsetning deles opp per inntektstype. |
 | 12 | Møbelscout-SEO | Offentlig, SEO-optimalisert `/mobelscout`. Ingen tynne programmatiske sider i v1. |
+| 13 | **Ikke nettbutikk** | WooCommerce gjenskapes ikke. Produktene brukes til SEO, inspirasjon og leads. CTA-ene er «Be om tilbud», «Snakk med rådgiver» og «Legg til i prosjekt», og aldri «Kjøp» eller «Legg i handlekurv». Pris er et valgfritt felt. Ingen varianter som SKU-er. |
+| 14 | Kuratert katalog | Hvert WooCommerce-produkt vurderes som KEEP, MERGE, REDIRECT eller ARCHIVE. Målet er ~50 svært gode produktsider, ikke flest mulig. |
+| 15 | Kjernen | Koblingen **produkt ↕ prosjekt ↕ løsning ↕ merkevare ↕ rådgivning ↕ Møbelscout** styrer datamodell, internlenking og design. |
+
+## Hva vi ikke bygger
+
+| Bygges ikke | Erstattes av |
+|---|---|
+| Handlekurv, checkout, betaling, nettordre | «Be om tilbud» → lead → tilbud i Workshop Studio |
+| Kundekonto for netthandel | Hemmelig lenke for Møbelscout-resultater (ingen innlogging i v1) |
+| Lagerstyring for ordinære produkter | Valgfri leveringstid som tekst |
+| Pris- og variantmotor (SKU per størrelse, farge og understell) | `product_options` som *viser mulighetene*. Konfigurasjon skjer i tilbudet |
+| Løpende vedlikehold av utsalgspriser | Valgfritt «Fra x kr eks. mva.» med kontrolldato, ellers ingen pris |
+| «Legg i handlekurv» | «Legg til i prosjekt»: en forespørselsliste uten pris som sendes som én prosjektforespørsel |
+| Checkout på Scout-treff | «Dette er interessant» → Kontorcompaniet verifiserer → tilbud |
+
+## Kjernen: koblingsmodellen
+
+```
+                  ┌──────────────┐
+                  │  RÅDGIVNING  │  ← CTA på alle sider: navngitt rådgiver, «Be om tilbud»
+                  └──────┬───────┘
+   ┌──────────┐   ┌──────┴──────┐   ┌───────────┐
+   │ LØSNING  │◄─►│  PROSJEKT   │◄─►│ MERKEVARE │
+   └────┬─────┘   └──────┬──────┘   └─────┬─────┘
+        │                │                │
+        └──────────►┌────┴─────┐◄─────────┘
+                    │ PRODUKT  │
+                    └────┬─────┘
+                         │  «Vil dere heller ha brukt?»
+                    ┌────┴──────┐
+                    │MØBELSCOUT │ → treff → «Interessant» → rådgiver → tilbud
+                    └───────────┘
+```
+
+Hver kobling er en tabell i datamodellen (`project_products`, `project_solutions`, `project_brands`, `product_solutions`, `brand_categories`) og vises som en seksjon på begge sider av koblingen. Én redigering i admin, for eksempel «RH Logic ble brukt i prosjekt X», gir lenker på prosjekt-, produkt-, merke- og løsningssiden samtidig.
 
 ---
 
@@ -115,7 +153,7 @@ Alle URL-er er klassifisert i `url-inventar.csv`:
 
 | Type | Antall | Verdi | Behandling |
 |---|---|---|---|
-| Produkt (kontor/brukt) | 75 | **Høy** (long-tail) | 29 beholdes, 40 slås sammen til 12, 4 bruktvarer går til `/brukt` |
+| Produkt (kontor/brukt) | 75 | **Høy** for kjente modeller | Kuratert: **26 produktsider** (16 KEEP, 35 URL-er MERGE, 2 REDIRECT). 16 ARCHIVE går til relevant produkt, og 4 bruktvarer til `/brukt` |
 | Kategori | 19 | **Høy** (hovedsøkeord) | 301/MERGE til 8 nye kategorier |
 | Merke (produktkategori/brands) | 13 | Middels–høy | 301 til `/merkevarer/{merke}` |
 | Innholdssider | 20 | Høy for om oss, kontakt, prosjekter og leverandører | KEEP/301 |
@@ -126,22 +164,36 @@ Alle URL-er er klassifisert i `url-inventar.csv`:
 
 Search Console-data vil **justere prioriteten**, ikke ta prinsippene: URL-er med klikk eller backlinks verifiseres manuelt før lansering.
 
-## E. Produktaudit
+## E. Produktaudit og kuratert katalog
 
-**109 produkter:** 69 kontorprodukter, 4 brukt/utstilling og 36 firmagaver. 51 produkter er variable (WooCommerce-varianter), og alle har pris og bilde.
+**109 produkter i dag:** 69 kontorprodukter, 4 brukt/utstilling og 36 firmagaver. Den nye katalogen **importerer ikke alt automatisk**. Hvert produkt er vurdert i [`produktkatalog-vurdering.csv`](migration/produktkatalog-vurdering.csv):
 
-| Funn | Konsekvens for migreringen |
+| Beslutning | Antall URL-er | Hva det betyr |
+|---|---|---|
+| **KEEP** | 16 | Egen produktside (samme URL, bortsett fra én foreslått slug-retting) |
+| **MERGE** | 35 | Slås sammen til produktfamilier (Dencon skrivebord, Delta, Tribute, Kvart, Soft Pad …) |
+| **REDIRECT** | 2 | Duplikat eller feil slug (`-2`, `-kopi`) → kanonisk side |
+| **ARCHIVE** | 16 | Publiseres ikke: kabler, komponenter og tilbehør (14), Fora Form kabelluke og Dauphin ToSync. 301 til mest relevante produkt eller kategori |
+| → **Produktsider fra dagens data** | **26** | P1: 16 · P2: 10 |
+
+**Vurderingskriterier:** vil Kontorcompaniet selge produktet · SEO-verdi (kjent modell eller designikon) · viktig produsent (leverandørlisten) · brukt i prosjekter · dokumentasjon og bilder (EPD, miljømerke, antall bilder) · dekker det en viktig kategori.
+
+**Fra 26 til ~50:** de resterende sidene bør være **modeller Kontorcompaniet faktisk ønsker å selge** fra merkene på leverandørlisten, og som i dag mangler helt. Forslag som må bekreftes av dere:
+
+| Kategori | Kandidater (forslag) |
 |---|---|
-| Størrelser som egne produkter (Dencon Delta ×6, skrivebord ×6, skap ×3, Abstracta Soneo ×3, Evoline-kabler ×12, Fora Form Kvart ×3) | Slås sammen til **ett produkt med varianter**. Resultatet er 41 kontorproduktsider, med mindre tynt innhold og mer samlet autoritet |
-| Duplikater: Muuto Outline ×3, `-2`-slugs, «vitra-id-trim-kopi» | MERGE til én kanonisk side |
-| Feil slug: `dencon-skrivebord-140x80-cm-2` er i dag **160×80**, `fora-form-kvart-motebord-240x120` er **200×120**, og `dencon-utrekksskap` har skrivefeil | Ny slug med 301 |
-| 89 av 109 produkter har under 50 ord beskrivelse | Kvalitetsport: produktet indekseres først når det har beskrivelse, spesifikasjoner og alt-tekst |
-| Merke ligger som **kategori** (under «Brands»), ikke som eget felt. To parallelle merketaksonomier (YITH: «Express», «Ombruk») | Eget `brands`-register i ny modell |
-| Attributter er inkonsistente (Fora Form Kvart står med både Norge og Polen, «Peter Opsvik» er satt på HÅG Creed) | Gjennomgås ved import. Designer blir et felt, ikke et arkiv |
-| Priser vises med mva. i nettbutikken (B2C-logikk) | Ny standard: **pris eks. mva.**, prismodus `fixed` / `from` / `on_request` per produkt |
-| Nettbutikken viser 12 merker, men leverandørsiden har 52 | Kategori- og merkesider viser **merkene vi leverer**, ikke bare produktene som ligger i butikken |
+| Kontorstoler | RH Logic · RH Activ · HÅG Capisco Puls · Sedus se:motion · Varier Move · Varier Variable |
+| Møterom/konferanse | Fora Form (flere modeller) · Lammhults · Randers+Radius · Montana |
+| Skrivebord | Ole Lium · Horreds · Cube Design hev/senk |
+| Akustikk og stillerom | Abstracta Domo · Glimakra · Framery · Fantoni |
+| Lounge | Fora Form · Hay · Fredericia · Magis |
+| Oppbevaring | Montana Free · Sarpsborg Metall · Eskoleia |
 
-**Importløp:** WooCommerce Store API → staging-tabeller (rådata uendret) → normalisering (merke, kategori, varianter, rettighetsflagg på bilder) → kvalitetsport → publisering. Skriptet kan kjøres på nytt, slik at det fungerer frem til lansering.
+**Datakvalitet som må løftes før indeksering:** 89 av 109 produkter har under 50 ord beskrivelse, og flere slugs og titler er feil (`…-140x80-cm-2` er 160×80, `…-240x120` er 200×120). Attributter er inkonsistente. Produktene skrives redaksjonelt, prioritert P1 → P2.
+
+**Pris:** vises ikke som standard. Dagens WooCommerce-priser (inkl. mva., B2C-logikk) migreres ikke automatisk. Et produkt *kan* vise «Fra x kr eks. mva.» når dere ønsker det, med en kontrolldato som skjuler prisen hvis den ikke er sjekket på X måneder.
+
+**Import:** WooCommerce-rådata → `migration.*` (uendret) → bare KEEP/MERGE hentes inn som utkast (merke, kategori, bilder med rettighetsflagg, spesifikasjoner og miljødata) → redaksjonell bearbeiding → kvalitetsport → publisering.
 
 ## F. Informasjonsarkitektur
 
@@ -164,8 +216,8 @@ Se **[04 – Wireframes](04-wireframes.md)** for sideanatomi. Visuelt konsept:
 | **Grid** | 12 kolonner, maks 1 440 px, generøse marger (24/48/96 px). Asymmetriske bilde- og tekstkomposisjoner på prosjekt- og løsningssider |
 | **Bilder** | Fullbredde prosjektbilder (21:9 hero, 4:5 portrett i grid). Produkter på nøytral bakgrunn med konsekvent beskjæring. Ingen generiske stockbilder |
 | **Navigasjon** | Fem hovedpunkter: Løsninger · Produkter · Prosjekter · Møbelscout · Om oss, og én CTA: «Start et prosjekt». Mega-meny på desktop og fullskjermsmeny på mobil. Ingen handlekurv |
-| **CTA-hierarki** | Én primær per visning (oransje), sekundær som konturknapp, tertiær som tekstlenke. Produkter: «Be om tilbud» (primær) og «Legg i prosjektliste» (sekundær) |
-| **Produktpresentasjon** | Store bilder, rolige kort, merke over navn, prismodus, miljømerke som diskret badge og leveringstid |
+| **CTA-hierarki** | Én primær per visning (oransje), sekundær som konturknapp, tertiær som tekstlenke. Produkter: «Be om tilbud» (primær), «Snakk med rådgiver» (sekundær) og «Legg til i prosjekt» (tertiær). Aldri «Kjøp» eller «Handlekurv» |
+| **Produktpresentasjon** | Premium B2B/interiør, ikke en nettbutikk uten kjøpsknapp. Store bilder, bruksområder, egenskaper, miljødata og dokumentasjon, og produktet *i prosjekter*. Pris er valgfri og nedtonet |
 | **Prosjektpresentasjon** | Redaksjonell layout: nøkkeltall-stripe, utfordring → løsning → resultat, bildegalleri, «produkter i prosjektet» og sitat |
 | **Bevegelse** | Subtil innfading og løft (150–250 ms), bildeskala ved hover på kort, sticky seksjonsnavigasjon på lange sider og View Transitions mellom liste og detalj. Alt av ved `prefers-reduced-motion` |
 | **Signatur** | «Dot»-en beholdes som gjenkjenningselement i seksjonsmerker, prosesssteg og status |
@@ -184,7 +236,7 @@ Før fase 2 lager vi en visuell designprototype (typografi, farge og tre nøkkel
 | Jobber | Supabase `pg_cron` → Edge Functions (Scout-innhenting, matching, varsling). Se I |
 | AI | `ai/`-lag med `AiProvider`-grensesnitt, `OpenAiProvider` som standard og `MockProvider` i test. Modell per oppgave er konfigurerbar |
 | E-post | Resend (avsender `@kontorcompaniet.no`) |
-| Hosting | Vercel (Hobby/Pro etter trafikk, uavhengig av cron) |
+| Hosting | Vercel (Hobby/Pro etter trafikk, uavhengig av cron). Ingen e-handelsplattform, betalingsleverandør eller lagersystem |
 | Analyse | Førsteparts hendelseslogg i Supabase + GA4 via GTM etter samtykke (Consent Mode v2) |
 | Kvalitet | Vitest, Playwright (E2E + SEO-tester), Lighthouse CI med budsjett, axe-core, GitHub Actions |
 | Integrasjoner | Outbox (`domain_events`) + signerte webhooks/API. Donna, CRM, Workshop Studio og 24SO leser derfra |
@@ -255,11 +307,11 @@ Kildene tas i bruk i denne rekkefølgen: `mock` → `manual` (CSV/skjema i admin
 | Fase | Innhold | Ferdig når |
 |---|---|---|
 | **0 — Data** ✅ | Crawl, inventar, redirect-kart, sitemap, datamodell, wireframes | Godkjent av deg |
-| **0b — Designprototype** | Typografi, farger og tre nøkkelsider visuelt (forside, prosjekt, produkt) | Visuell retning godkjent |
+| **0b — Designprototype** ✅ levert | Statisk prototype: forside, produkt, kategori, merke, prosjekt og Møbelscout (landing, bekreftelse, resultat) | Visuell retning godkjent |
 | **1 — Fundament** | Next.js, designsystem, Supabase-skjema med RLS, SEO-primitiver, repository-lag, admin-skall, CI | Grønn CI, Lighthouse-budsjett aktivt |
 | **2 — Offentlig vertical slice** | Forside, én løsning, én kategori, tre produkter, Norwegian-prosjektet, én merkeside, kontakt/lead | Hele brukerreisen med ekte innhold |
 | **3 — Møbelscout vertical slice** | Input (tekst og tale) → AI → bekreftelse → kontakt → Scout → mock-kilde → match → resultat → «Interessant» → admin | Full trakt ende til ende med sporing |
-| **4 — Migrering** | Produktimport, varianter, merker, kategorier, prosjekter, løsninger, artikler | Staging komplett, kvalitetsport grønn |
+| **4 — Migrering** | Kuratert import (KEEP/MERGE), redaksjonell produkttekst P1 → P2, nye modellsider opp mot ~50, merker, kategorier som rådgivningssider, prosjekter, løsninger og artikler | Staging komplett, kvalitetsport grønn |
 | **5 — Admin** | Full redigering av produkter, prosjekter, redirects og SEO | Kontorcompaniet redigerer selv |
 | **6 — Lansering** | Redirect-tester, staging-crawl, sjekkliste | Live uten verditap |
 | **7 — Utvidelse** | Egne og manuelle Scout-kilder, varsling, Donna/CRM, lokale sider der data finnes | Målbar trakt til omsetning |
@@ -270,5 +322,5 @@ Kildene tas i bruk i denne rekkefølgen: `mock` → `manual` (CSV/skjema i admin
 2. **MerchMaker-domene og URL-struktur** for firmagave-redirects.
 3. **Prosjektdata:** kunde, år, størrelse, antall arbeidsplasser, bilder og tillatelse for Norwegian, Ice, Yara, Kontorhuset og nyere prosjekter.
 4. **Kundesitater:** bekreft at de kan brukes med navn og tittel.
-5. **Produktsammenslåinger** merket «manuell sjekk» i redirect-kartet (5 stk.).
+5. **Katalogen:** bekreft KEEP/ARCHIVE (spesielt Dauphin, Profim og Fogia, som ikke står på leverandørlisten) og velg nye modeller opp mot ~50.
 6. **Kategorinavn:** «Kantinestoler» (i dag «Stoler») og «Sofa og lounge».

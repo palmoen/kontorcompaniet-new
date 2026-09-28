@@ -8,6 +8,7 @@ Status: forslag til godkjenning. Dette er en **spesifikasjon**, ikke migreringer
 - **Postgres-skjemaer etter ansvar:** `content` (nettstedets innhold), `crm` (leads, kontakter, salgsmuligheter), `scout` (Møbelscout), `ops` (redirects, hendelser, AI-logg, revisjon). Bare `public` eksponeres via Supabase-API-et, og der ligger **kun views** med publisert innhold.
 - Alle tabeller har `id uuid pk default gen_random_uuid()`, `created_at` og `updated_at` (trigger). Innholdstabeller har i tillegg `status` (`draft` | `published` | `archived`) og `published_at`.
 - **RLS på alt.** Anonyme brukere leser bare `public.*`-views. Skriving fra nettsiden skjer i server-kode med service-rollen etter validering (Zod). Admin bruker Supabase Auth med roller (`admin`, `editor`, `sales`).
+- **Ingen e-handelsinfrastruktur.** Ingen tabeller for handlekurv, ordre, betaling, lager eller kundekonto.
 - Slugs er unike per tabell, med små bokstaver `[a-z0-9-]`. En slug-endring i admin **oppretter automatisk en redirect**.
 - **Felles SEO-felt** på alle indekserbare innholdstabeller: `seo_title`, `seo_description`, `og_image_id`, `robots_override` (`index` | `noindex` | null = automatisk via kvalitetsport) og `canonical_override`.
 
@@ -33,41 +34,76 @@ content.people (                 -- rådgivere/ansatte (kontaktside, prosjekter,
 )
 ```
 
-## 2. Katalog
+## 2. Produktkatalog (B2B, ikke nettbutikk)
+
+Katalogen skal **informere, rangere og skape leads**. Den har ingen salgbare SKU-er, ingen lagerstyring, ingen prismotor og ingen konfigurator. Detaljert konfigurasjon skjer i tilbudsprosessen (Workshop Studio).
 
 ```sql
 content.brands (
-  slug, name, logo_id, website_url, country, description_mdx,
-  is_partner bool,               -- står på leverandørlisten
-  has_page bool generated,       -- kvalitetsport (se 01-sitemap)
+  slug, name, logo_id, website_url, country, parent_company,   -- f.eks. HÅG → Flokk
+  intro_md,                       -- kort introduksjon
+  why_we_use_md,                  -- «hvorfor Kontorcompaniet bruker merket»
+  sustainability_md,              -- miljøarbeid, sertifiseringer
+  is_partner bool,                -- står på leverandørlisten
   + SEO-felt
 )
 content.categories (
-  slug, name, parent_id, intro_mdx, body_source ('db'|'mdx'), sort, + SEO-felt
-)
-content.brand_categories (brand_id, category_id)   -- «merker vi leverer i kategorien» (fra /leverandorer/)
-
-content.products (
-  slug, name, brand_id, primary_category_id, family text,
-  short_description, description_mdx,
-  price_mode ('fixed'|'from'|'on_request'),
-  price_ex_vat numeric, price_from_ex_vat numeric,
-  lead_time_text, lead_time_days_min int, lead_time_days_max int,
-  warranty_years int, designer text, country_of_origin text,
-  is_used bool default false,    -- bruktvarer ligger i scout.*/own-stock, ikke her
-  legacy_wc_id int,              -- sporbarhet til gammel WooCommerce-ID
+  slug, name, parent_id, sort,
+  intro_md,                       -- rådgivende ingress
+  body_source ('db'|'mdx'), body_mdx_path, body_blocks jsonb,  -- «slik velger du …», behov, ergonomi
   + SEO-felt
 )
-content.product_categories (product_id, category_id)          -- sekundære kategorier
-content.product_variants (product_id, sku, name, attributes jsonb, -- {"size":"160x80","frame":"hvit"}
-                          price_ex_vat, is_default bool, sort)
-content.product_specs (product_id, group, label, value, unit, sort) -- dimensjoner, materialer …
-content.certifications (slug, name, description, logo_id)        -- FSC, Greenguard, Møbelfakta, Svanemerket
+content.brand_categories (brand_id, category_id, note)   -- «merker vi leverer i kategorien»
+content.product_families (       -- valgfritt: HÅG Tribute, Dencon Delta … (grupperer modeller)
+  brand_id, slug, name, intro_md
+)
+
+content.products (
+  slug, name, brand_id, family_id null, primary_category_id,
+  model_code text null,           -- «8106», «9031»
+  tagline text,                   -- én linje under navnet
+  summary_md,                     -- kort, god beskrivelse (≥ 80 ord før indeksering)
+  use_cases text[],               -- «fokusarbeid», «ståarbeidsplass», «møterom»
+  features jsonb,                 -- [{title, text}] – egenskaper med kort forklaring
+  ergonomics_md null,             -- der det er relevant
+  dimensions_md null,             -- størrelser/mål som informasjon (ikke SKU-er)
+  materials_md null,              -- materialer/farger på hensiktsmessig nivå
+  warranty_years int null, designer text null, country_of_origin text null,
+  lead_time_text text null,       -- «Normalt 3–5 uker» (valgfritt, ikke en forpliktelse)
+
+  price_display ('none'|'from'|'on_request') default 'none',   -- VALGFRITT
+  price_from_ex_vat numeric null,                                -- bare når price_display = 'from'
+  price_checked_at date null,     -- når prisen sist ble kontrollert (skjules etter X mnd)
+
+  catalog_status ('draft'|'published'|'archived'),
+  legacy_wc_ids int[],            -- sporbarhet til WooCommerce-ID-ene som ble slått sammen
+  + SEO-felt
+)
+content.product_options (         -- VISER MULIGHETER, er ikke salgbare kombinasjoner
+  product_id, group text,         -- «Størrelser», «Understell», «Tekstil», «Modeller»
+  values text[],                  -- {"120×80","140×80","160×80"} eller {"9021","9031 (med nakkestøtte)"}
+  note text, sort int
+)
+content.product_specs (product_id, group, label, value, unit, sort)   -- sittehøyde, vekt, justeringer …
+content.product_categories (product_id, category_id)                  -- sekundære kategorier
+content.product_solutions (product_id, solution_id)                   -- «passer i løsning»
+content.certifications (slug, name, description, logo_id)             -- FSC, Greenguard, Møbelfakta, Svanemerket
 content.product_certifications (product_id, certification_id)
-content.documents (product_id, kind ('epd'|'datasheet'|'manual'|'guide'), title, url|file_id)
-                                -- NB: guides.kontorcompaniet.no lenkes her
+content.documents (product_id|brand_id, kind ('epd'|'datasheet'|'manual'|'guide'|'certificate'),
+                   title, url | file_id, valid_until date null)
 content.related_products (product_id, related_id, kind ('family'|'complement'|'alternative'))
 ```
+
+**Ikke i modellen (bevisst):** handlekurv, ordre, betaling, kundekonto for netthandel, lagerbeholdning, SKU-pris per variant, rabattkoder, fraktberegning, mva.-motor og produktanmeldelser. Bruktvarer med antall og pris hører hjemme i `scout.*` (egen kilde `own_stock`), ikke i katalogen.
+
+### Migrering fra WooCommerce (kuratert)
+
+```sql
+migration.wc_products (wc_id, slug, raw jsonb, fetched_at)           -- rådata, uendret
+migration.catalog_decisions (wc_slug, decision ('KEEP'|'MERGE'|'REDIRECT'|'ARCHIVE'),
+                             target_path, priority, reason, decided_by, decided_at)
+```
+Kilde: [`migration/produktkatalog-vurdering.csv`](migration/produktkatalog-vurdering.csv). Import henter bare `KEEP` og `MERGE` og lager et utkast. Publisering krever at kvalitetsporten er bestått.
 
 ## 3. Media og rettigheter
 
@@ -80,7 +116,7 @@ content.media_assets (
   rights_note, source_url,
   focal_x, focal_y                -- for beskjæring
 )
-content.product_media (product_id, media_id, variant_id null, role ('primary'|'gallery'|'detail'|'context'), sort)
+content.product_media (product_id, media_id, role ('primary'|'gallery'|'detail'|'context'|'in_project'), sort)
 ```
 
 Bilder med `rights = 'unknown' | 'restricted'` publiseres ikke. Hvem som har importert bildet og når, logges.
@@ -139,7 +175,8 @@ crm.organizations (name, org_number null, domain, external_refs jsonb)   -- {"cr
 crm.contacts (organization_id, name, email, phone, role, consent jsonb, external_refs jsonb)
 
 crm.leads (
-  kind ('contact'|'project_request'|'quote_request'|'scout'|'scout_interest'),
+  kind ('contact'|'project_request'|'quote_request'|'advisor_request'|'scout'|'scout_interest'),
+  product_id null, brand_id null, category_id null, project_ref_id null,  -- hvor forespørselen startet
   priority ('normal'|'high'),
   organization_id, contact_id, visitor_id,
   message, payload jsonb,          -- skjemadata / produktliste
@@ -147,7 +184,10 @@ crm.leads (
   assigned_to → people, status ('new'|'contacted'|'qualified'|'disqualified'),
   external_refs jsonb
 )
-crm.project_lists (visitor_id, lead_id null, items jsonb)  -- «Legg i prosjektliste» → sendes som forespørsel
+crm.inquiry_lists (              -- «Legg til i prosjekt»: en huskeliste for forespørselen, IKKE en handlekurv
+  visitor_id, lead_id null,       -- ingen priser, ingen antall-validering, ingen checkout
+  items jsonb                     -- [{product_id, note, qty_estimate?}] → sendes som én prosjektforespørsel
+)
 
 crm.opportunities (                -- kvalifisert salgsmulighet (fra lead eller Scout-interesse)
   lead_id, scout_request_id null, title,

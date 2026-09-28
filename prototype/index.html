@@ -1,0 +1,1362 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kontorcompaniet Prototype 0b</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+/* ==========================================================================
+   Kontorcompaniet – designprototype 0b
+   Tokens (bygger på designmanualen, modernisert)
+   ========================================================================== */
+:root{
+  color-scheme: light;
+  --paper:#FBFAF7;      /* side */
+  --sand:#F1EEE7;       /* rolige flater, produktbakgrunn */
+  --sand-2:#E8E3D8;
+  --line:#E0DACE;
+  --ink:#211E19;        /* tekst */
+  --ink-2:#5C554B;      /* sekundærtekst (6,9:1) */
+  --ink-3:#877F72;      /* hjelpetekst på store flater */
+  --gold:#91762A;       /* Pantone 105 C – detaljer, store tall */
+  --gold-text:#6F5A1F;  /* gull som tekst (6,4:1) */
+  --signal:#CF4520;     /* Pantone 173 C – kun primær-CTA og dot */
+  --signal-deep:#A8371A;
+  --night:#1E1C19;      /* mørke seksjoner */
+  --night-2:#2A2723;
+  --night-ink:#EDE8DE;
+  --night-ink-2:#B3AB9C;
+
+  --f-display:"Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --s-1:clamp(2.6rem, 1.6rem + 4.2vw, 5.2rem);   /* hero */
+  --s-2:clamp(2rem, 1.4rem + 2.4vw, 3.3rem);     /* H1 undersider */
+  --s-3:clamp(1.55rem, 1.2rem + 1.2vw, 2.2rem);  /* H2 */
+  --s-4:1.25rem;                                 /* H3 */
+  --s-body:1.0625rem;
+  --s-small:.9rem;
+  --s-micro:.72rem;
+
+  --gutter:clamp(16px, 4vw, 56px);
+  --maxw:1400px;
+  --radius:3px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:var(--s-body);line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+h1,h2,h3,h4{font-family:var(--f-display);font-stretch:112%;font-weight:600;line-height:1.08;letter-spacing:-.015em;margin:0;text-wrap:balance}
+h1{font-size:var(--s-2)}
+h2{font-size:var(--s-3)}
+h3{font-size:var(--s-4);line-height:1.2}
+p{margin:0}
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gutter)}
+.measure{max-width:64ch}
+.muted{color:var(--ink-2)}
+.eyebrow{font-family:var(--f-mono);font-size:var(--s-micro);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);display:inline-flex;align-items:center;gap:.6em}
+.eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--signal);flex:none}
+.eyebrow.plain::before{display:none}
+.num{font-variant-numeric:tabular-nums}
+.example{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);border:1px dashed var(--ink-3);border-radius:2px;padding:1px 5px;vertical-align:middle;white-space:nowrap}
+section.band{padding-block:clamp(56px, 7vw, 112px)}
+section.band.tight{padding-block:clamp(40px, 5vw, 72px)}
+.band.sand{background:var(--sand)}
+.band.night{background:var(--night);color:var(--night-ink)}
+.band.night .muted,.band.night .eyebrow{color:var(--night-ink-2)}
+.stack>*+*{margin-top:var(--st,1rem)}
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:16px 40px;margin-bottom:clamp(28px,3.5vw,48px)}
+.sec-head .stack{--st:.8rem;max-width:60ch}
+.textlink{font-weight:600;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px;white-space:nowrap}
+.textlink:hover{color:var(--signal-deep)}
+
+/* ---------- Knapper ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;font:600 1rem/1 var(--f-body);padding:.95em 1.4em;border-radius:var(--radius);border:1.5px solid transparent;cursor:pointer;text-decoration:none;transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease),transform .2s var(--ease)}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--signal);color:#fff}
+.btn-primary:hover{background:var(--signal-deep)}
+.btn-secondary{border-color:var(--ink);color:var(--ink);background:transparent}
+.btn-secondary:hover{background:var(--ink);color:var(--paper)}
+.night .btn-secondary,.on-dark .btn-secondary{border-color:var(--night-ink);color:var(--night-ink)}
+.night .btn-secondary:hover,.on-dark .btn-secondary:hover{background:var(--night-ink);color:var(--night)}
+.btn-quiet{background:none;border:0;padding:.5em 0;font:600 1rem/1.3 var(--f-body);cursor:pointer;color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.btn-quiet:hover{color:var(--signal-deep)}
+.btn-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+/* ---------- Header ---------- */
+.site-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:color-mix(in srgb, var(--paper) 92%, transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.site-header .wrap{display:flex;align-items:center;gap:24px;height:72px}
+.logo{display:flex;align-items:center;flex:none}
+.logo img{height:26px;width:auto}
+.mainnav{display:flex;gap:4px;margin-left:auto}
+.mainnav a{text-decoration:none;font-weight:600;font-size:.97rem;padding:.55em .8em;border-radius:var(--radius);color:var(--ink)}
+.mainnav a:hover{background:var(--sand)}
+.mainnav a[aria-current="page"]{box-shadow:inset 0 -2px 0 var(--ink)}
+.header-cta{flex:none}
+.menu-btn{display:none;margin-left:auto;background:none;border:1.5px solid var(--ink);border-radius:var(--radius);padding:.5em .8em;font:600 .95rem var(--f-body);color:var(--ink)}
+@media (max-width: 980px){
+  .mainnav,.header-cta{display:none}
+  .menu-btn{display:inline-flex}
+  .site-header.open .mainnav{display:flex;position:absolute;left:0;right:0;top:72px;flex-direction:column;background:var(--paper);padding:16px var(--gutter) 24px;border-bottom:1px solid var(--line)}
+  .site-header.open .mainnav a{font-family:var(--f-display);font-stretch:112%;font-size:1.5rem;padding:.4em 0}
+}
+.crumbs{font-size:var(--s-small);color:var(--ink-2);padding-top:22px}
+.crumbs a{text-decoration:none}
+.crumbs a:hover{text-decoration:underline}
+.crumbs span[aria-hidden]{margin-inline:.5em;color:var(--ink-3)}
+
+/* ---------- Koblingslinjen (signatur) ---------- */
+.kobl{border-block:1px solid var(--line);background:var(--paper)}
+.kobl .wrap{display:flex;align-items:center;gap:20px 28px;padding-block:18px;flex-wrap:wrap}
+.kobl-label{font-family:var(--f-mono);font-size:var(--s-micro);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);flex:none}
+.kobl ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 0;position:relative;flex:1}
+.kobl li{display:flex;align-items:center}
+.kobl li+li::before{content:"";width:28px;height:1px;background:var(--ink-3);margin-inline:6px}
+.kobl a,.kobl .here{display:inline-flex;align-items:baseline;gap:.5em;text-decoration:none;padding:.35em .2em;border-radius:var(--radius)}
+.kobl a:hover .kn{text-decoration:underline;text-underline-offset:3px}
+.kobl .kt{font-family:var(--f-mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);display:inline-flex;align-items:center;gap:.5em}
+.kobl .kt::before{content:"";width:7px;height:7px;border-radius:50%;border:1.5px solid var(--ink);background:var(--paper)}
+.kobl .here .kt::before{background:var(--signal);border-color:var(--signal)}
+.kobl .kn{font-weight:600;font-size:.95rem}
+.kobl .scout .kt::before{border-color:var(--signal)}
+
+/* ---------- Kort ---------- */
+.grid{display:grid;gap:clamp(16px,2vw,28px)}
+.g-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g-6{grid-template-columns:repeat(6,minmax(0,1fr))}
+@media (max-width: 1100px){.g-6{grid-template-columns:repeat(3,minmax(0,1fr))}.g-4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width: 760px){.g-3,.g-2{grid-template-columns:1fr}.g-6{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width: 420px){.g-4{grid-template-columns:1fr}}
+
+.pcard{display:flex;flex-direction:column;text-decoration:none;color:inherit}
+.pcard .ph{background:var(--sand);aspect-ratio:4/5;display:grid;place-items:center;overflow:hidden;border-radius:var(--radius)}
+.pcard .ph img{width:78%;height:78%;object-fit:contain;mix-blend-mode:multiply;transition:transform .5s var(--ease)}
+.pcard:hover .ph img{transform:scale(1.04)}
+.pcard .pb{padding-top:14px;display:flex;flex-direction:column;gap:4px}
+.pcard .brand{font-family:var(--f-mono);font-size:var(--s-micro);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.pcard .name{font-family:var(--f-display);font-stretch:110%;font-weight:600;font-size:1.15rem;line-height:1.2}
+.pcard .fit{color:var(--ink-2);font-size:var(--s-small)}
+.pcard .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.tag{font-size:.74rem;border:1px solid var(--line);border-radius:99px;padding:2px 9px;color:var(--ink-2);background:var(--paper)}
+
+.prj{display:flex;flex-direction:column;text-decoration:none;color:inherit}
+.prj .im{overflow:hidden;border-radius:var(--radius);aspect-ratio:4/3;background:var(--sand-2)}
+.prj .im img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
+.prj:hover .im img{transform:scale(1.03)}
+.prj .meta{display:flex;gap:10px;flex-wrap:wrap;font-family:var(--f-mono);font-size:var(--s-micro);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin-top:14px}
+.prj h3{margin-top:6px}
+.prj.big .im{aspect-ratio:16/10}
+.prj.textonly .im{display:grid;place-items:center;background:var(--night);color:var(--night-ink);padding:24px}
+.prj.textonly .im blockquote{margin:0;font-family:var(--f-display);font-stretch:105%;font-size:1.15rem;line-height:1.35}
+
+.person{display:flex;gap:14px;align-items:center}
+.avatar{width:56px;height:56px;border-radius:50%;background:var(--sand-2);display:grid;place-items:center;font-family:var(--f-display);font-stretch:112%;font-weight:600;color:var(--ink-2);flex:none}
+.night .avatar{background:var(--night-2);color:var(--night-ink)}
+
+/* ---------- Forside ---------- */
+.hero{position:relative;color:#fff;background:#2b2722}
+.hero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.92}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg, rgba(20,18,15,.78) 0%, rgba(20,18,15,.45) 48%, rgba(20,18,15,.05) 100%)}
+.hero .wrap{position:relative;z-index:1;padding-block:clamp(72px, 11vw, 168px) clamp(40px,5vw,64px);display:grid;gap:28px}
+.hero h1{font-size:var(--s-1);max-width:13ch;font-stretch:118%;font-weight:600;letter-spacing:-.02em}
+.hero p.lead{font-size:clamp(1.1rem, 1rem + .4vw, 1.3rem);max-width:46ch;color:#EFEAE0}
+.hero .credit{font-family:var(--f-mono);font-size:var(--s-micro);letter-spacing:.1em;text-transform:uppercase;color:#D9D2C4;margin-top:clamp(24px,5vw,72px)}
+.intro-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(28px,5vw,96px);align-items:end}
+@media (max-width: 860px){.intro-grid{grid-template-columns:1fr}}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--ink)}
+.facts div{padding:18px 16px 0 0}
+.facts b{display:block;font-family:var(--f-display);font-stretch:118%;font-weight:600;font-size:clamp(2rem,1.4rem+2vw,3rem);line-height:1;color:var(--gold)}
+.facts span{font-size:var(--s-small);color:var(--ink-2)}
+.sol{position:relative;display:block;text-decoration:none;color:#fff;border-radius:var(--radius);overflow:hidden;aspect-ratio:3/4;background:var(--night)}
+.sol img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
+.sol:hover img{transform:scale(1.05)}
+.sol::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(20,18,15,.78))}
+.sol span{position:absolute;left:14px;right:14px;bottom:12px;z-index:1;font-family:var(--f-display);font-stretch:110%;font-weight:600;font-size:1.05rem;line-height:1.2}
+.prj-feature{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(16px,2vw,28px)}
+.prj-feature .col{display:grid;gap:clamp(16px,2vw,28px);align-content:start}
+@media (max-width: 860px){.prj-feature{grid-template-columns:1fr}}
+.quotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,48px)}
+@media (max-width: 860px){.quotes{grid-template-columns:1fr}}
+.quote blockquote{margin:0;font-family:var(--f-display);font-stretch:104%;font-weight:500;font-size:1.2rem;line-height:1.35}
+.quote figcaption{margin-top:14px;font-size:var(--s-small);color:var(--ink-2)}
+.logos{display:flex;flex-wrap:wrap;gap:12px 40px;align-items:center;margin-top:40px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--f-display);font-stretch:115%;font-weight:600;color:var(--ink-3);font-size:1.15rem}
+.scout-band{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(28px,5vw,80px);align-items:center}
+@media (max-width: 900px){.scout-band{grid-template-columns:1fr}}
+.fake-input{background:var(--night-2);border:1px solid #45403A;border-radius:var(--radius);padding:20px;color:var(--night-ink);font-size:1.05rem;min-height:120px;position:relative}
+.fake-input .caret{display:inline-block;width:2px;height:1.1em;background:var(--signal);vertical-align:-3px;margin-left:2px;animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.cats{display:flex;flex-wrap:wrap;gap:10px}
+.cats a{text-decoration:none;border:1px solid var(--ink);border-radius:99px;padding:.55em 1.1em;font-weight:600}
+.cats a:hover{background:var(--ink);color:var(--paper)}
+.brandrow{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:28px;font-family:var(--f-display);font-stretch:118%;font-weight:600;font-size:1.25rem;color:var(--ink-2)}
+.brandrow a{text-decoration:none}
+.brandrow a:hover{color:var(--ink)}
+.process{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));counter-reset:p;border-top:1px solid var(--ink)}
+.process li{padding:20px 20px 0 0;counter-increment:p}
+.process li::before{content:"0" counter(p);font-family:var(--f-mono);font-size:var(--s-small);color:var(--gold-text);display:block;margin-bottom:10px}
+.process h3{font-size:1.1rem}
+.process p{font-size:var(--s-small);color:var(--ink-2);margin-top:6px}
+@media (max-width: 900px){.process{grid-template-columns:1fr 1fr}}
+@media (max-width: 480px){.process{grid-template-columns:1fr}}
+.contact-cta{display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(24px,5vw,80px);align-items:center}
+@media (max-width: 860px){.contact-cta{grid-template-columns:1fr}}
+.phone{font-family:var(--f-mono);font-size:1.05rem;user-select:all}
+
+/* ---------- Produktside ---------- */
+.pdp{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(24px,5vw,88px);padding-top:18px}
+@media (max-width: 900px){.pdp{grid-template-columns:1fr}}
+.gallery{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gallery .main{grid-column:1 / -1;background:var(--sand);border-radius:var(--radius);aspect-ratio:1/1;display:grid;place-items:center}
+.gallery .main img{width:100%;height:100%;object-fit:contain;padding:6%;mix-blend-mode:multiply}
+.gallery .thumb{background:var(--sand);border-radius:var(--radius);aspect-ratio:1/1;display:grid;place-items:center;overflow:hidden}
+.gallery .thumb img{width:100%;height:100%;object-fit:contain;padding:10%;mix-blend-mode:multiply}
+.gallery .thumb.ctx img{width:100%;height:100%;object-fit:cover;padding:0;mix-blend-mode:normal}
+.gallery .thumb.ctx{position:relative}
+.gallery .thumb.ctx span{position:absolute;left:10px;bottom:10px;background:var(--paper);font-size:.74rem;padding:2px 8px;border-radius:99px}
+.pdp-info{position:sticky;top:96px;align-self:start;display:flex;flex-direction:column;gap:22px}
+@media (max-width: 900px){.pdp-info{position:static}}
+.pdp-info .tagline{font-size:1.15rem;color:var(--ink-2);max-width:40ch}
+.fitlist{display:flex;flex-wrap:wrap;gap:8px}
+.cta-stack{display:grid;gap:10px}
+.cta-stack .btn{width:100%}
+.keyfacts{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.keyfacts div{padding:12px 0;border-bottom:1px solid var(--line)}
+.keyfacts dt{font-family:var(--f-mono);font-size:var(--s-micro);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.keyfacts dd{margin:2px 0 0;font-weight:600}
+.advisor{display:flex;gap:14px;align-items:center;padding:16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper)}
+.advisor p{font-size:var(--s-small)}
+.advisor b{display:block}
+.subnav{position:sticky;top:72px;z-index:30;background:color-mix(in srgb, var(--paper) 94%, transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.subnav .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
+.subnav a{flex:none;text-decoration:none;font-size:var(--s-small);font-weight:600;padding:.4em .8em;border-radius:99px;color:var(--ink-2)}
+.subnav a:hover{background:var(--sand);color:var(--ink)}
+.subnav a .c{font-family:var(--f-mono);font-weight:400;color:var(--ink-3);margin-left:4px}
+.two-col{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(24px,5vw,88px)}
+@media (max-width: 860px){.two-col{grid-template-columns:1fr}}
+.features{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.features div{background:var(--paper);padding:22px}
+.features h3{font-size:1.05rem;display:flex;gap:.6em;align-items:center}
+.features h3::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--signal);flex:none}
+.features p{font-size:var(--s-small);color:var(--ink-2);margin-top:8px}
+@media (max-width: 860px){.features{grid-template-columns:1fr}}
+.specs{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.specs th,.specs td{text-align:left;padding:12px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.specs th{font-weight:400;color:var(--ink-2);width:48%}
+.specs td{font-family:var(--f-mono);font-size:.95rem}
+.options{display:grid;gap:14px}
+.option{display:grid;grid-template-columns:180px 1fr;gap:16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.option b{font-weight:600}
+@media (max-width: 560px){.option{grid-template-columns:1fr;gap:4px}}
+.docs{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.docs li{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:14px 16px;background:var(--sand);border-radius:var(--radius)}
+.docs li span{font-size:var(--s-small);color:var(--ink-2)}
+.certs{display:flex;gap:10px;flex-wrap:wrap}
+.cert{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--ink);border-radius:99px;padding:5px 12px 5px 8px;font-weight:600;font-size:.88rem}
+.cert::before{content:"";width:16px;height:16px;border-radius:50%;background:var(--gold)}
+.split-band{display:grid;grid-template-columns:1fr 1fr}
+.split-band>div{padding:clamp(32px,5vw,72px) var(--gutter)}
+.split-band .new{background:var(--sand)}
+.split-band .used{background:var(--night);color:var(--night-ink)}
+.split-band .used .muted{color:var(--night-ink-2)}
+.split-band .inner{max-width:560px;display:grid;gap:18px;justify-items:start}
+.split-band .new .inner{margin-left:auto}
+@media (max-width: 860px){.split-band{grid-template-columns:1fr}.split-band .new .inner{margin-left:0}}
+
+/* ---------- Kategori ---------- */
+.cat-hero{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(24px,5vw,88px);align-items:end;padding-top:18px}
+.cat-hero .im{aspect-ratio:5/4;border-radius:var(--radius);overflow:hidden}
+.cat-hero .im img{width:100%;height:100%;object-fit:cover}
+@media (max-width: 860px){.cat-hero{grid-template-columns:1fr}}
+.choose{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(16px,2vw,28px);counter-reset:c}
+.choose div{border-top:2px solid var(--ink);padding-top:16px}
+.choose h3{font-size:1.1rem}
+.choose p{font-size:var(--s-small);color:var(--ink-2);margin-top:8px}
+@media (max-width: 900px){.choose{grid-template-columns:1fr 1fr}}
+@media (max-width: 480px){.choose{grid-template-columns:1fr}}
+.needs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(24px,4vw,64px)}
+.needs a{display:flex;justify-content:space-between;gap:16px;padding:18px 0;border-bottom:1px solid var(--line);text-decoration:none}
+.needs a:hover b{text-decoration:underline}
+.needs span{color:var(--ink-2);font-size:var(--s-small);text-align:right}
+@media (max-width: 760px){.needs{grid-template-columns:1fr}}
+.faq details{border-bottom:1px solid var(--line);padding:18px 0}
+.faq summary{cursor:pointer;font-weight:600;font-size:1.05rem;list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq summary::after{content:"+";font-family:var(--f-mono);color:var(--ink-2)}
+.faq details[open] summary::after{content:"–"}
+.faq details p{margin-top:10px;color:var(--ink-2);max-width:64ch}
+
+/* ---------- Merke ---------- */
+.brand-hero{position:relative;background:var(--night);color:var(--night-ink)}
+.brand-hero .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,88px);padding-block:clamp(40px,6vw,96px);align-items:center}
+.brand-hero .wordmark{font-family:var(--f-display);font-stretch:125%;font-weight:700;font-size:clamp(4rem,3rem + 6vw,8rem);line-height:.9;letter-spacing:-.02em}
+.brand-hero .im{aspect-ratio:4/3;border-radius:var(--radius);overflow:hidden;background:var(--night-2)}
+.brand-hero .im img{width:100%;height:100%;object-fit:cover}
+@media (max-width: 860px){.brand-hero .wrap{grid-template-columns:1fr}}
+.factstrip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-bottom:1px solid var(--line)}
+.factstrip div{padding:22px 16px 22px 0}
+.factstrip dt{font-family:var(--f-mono);font-size:var(--s-micro);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.factstrip dd{margin:4px 0 0;font-family:var(--f-display);font-stretch:110%;font-weight:600;font-size:1.15rem}
+@media (max-width: 760px){.factstrip{grid-template-columns:1fr 1fr}}
+.families{display:flex;flex-wrap:wrap;gap:10px}
+.families a{text-decoration:none;font-family:var(--f-display);font-stretch:112%;font-weight:600;font-size:1.3rem;padding:.3em .7em;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper)}
+.families a:hover{border-color:var(--ink)}
+.families a small{font-family:var(--f-mono);font-size:.65rem;font-weight:400;color:var(--ink-3);margin-left:6px;letter-spacing:.06em}
+
+/* ---------- Prosjekt ---------- */
+.prj-hero{position:relative;background:var(--night);color:#fff}
+.prj-hero img{width:100%;height:clamp(320px,52vw,680px);object-fit:cover;opacity:.9}
+.prj-hero .over{position:absolute;inset:auto 0 0 0;background:linear-gradient(180deg,transparent,rgba(20,18,15,.82))}
+.prj-hero .over .wrap{padding-block:80px 40px;display:grid;gap:14px}
+.prj-hero h1{font-size:var(--s-1);max-width:16ch;font-stretch:116%}
+.keystrip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:var(--paper);border-bottom:1px solid var(--line)}
+.keystrip div{padding:22px 16px 22px 0}
+.keystrip dt{font-family:var(--f-mono);font-size:var(--s-micro);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.keystrip dd{margin:4px 0 0;font-family:var(--f-display);font-stretch:112%;font-weight:600;font-size:1.3rem}
+.keystrip dd.big{font-size:2rem;color:var(--gold)}
+@media (max-width: 760px){.keystrip{grid-template-columns:1fr 1fr}}
+.story{display:grid;grid-template-columns:220px minmax(0,1fr);gap:16px clamp(24px,5vw,80px);padding-block:28px;border-top:1px solid var(--line)}
+.story:first-child{border-top:0}
+.story h2{font-size:1.4rem}
+@media (max-width: 760px){.story{grid-template-columns:1fr}}
+.bigquote{font-family:var(--f-display);font-stretch:106%;font-weight:500;font-size:clamp(1.6rem,1.1rem+2vw,2.6rem);line-height:1.2;max-width:26ch;margin:0}
+.videos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media (max-width: 900px){.videos{grid-template-columns:1fr 1fr}}
+.video{display:flex;flex-direction:column;gap:10px;text-decoration:none}
+.video .frame{aspect-ratio:16/9;background:var(--night-2);border-radius:var(--radius);display:grid;place-items:center;position:relative;overflow:hidden}
+.video .frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
+.video .play{position:relative;width:52px;height:52px;border-radius:50%;background:var(--paper);display:grid;place-items:center}
+.video .play::after{content:"";border-left:14px solid var(--ink);border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
+.video b{font-weight:600}
+.video span{font-size:var(--s-small);color:var(--night-ink-2)}
+.inproject{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,40px)}
+.inproject h3{font-family:var(--f-mono);font-stretch:100%;font-weight:500;font-size:var(--s-micro);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);margin-bottom:12px}
+.inproject ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.inproject li a{font-weight:600;text-decoration:none;border-bottom:1px solid var(--line)}
+.inproject li a:hover{border-color:var(--ink)}
+@media (max-width: 760px){.inproject{grid-template-columns:1fr}}
+
+/* ---------- Møbelscout ---------- */
+.scout-hero{background:var(--night);color:var(--night-ink)}
+.scout-hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(28px,5vw,88px);padding-block:clamp(48px,7vw,112px);align-items:start}
+@media (max-width: 960px){.scout-hero .wrap{grid-template-columns:1fr}}
+.scout-hero h1{font-size:clamp(2.3rem,1.5rem + 3vw,4rem);font-stretch:116%;max-width:14ch}
+.scout-hero .muted,.scout-hero .eyebrow{color:var(--night-ink-2)}
+.scout-hero .lead{font-size:1.2rem;color:var(--night-ink-2);max-width:40ch}
+.panel{background:var(--paper);color:var(--ink);border-radius:6px;padding:clamp(20px,3vw,36px);box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+.panel h2{font-size:1.5rem}
+.steps-indicator{display:flex;gap:8px;margin-bottom:18px;font-family:var(--f-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.steps-indicator span{display:flex;align-items:center;gap:6px}
+.steps-indicator span::before{content:"";width:7px;height:7px;border-radius:50%;border:1.5px solid var(--ink-3)}
+.steps-indicator span.on{color:var(--ink)}
+.steps-indicator span.on::before{background:var(--signal);border-color:var(--signal)}
+.steps-indicator span.done::before{background:var(--ink);border-color:var(--ink)}
+label{font-weight:600;font-size:.95rem;display:block;margin-bottom:6px}
+textarea,input[type=text],input[type=email],input[type=tel]{width:100%;font:inherit;color:var(--ink);background:#fff;border:1.5px solid var(--sand-2);border-radius:var(--radius);padding:.8em .9em}
+textarea:focus,input:focus{outline:none;border-color:var(--ink)}
+textarea{min-height:150px;resize:vertical;line-height:1.5}
+.input-tools{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.mic{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--ink);background:none;border-radius:99px;padding:.5em 1em;font:600 .92rem var(--f-body);color:var(--ink);cursor:pointer}
+.mic::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--signal)}
+.mic[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.hint{font-size:.85rem;color:var(--ink-2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chips button{background:var(--sand);border:0;border-radius:99px;padding:.45em .9em;font:600 .85rem var(--f-body);color:var(--ink);cursor:pointer}
+.chips button:hover{background:var(--sand-2)}
+.understood{list-style:none;margin:16px 0;padding:0;border-top:1px solid var(--line)}
+.understood li{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line)}
+.understood li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ink);transform:translateY(-1px)}
+.understood li.hard::before{background:var(--signal)}
+.understood small{color:var(--ink-3);font-size:.8rem}
+.understood button{background:none;border:0;color:var(--ink-2);font:600 .85rem var(--f-body);text-decoration:underline;cursor:pointer}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--ink-2)}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--ink)}
+.legend i.h{background:var(--signal)}
+.question{background:var(--sand);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px}
+.question p{font-weight:600}
+.question .chips{margin-top:8px}
+.question .chips button{background:var(--paper)}
+.question .chips button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid .full{grid-column:1/-1}
+@media (max-width: 560px){.form-grid{grid-template-columns:1fr}}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:.9rem}
+.check input{margin-top:5px}
+.how{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;counter-reset:h}
+.how li{counter-increment:h;border-top:1px solid var(--ink);padding-top:14px}
+.how li::before{content:counter(h);font-family:var(--f-display);font-stretch:118%;font-weight:600;font-size:2rem;color:var(--gold);display:block;line-height:1;margin-bottom:10px}
+.how p{font-size:var(--s-small);color:var(--ink-2);margin-top:6px}
+@media (max-width: 900px){.how{grid-template-columns:1fr 1fr}}
+@media (max-width: 480px){.how{grid-template-columns:1fr}}
+.match{display:grid;grid-template-columns:220px minmax(0,1fr);gap:clamp(16px,3vw,32px);background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:clamp(16px,2vw,24px)}
+.match .ph{background:var(--sand);border-radius:var(--radius);aspect-ratio:1/1;display:grid;place-items:center}
+.match .ph img{width:100%;height:100%;object-fit:contain;padding:8%;mix-blend-mode:multiply}
+.match .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+.score{font-family:var(--f-mono);font-size:.85rem;display:inline-flex;align-items:center;gap:8px}
+.score .bar{width:80px;height:6px;background:var(--sand-2);border-radius:99px;overflow:hidden}
+.score .bar i{display:block;height:100%;background:var(--gold)}
+.match dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0}
+.match dt{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.match dd{margin:2px 0 0;font-weight:600}
+.match .price{font-family:var(--f-display);font-stretch:110%;font-weight:600;font-size:1.4rem}
+.match .complete{background:var(--sand);padding:12px 14px;border-radius:var(--radius);font-size:.95rem;margin-bottom:14px}
+.match .why{font-size:.9rem;color:var(--ink-2);margin-bottom:14px}
+.match .done{display:none;padding:14px;border-radius:var(--radius);background:#EEF1E8;color:#2E3A20;font-weight:600}
+.match.interested .done{display:block}
+.match.interested .btn-row{display:none}
+.match.rejected{opacity:.55}
+@media (max-width: 680px){.match{grid-template-columns:1fr}.match dl{grid-template-columns:1fr 1fr}}
+.statuspill{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);border-radius:99px;padding:4px 12px}
+.statuspill::before{content:"";width:8px;height:8px;border-radius:50%;background:#5D8A3A;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+
+/* ---------- Dialog / prosjektliste ---------- */
+dialog{border:0;border-radius:6px;padding:0;max-width:560px;width:calc(100% - 32px);color:var(--ink);background:var(--paper);box-shadow:0 40px 80px -30px rgba(0,0,0,.5)}
+dialog::backdrop{background:rgba(20,18,15,.55)}
+dialog .dh{padding:24px 24px 0;display:flex;justify-content:space-between;gap:16px;align-items:start}
+dialog .db{padding:20px 24px 24px}
+.x{background:none;border:0;font-size:1.6rem;line-height:1;cursor:pointer;color:var(--ink-2)}
+.drawer{position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:45;width:min(360px, calc(100% - 32px));background:var(--paper);border:1px solid var(--line);border-radius:6px;box-shadow:0 24px 48px -24px rgba(0,0,0,.35)}
+.drawer header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);font-weight:600}
+.drawer ul{list-style:none;margin:0;padding:8px 16px;max-height:200px;overflow:auto}
+.drawer li{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.drawer li button{background:none;border:0;color:var(--ink-2);cursor:pointer;text-decoration:underline;font:inherit;font-size:.85rem}
+.drawer .foot{padding:12px 16px 16px;display:grid;gap:8px}
+.drawer .foot p{font-size:.8rem;color:var(--ink-2)}
+
+/* ---------- Footer ---------- */
+.site-footer{background:var(--night);color:var(--night-ink-2);padding-block:64px 120px;font-size:var(--s-small)}
+.site-footer .cols{display:grid;grid-template-columns:1.4fr repeat(4,minmax(0,1fr));gap:32px}
+.site-footer h4{font-family:var(--f-mono);font-stretch:100%;font-weight:500;font-size:var(--s-micro);letter-spacing:.12em;text-transform:uppercase;color:var(--night-ink);margin-bottom:12px}
+.site-footer ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.site-footer a{text-decoration:none}
+.site-footer a:hover{color:var(--night-ink)}
+.site-footer .addr{color:var(--night-ink);line-height:1.7}
+.site-footer .legal{margin-top:48px;padding-top:20px;border-top:1px solid #3A3631;display:flex;gap:20px;flex-wrap:wrap;justify-content:space-between}
+@media (max-width: 900px){.site-footer .cols{grid-template-columns:1fr 1fr}}
+
+/* ---------- Prototype-verktøylinje ---------- */
+.protobar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:50;display:flex;align-items:center;gap:4px;background:var(--ink);color:var(--paper);border-radius:99px;padding:6px;box-shadow:0 12px 30px -10px rgba(0,0,0,.5);max-width:calc(100% - 32px);overflow-x:auto;scrollbar-width:none}
+.protobar b{font-family:var(--f-mono);font-weight:500;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:0 10px 0 12px;white-space:nowrap;color:#C9C1B2}
+.protobar a{white-space:nowrap;text-decoration:none;font-size:.85rem;font-weight:600;padding:.5em .9em;border-radius:99px;color:var(--paper)}
+.protobar a[aria-current="page"]{background:var(--paper);color:var(--ink)}
+.protobar a:hover:not([aria-current="page"]){background:#3A362F}
+
+.route[hidden]{display:none!important}
+.fade-in{animation:fadein .5s var(--ease) both}
+@keyframes fadein{from{opacity:.001;transform:translateY(6px)}to{opacity:1;transform:none}}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- ======================= HEADER ======================= -->
+<header class="site-header" id="top">
+  <div class="wrap">
+    <a class="logo" href="#forside" aria-label="Kontorcompaniet – til forsiden"><img src="assets/logo.png" alt="Kontorcompaniet" width="164" height="26"></a>
+    <nav class="mainnav" id="mainnav" aria-label="Hovedmeny">
+      <a href="#forside" data-nav="losninger">Løsninger</a>
+      <a href="#kategori" data-nav="produkter">Produkter</a>
+      <a href="#prosjekt" data-nav="prosjekter">Prosjekter</a>
+      <a href="#mobelscout" data-nav="mobelscout">Møbelscout</a>
+      <a href="#forside" data-nav="om">Om oss</a>
+    </nav>
+    <a class="btn btn-primary header-cta" href="#" data-open="quote" data-product="">Start et prosjekt</a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mainnav">Meny</button>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- =====================================================================
+     FORSIDE
+     ===================================================================== -->
+<div class="route" data-route="forside">
+  <section class="hero" aria-labelledby="h-hero">
+    <img class="bg" src="assets/ice-wide.webp" alt="Åpent kontorlandskap med sofagrupper og arbeidsbord hos Ice i Nydalen" fetchpriority="high">
+    <div class="wrap">
+      <span class="eyebrow" style="color:#E8E1D3">Kontorinnredning siden 1981</span>
+      <h1 id="h-hero">Fra idé til ferdig arbeidsplass.</h1>
+      <p class="lead">Vi planlegger, leverer og monterer kontorer folk trives i. Én kontaktperson hele veien, fra første befaring til siste stol er på plass.</p>
+      <div class="btn-row on-dark">
+        <a class="btn btn-primary" href="#" data-open="quote" data-product="">Start et prosjekt</a>
+        <a class="btn btn-secondary" href="#prosjekt">Se prosjekter</a>
+      </div>
+      <p class="credit">Prosjekt: Ice, Nydalen</p>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="h-intro">
+    <div class="wrap intro-grid">
+      <div class="stack" style="--st:1.1rem">
+        <span class="eyebrow">Hva vi gjør</span>
+        <h2 id="h-intro">Én partner fra behov til ferdig møblerte lokaler</h2>
+        <p class="muted measure">Vi er et familieeid selskap i Drammen. Vi kartlegger hvordan dere jobber, tegner løsningen, velger møbler fra produsenter vi kjenner godt, og tar ansvar for levering og montering. Vi er rådgivere, ikke pågående selgere.</p>
+      </div>
+      <div class="facts">
+        <div><b class="num">1981</b><span>grunnlagt i Drammen</span></div>
+        <div><b class="num">750</b><span>arbeidsplasser levert til Norwegian</span></div>
+        <div><b class="num">52</b><span>merker vi leverer</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight" aria-labelledby="h-sol" id="losninger">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="stack"><span class="eyebrow">Løsninger</span><h2 id="h-sol">Hva trenger dere hjelp med?</h2></div>
+        <a class="textlink" href="#forside">Alle løsninger</a>
+      </div>
+      <div class="grid g-6">
+        <a class="sol" href="#kategori"><img src="assets/int-skrivebord.webp" alt="" loading="lazy"><span>Kontorlandskap</span></a>
+        <a class="sol" href="#kategori"><img src="assets/int-konferanse.webp" alt="" loading="lazy"><span>Møterom</span></a>
+        <a class="sol" href="#kategori"><img src="assets/int-akustikk.webp" alt="" loading="lazy"><span>Akustikk</span></a>
+        <a class="sol" href="#kategori"><img src="assets/int-kontorstol.webp" alt="" loading="lazy"><span>Ergonomi</span></a>
+        <a class="sol" href="#kategori"><img src="assets/int-kantine.webp" alt="" loading="lazy"><span>Kantine</span></a>
+        <a class="sol" href="#mobelscout"><img src="assets/int-lounge.webp" alt="" loading="lazy"><span>Gjenbruk og brukt</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="h-prj">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="stack"><span class="eyebrow">Utvalgte prosjekter</span><h2 id="h-prj">Kontorer vi har levert</h2></div>
+        <a class="textlink" href="#prosjekt">Alle prosjekter</a>
+      </div>
+      <div class="prj-feature">
+        <a class="prj big" href="#prosjekt">
+          <div class="im"><img src="assets/norwegian-hq.webp" alt="Norwegians hovedkontor på Fornebu" loading="lazy"></div>
+          <div class="meta"><span>Norwegian</span><span>Fornebu</span><span class="num">750 arbeidsplasser</span></div>
+          <h3>Hovedkontor med kontor, konferanse, kantine og sosiale soner</h3>
+        </a>
+        <div class="col">
+          <a class="prj" href="#prosjekt">
+            <div class="im"><img src="assets/ice.webp" alt="Kontorlandskap hos Ice i Nydalen" loading="lazy"></div>
+            <div class="meta"><span>Ice</span><span>Nydalen</span></div>
+            <h3>Rådgivende partner siden oppstarten i 2013</h3>
+          </a>
+          <a class="prj textonly" href="#prosjekt">
+            <div class="im"><blockquote>«Kontorcompaniet ble valgt til å møblere våre lokaler i Askekroken på Skøyen i 2019.»</blockquote></div>
+            <div class="meta"><span>Yara International</span><span>Skøyen</span><span class="num">2019</span></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band sand" aria-labelledby="h-q">
+    <div class="wrap">
+      <h2 id="h-q" class="eyebrow plain" style="margin-bottom:28px">Det kundene sier</h2>
+      <div class="quotes">
+        <figure class="quote" style="margin:0"><blockquote>«These people delivered and we as the customer could not wish for any other result. We highly recommend Kontorcompaniet!»</blockquote><figcaption>Jørgen Horlings, Head of Facility Management, Norwegian ASA</figcaption></figure>
+        <figure class="quote" style="margin:0"><blockquote>«Vi har benyttet oss av Kontorcompaniet helt siden oppstarten i 2013. De var også vår møbelleverandør og rådgivende partner ifm. flyttingen til Nydalen i 2017.»</blockquote><figcaption>Hilde Høivik, HR, Ice Communication Norge AS</figcaption></figure>
+        <figure class="quote" style="margin:0"><blockquote>«Kontorcompaniet ble valgt til å møblere våre lokaler i Askekroken på Skøyen i 2019.»</blockquote><figcaption>Iris Sigurdardottir, Facility Management Specialist, Yara International ASA</figcaption></figure>
+      </div>
+      <div class="logos" aria-label="Utvalgte kunder"><span>Norwegian</span><span>Yara</span><span>Ice</span><span>Kontorhuset</span></div>
+    </div>
+  </section>
+
+  <section class="band night" aria-labelledby="h-scoutband">
+    <div class="wrap scout-band">
+      <div class="stack" style="--st:1.1rem">
+        <span class="eyebrow">Møbelscout</span>
+        <h2 id="h-scoutband">På jakt etter brukte kontormøbler?</h2>
+        <p class="muted measure">Fortell Møbelscout hva dere trenger. Vi følger markedet, sier fra når vi finner noe som passer, og kan komplettere med nye møbler, frakt og montering.</p>
+        <div class="btn-row on-dark"><a class="btn btn-primary" href="#mobelscout">Sett Møbelscout på saken</a><a class="btn btn-secondary" href="#mobelscout">Slik fungerer det</a></div>
+      </div>
+      <div class="fake-input" aria-hidden="true">Vi trenger ca. 30 ergonomiske kontorstoler fra HÅG eller RH, maks 4–5 000 kr per stol. Oslo/Drammen. Før november.<span class="caret"></span></div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="h-prod">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="stack"><span class="eyebrow">Produkter</span><h2 id="h-prod">Møbler fra produsentene vi stoler på</h2><p class="muted">Vi viser et utvalg av det vi anbefaler. Vi leverer hele sortimentet til merkene under.</p></div>
+      </div>
+      <div class="cats">
+        <a href="#kategori">Kontorstoler</a><a href="#kategori">Skrivebord</a><a href="#kategori">Møtebord</a><a href="#kategori">Møteromsstoler</a><a href="#kategori">Kantinestoler</a><a href="#kategori">Sofa og lounge</a><a href="#kategori">Oppbevaring</a><a href="#kategori">Akustikk</a>
+      </div>
+      <div class="brandrow"><a href="#merke">HÅG</a><span>RH</span><span>Sedus</span><span>Vitra</span><span>Fora Form</span><span>Dencon</span><span>Varier</span><span>Abstracta</span><span>Montana</span><span>Muuto</span><span>Lammhults</span></div>
+    </div>
+  </section>
+
+  <section class="band sand" aria-labelledby="h-proc">
+    <div class="wrap">
+      <div class="sec-head"><div class="stack"><span class="eyebrow">Slik jobber vi</span><h2 id="h-proc">Fra behov til ferdig lokale</h2></div></div>
+      <ol class="process">
+        <li><h3>Behov og analyse</h3><p>Vi kartlegger hvordan dere jobber, hvor mange dere er, og hva som ikke fungerer i dag.</p></li>
+        <li><h3>Plan og tegning</h3><p>Planløsning, soner og møbelvalg, tilpasset lokaler, budsjett og arbeidsform.</p></li>
+        <li><h3>Tilbud og finansiering</h3><p>Ett samlet tilbud. Kjøp eller leasing over 3–5 år.</p></li>
+        <li><h3>Levering og montering</h3><p>Vi koordinerer leverandører, frakt, innbæring og montering.</p></li>
+        <li><h3>Oppfølging og service</h3><p>Justering, tilleggsbestillinger, service og ombruk når behovene endrer seg.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band tight" aria-labelledby="h-env">
+    <div class="wrap two-col" style="align-items:center">
+      <div class="stack"><span class="eyebrow">Bærekraft</span><h2 id="h-env">Miljøfyrtårn-sertifisert</h2></div>
+      <div class="stack"><p class="muted measure">Vi dokumenterer miljøpåvirkningen vår årlig, er medlem av Grønt Punkt og hjelper dere velge møbler med EPD og miljømerking. Ombruk av eksisterende møbler er en naturlig del av prosjektene våre.</p><div class="certs"><span class="cert">Miljøfyrtårn</span><span class="cert">Grønt Punkt</span><span class="cert">EPD</span><span class="cert">Møbelfakta</span></div></div>
+    </div>
+  </section>
+
+  <section class="band night" aria-labelledby="h-contact">
+    <div class="wrap contact-cta">
+      <div class="stack" style="--st:1.1rem">
+        <span class="eyebrow">Kontakt</span>
+        <h2 id="h-contact">Skal dere flytte, vokse eller fornye?</h2>
+        <p class="muted measure">Vi tar en uforpliktende prat og kommer gjerne på befaring. Showroomet vårt i Tollbugata 115 i Drammen er åpent hverdager 08–16.</p>
+        <div class="btn-row on-dark"><a class="btn btn-primary" href="#" data-open="quote" data-product="">Start et prosjekt</a></div>
+      </div>
+      <div class="person"><div class="avatar">PM</div><div><b style="color:var(--night-ink)">Pål Moen</b><br><span class="muted">Daglig leder og salg</span><br><span class="phone" style="color:var(--night-ink)">32 88 20 20</span></div></div>
+    </div>
+  </section>
+</div>
+
+<!-- =====================================================================
+     PRODUKTSIDE – HÅG Capisco 8106
+     ===================================================================== -->
+<div class="route" data-route="produkt" hidden>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Brødsmuler"><a href="#forside">Forside</a><span aria-hidden="true">/</span><a href="#kategori">Kontorstoler</a><span aria-hidden="true">/</span><span>HÅG Capisco 8106</span></nav>
+    <div class="pdp">
+      <div class="gallery">
+        <div class="main"><img src="assets/capisco-side.webp" alt="HÅG Capisco 8106 sett fra siden, sort tekstil" width="370" height="650"></div>
+        <div class="thumb"><img src="assets/capisco-3.webp" alt="HÅG Capisco 8106 sett forfra" loading="lazy"></div>
+        <div class="thumb ctx"><img src="assets/int-skrivebord.webp" alt="Kontorstol ved hev/senk-skrivebord" loading="lazy"><span>I bruk</span></div>
+      </div>
+      <div class="pdp-info">
+        <div class="stack" style="--st:.6rem">
+          <a href="#merke" class="eyebrow" style="text-decoration:none">HÅG</a>
+          <h1>HÅG Capisco 8106</h1>
+          <p class="tagline">Sadelstolen du kan sitte på forfra, bakfra og sidelengs, eller nesten stående ved et hevet bord.</p>
+        </div>
+        <div>
+          <p class="hint" style="margin-bottom:8px">Passer til</p>
+          <div class="fitlist"><span class="tag">Aktivt arbeid</span><span class="tag">Hev/senk-pulter</span><span class="tag">Kreative miljøer</span><span class="tag">Korte og lange økter</span></div>
+        </div>
+        <div class="cta-stack">
+          <a class="btn btn-primary" href="#" data-open="quote" data-product="HÅG Capisco 8106">Be om tilbud</a>
+          <a class="btn btn-secondary" href="#" data-open="advisor" data-product="HÅG Capisco 8106">Snakk med rådgiver</a>
+          <button class="btn-quiet" type="button" data-add="HÅG Capisco 8106" style="justify-self:start">+ Legg til i prosjekt</button>
+        </div>
+        <dl class="keyfacts">
+          <div><dt>Design</dt><dd>Peter Opsvik</dd></div>
+          <div><dt>Garanti</dt><dd class="num">10 år</dd></div>
+          <div><dt>Mekanisme</dt><dd>HÅG inBalance</dd></div>
+          <div><dt>Maks brukervekt</dt><dd class="num">136 kg</dd></div>
+        </dl>
+        <div class="advisor"><div class="avatar">PM</div><p><b>Vil dere prøve den først?</b>Kom innom showroomet i Drammen, eller få en prøvestol levert til kontoret.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="kobl" aria-label="Denne siden henger sammen med" style="margin-top:clamp(40px,5vw,72px)">
+    <div class="wrap">
+      <span class="kobl-label">Henger sammen med</span>
+      <ol>
+        <li><span class="here"><span class="kt">Produkt</span><span class="kn">Capisco 8106</span></span></li>
+        <li><a href="#merke"><span class="kt">Merke</span><span class="kn">HÅG</span></a></li>
+        <li><a href="#prosjekt"><span class="kt">Prosjekter</span><span class="kn">2 prosjekter</span></a></li>
+        <li><a href="#kategori"><span class="kt">Løsning</span><span class="kn">Ergonomi</span></a></li>
+        <li><a href="#" data-open="advisor" data-product="HÅG Capisco 8106"><span class="kt">Rådgiver</span><span class="kn">Pål Moen</span></a></li>
+        <li class="scout"><a href="#mobelscout"><span class="kt">Møbelscout</span><span class="kn">Brukt Capisco</span></a></li>
+      </ol>
+    </div>
+  </nav>
+
+  <nav class="subnav" aria-label="På denne siden">
+    <div class="wrap">
+      <a href="#p-om" data-scroll>Om stolen</a><a href="#p-egenskaper" data-scroll>Egenskaper</a><a href="#p-ergonomi" data-scroll>Ergonomi</a><a href="#p-muligheter" data-scroll>Muligheter</a><a href="#p-mal" data-scroll>Mål</a><a href="#p-miljo" data-scroll>Miljø og dokumentasjon</a><a href="#p-prosjekter" data-scroll>Prosjekter<span class="c">2</span></a><a href="#p-relatert" data-scroll>Relatert</a>
+    </div>
+  </nav>
+
+  <section class="band" id="p-om" aria-labelledby="h-om">
+    <div class="wrap two-col">
+      <div class="stack"><span class="eyebrow">Om stolen</span><h2 id="h-om">Laget for å bevege seg</h2></div>
+      <div class="stack" style="--st:1rem">
+        <p class="measure">Capisco er designet av Peter Opsvik og er en av HÅGs mest kjente stoler. Det sadelformede setet gjør at du kan sitte forfra i en vanlig arbeidsstilling, bakvendt lent mot ryggen, sidelengs, eller nesten stående ved et hevet bord. Tanken er enkel: den beste sittestillingen er alltid den neste.</p>
+        <p class="measure muted">Den passer særlig godt der hev/senk-pulter brukes aktivt, i kreative miljøer og for alle som vil variere stillingen gjennom dagen. Vi hjelper dere vurdere om Capisco passer som hovedstol eller som et supplement i landskapet.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight" id="p-egenskaper" aria-labelledby="h-eg">
+    <div class="wrap">
+      <div class="sec-head"><div class="stack"><span class="eyebrow">Egenskaper</span><h2 id="h-eg">Det som skiller Capisco</h2></div></div>
+      <div class="features">
+        <div><h3>Sadelsete</h3><p>Gir plass til flere sittestillinger og en åpnere vinkel i hoften.</p></div>
+        <div><h3>HÅG inBalance</h3><p>Ryggen og setet følger bevegelsene dine. Motstanden justeres etter kroppsvekt.</p></div>
+        <div><h3>Separat rygghøyde</h3><p>Ryggstøtten justeres uavhengig av sittehøyden.</p></div>
+        <div><h3>Justerbar setedybde</h3><p>2–3 fingerbredder mellom knehase og setekant, uansett stilling.</p></div>
+        <div><h3>Låsbar vipp</h3><p>Fast stilling når du trenger stabilitet i konsentrert arbeid.</p></div>
+        <div><h3>Buede fotplater</h3><p>Femarmet aluminiumsfot på Ø73 cm med plass til føttene.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band sand" id="p-ergonomi" aria-labelledby="h-erg">
+    <div class="wrap two-col">
+      <div class="stack"><span class="eyebrow">Ergonomi</span><h2 id="h-erg">Riktig innstilt på fem minutter</h2></div>
+      <div class="stack" style="--st:1rem">
+        <p class="measure">Juster i denne rekkefølgen første gang: sittehøyde, setedybde, rygghøyde og til slutt vippespenning. Ved levering stiller vi inn stolene sammen med de ansatte.</p>
+        <p><a class="textlink" href="https://guides.kontorcompaniet.no/hag/capisco-8106/">Åpne brukerguiden for Capisco 8106</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight" id="p-muligheter" aria-labelledby="h-mul">
+    <div class="wrap two-col">
+      <div class="stack" style="--st:.8rem"><span class="eyebrow">Muligheter</span><h2 id="h-mul">Tilpasses i tilbudet</h2><p class="muted">Dette viser hva som finnes. Vi hjelper dere velge riktig utførelse når vi lager tilbudet.</p></div>
+      <div class="options">
+        <div class="option"><b>Tekstiler og farger</b><span class="muted">Stort utvalg fra HÅGs tekstilkart, også gjenvunnet ull og skinn.</span></div>
+        <div class="option"><b>Fotkryss</b><span class="muted">Flere farger og materialer.</span></div>
+        <div class="option"><b>Høyde</b><span class="muted">Varianter for vanlig skrivebordshøyde og for ståbord.</span></div>
+        <div class="option"><b>Tilvalg</b><span class="muted">Armlener, nakkestøtte og hjul for ulike gulv.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight" id="p-mal" aria-labelledby="h-mal">
+    <div class="wrap two-col">
+      <div class="stack"><span class="eyebrow">Mål</span><h2 id="h-mal">Spesifikasjoner</h2></div>
+      <div style="overflow-x:auto">
+        <table class="specs">
+          <tbody>
+            <tr><th scope="row">Sittehøyde</th><td>47–65,5 cm</td></tr>
+            <tr><th scope="row">Setedybde</th><td>37–46 cm</td></tr>
+            <tr><th scope="row">Setebredde</th><td>49 cm</td></tr>
+            <tr><th scope="row">Fotkryss</th><td>Ø 73 cm</td></tr>
+            <tr><th scope="row">Maks brukervekt</th><td>136 kg</td></tr>
+            <tr><th scope="row">Garanti</th><td>10 år</td></tr>
+          </tbody>
+        </table>
+        <p class="hint" style="margin-top:10px">Kilde: HÅG. Verdiene gjelder standardutførelse.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band sand" id="p-miljo" aria-labelledby="h-miljo">
+    <div class="wrap two-col">
+      <div class="stack"><span class="eyebrow">Miljø og dokumentasjon</span><h2 id="h-miljo">Dokumentert, ikke bare lovet</h2></div>
+      <div class="stack" style="--st:1.2rem">
+        <div class="certs"><span class="cert">EPD</span><span class="cert">Møbelfakta</span><span class="cert">Norsk design</span> <span class="example">Eksempeldata</span></div>
+        <ul class="docs">
+          <li><div><b>Miljøvaredeklarasjon (EPD)</b><br><span>PDF fra produsent</span></div><a class="textlink" href="#p-miljo">Last ned</a></li>
+          <li><div><b>Produktdatablad</b><br><span>Mål, materialer og tilvalg</span></div><a class="textlink" href="#p-miljo">Last ned</a></li>
+          <li><div><b>Brukerguide</b><br><span>guides.kontorcompaniet.no</span></div><a class="textlink" href="https://guides.kontorcompaniet.no/hag/capisco-8106/">Åpne</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="p-prosjekter" aria-labelledby="h-pp">
+    <div class="wrap">
+      <div class="sec-head"><div class="stack"><span class="eyebrow">I prosjekter</span><h2 id="h-pp">Brukt i 2 av prosjektene våre <span class="example">Eksempelkobling</span></h2></div><a class="textlink" href="#prosjekt">Alle prosjekter</a></div>
+      <div class="grid g-2">
+        <a class="prj" href="#prosjekt"><div class="im"><img src="assets/norwegian-hq.webp" alt="Norwegians hovedkontor på Fornebu" loading="lazy"></div><div class="meta"><span>Norwegian</span><span>Fornebu</span></div><h3>750 arbeidsplasser på Fornebu</h3></a>
+        <a class="prj" href="#prosjekt"><div class="im"><img src="assets/ice.webp" alt="Kontorlandskap hos Ice" loading="lazy"></div><div class="meta"><span>Ice</span><span>Nydalen</span></div><h3>Nye lokaler i Nydalen</h3></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band sand" id="p-relatert" aria-labelledby="h-rel">
+    <div class="wrap">
+      <div class="sec-head"><div class="stack"><span class="eyebrow">Relatert</span><h2 id="h-rel">Mer fra HÅG, og alternativer</h2></div><a class="textlink" href="#kategori">Alle kontorstoler</a></div>
+      <div class="grid g-4">
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/futu.webp" alt="HÅG Futu Mesh" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Futu Mesh</span><span class="fit">Hele arbeidsdagen</span></div></a>
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/tribute.webp" alt="HÅG Tribute" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Tribute</span><span class="fit">Høy rygg, med eller uten nakkestøtte</span></div></a>
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/sofi.webp" alt="HÅG Sofi Mesh" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Sofi Mesh</span><span class="fit">Allsidig og norskprodusert</span></div></a>
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/id-trim.webp" alt="Vitra ID Trim" loading="lazy"></div><div class="pb"><span class="brand">Vitra · alternativ</span><span class="name">ID Trim</span><span class="fit">Fleksible arbeidsplasser</span></div></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="split-band">
+    <div class="new"><div class="inner"><span class="eyebrow">Nytt</span><h2>Trenger dere mange?</h2><p class="muted">Vi setter sammen riktig utførelse, leverer og stiller inn stolene hos dere.</p><a class="btn btn-primary" href="#" data-open="quote" data-product="HÅG Capisco 8106">Be om tilbud</a></div></div>
+    <div class="used"><div class="inner"><span class="eyebrow">Brukt</span><h2>Vil dere heller ha brukt Capisco?</h2><p class="muted">Møbelscout leter etter brukte stoler for dere og sier fra når vi finner et parti som passer.</p><a class="btn btn-secondary" href="#mobelscout" data-scout-prefill="Vi ser etter brukte HÅG Capisco kontorstoler.">Sett Møbelscout på saken</a></div></div>
+  </div>
+</div>
+
+<!-- =====================================================================
+     KATEGORISIDE – Kontorstoler
+     ===================================================================== -->
+<div class="route" data-route="kategori" hidden>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Brødsmuler"><a href="#forside">Forside</a><span aria-hidden="true">/</span><a href="#kategori">Produkter</a><span aria-hidden="true">/</span><span>Kontorstoler</span></nav>
+    <div class="cat-hero">
+      <div class="stack" style="--st:1.1rem;padding-bottom:8px">
+        <span class="eyebrow">Produkter</span>
+        <h1>Kontorstoler</h1>
+        <p class="measure" style="font-size:1.15rem">En god kontorstol er den som blir justert riktig og brukt riktig. Vi hjelper dere velge stoler som passer arbeidsformen, kroppene og budsjettet, og stiller dem inn når de leveres.</p>
+        <div class="btn-row"><a class="btn btn-primary" href="#" data-open="advisor" data-product="Kontorstoler">Snakk med en rådgiver</a><a class="btn btn-secondary" href="#forside">Prøv i showroom</a></div>
+      </div>
+      <div class="im"><img src="assets/int-kontorstol.webp" alt="Ergonomisk kontorstol i lyst rom" width="560" height="560"></div>
+    </div>
+  </div>
+
+  <nav class="kobl" aria-label="Denne siden henger sammen med" style="margin-top:clamp(40px,5vw,72px)">
+    <div class="wrap">
+      <span class="kobl-label">Henger sammen med</span>
+      <ol>
+        <li><span class="here"><span class="kt">Kategori</span><span class="kn">Kontorstoler</span></span></li>
+        <li><a href="#forside"><span class="kt">Løsning</span><span class="kn">Ergonomi</span></a></li>
+        <li><a href="#merke"><span class="kt">Merker</span><span class="kn">9 merker</span></a></li>
+        <li><a href="#prosjekt"><span class="kt">Prosjekter</span><span class="kn">3 prosjekter</span></a></li>
+        <li class="scout"><a href="#mobelscout"><span class="kt">Møbelscout</span><span class="kn">Brukte kontorstoler</span></a></li>
+      </ol>
+    </div>
+  </nav>
+
+  <section class="band" aria-labelledby="h-choose">
+    <div class="wrap">
+      <div class="sec-head"><div class="stack"><span class="eyebrow">Slik velger dere</span><h2 id="h-choose">Fire spørsmål før dere velger kontorstol</h2></div></div>
+      <div class="choose">
+        <div><h3>Hvordan jobber dere?</h3><p>Lange økter foran skjerm, mye møter, eller veksling mellom sitte og stå? Arbeidsformen avgjør mer enn designet.</p></div>
+        <div><h3>Hvem skal sitte i den?</h3><p>Delte arbeidsplasser trenger stoler som er raske å justere. Store og små brukere trenger riktig sittehøyde og setedybde.</p></div>
+        <div><h3>Hva må kunne justeres?</h3><p>Sittehøyde, setedybde, korsryggstøtte og armlener er et minimum. Mekanismen bør følge bevegelsene.</p></div>
+        <div><h3>Hvor lenge skal den vare?</h3><p>Garanti, reservedeler, EPD og om stolen kan trekkes om eller brukes igjen senere.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band sand" aria-labelledby="h-rec">
+    <div class="wrap">
+      <div class="sec-head"><div class="stack" style="--st:.8rem"><span class="eyebrow">Nytt</span><h2 id="h-rec">Våre anbefalte kontorstoler</h2><p class="muted">Et utvalg vi kjenner godt. Vi leverer hele sortimentet til merkene lenger ned.</p></div></div>
+      <div class="grid g-3">
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/capisco-side.webp" alt="HÅG Capisco 8106" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Capisco 8106</span><span class="fit">Aktiv sitting og hev/senk-pulter</span><div class="tags"><span class="tag">10 års garanti</span></div></div></a>
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/futu.webp" alt="HÅG Futu Mesh" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Futu Mesh</span><span class="fit">Hele arbeidsdagen, pustende rygg</span><div class="tags"><span class="tag">EPD</span><span class="tag">Greenguard</span></div></div></a>
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/tribute.webp" alt="HÅG Tribute" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Tribute</span><span class="fit">Lange dager, høy rygg og nakkestøtte</span><div class="tags"><span class="tag">EPD</span><span class="tag">Møbelfakta</span></div></div></a>
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/sofi.webp" alt="HÅG Sofi Mesh" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Sofi Mesh</span><span class="fit">Allsidig, norskprodusert</span><div class="tags"><span class="tag">10 års garanti</span></div></div></a>
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/creed.webp" alt="HÅG Creed" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Creed 6006</span><span class="fit">Fullpolstret med høy ryggstøtte</span><div class="tags"><span class="tag">EPD</span><span class="tag">Greenguard</span></div></div></a>
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/id-trim.webp" alt="Vitra ID Trim" loading="lazy"></div><div class="pb"><span class="brand">Vitra</span><span class="name">ID Trim</span><span class="fit">Fleksible og delte arbeidsplasser</span><div class="tags"><span class="tag">EPD</span></div></div></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="h-need">
+    <div class="wrap">
+      <div class="sec-head"><div class="stack"><span class="eyebrow">Etter behov</span><h2 id="h-need">Hva er viktigst for dere?</h2></div></div>
+      <div class="needs">
+        <a href="#produkt"><b>Aktiv sitting ved hev/senk-pult</b><span>Capisco</span></a>
+        <a href="#produkt"><b>Lange dager foran skjerm</b><span>Futu Mesh · Tribute</span></a>
+        <a href="#produkt"><b>Delte arbeidsplasser</b><span>ID Trim · Sofi Mesh</span></a>
+        <a href="#produkt"><b>Ledere og cellekontor</b><span>Tribute 9031 · Creed</span></a>
+        <a href="#produkt"><b>Dokumentert miljøprofil</b><span>Futu · Creed · Tribute</span></a>
+        <a href="#mobelscout"><b>Lavere budsjett eller ombruk</b><span>Møbelscout</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band sand tight" aria-labelledby="h-brands">
+    <div class="wrap two-col">
+      <div class="stack" style="--st:.8rem"><span class="eyebrow">Merker vi leverer</span><h2 id="h-brands">Ni produsenter av kontorstoler</h2><p class="muted">Ser dere etter en bestemt modell? Vi skaffer den.</p></div>
+      <div class="brandrow" style="margin-top:0;color:var(--ink)"><a href="#merke">HÅG</a><span>RH</span><span>Sedus</span><span>Varier</span><span>Savo</span><span>RBM</span><span>NCP</span><span>BackApp</span><span>Kontorsenteret</span></div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="h-cp">
+    <div class="wrap">
+      <div class="sec-head"><div class="stack"><span class="eyebrow">Prosjekter</span><h2 id="h-cp">Kontorstoler i prosjektene våre</h2></div><a class="textlink" href="#prosjekt">Alle prosjekter</a></div>
+      <div class="grid g-3">
+        <a class="prj" href="#prosjekt"><div class="im"><img src="assets/norwegian-hq.webp" alt="Norwegians hovedkontor" loading="lazy"></div><div class="meta"><span>Norwegian</span><span class="num">750 apl.</span></div><h3>Hovedkontor på Fornebu</h3></a>
+        <a class="prj" href="#prosjekt"><div class="im"><img src="assets/ice.webp" alt="Ice i Nydalen" loading="lazy"></div><div class="meta"><span>Ice</span><span>Nydalen</span></div><h3>Nye lokaler i Nydalen</h3></a>
+        <a class="prj" href="#prosjekt"><div class="im"><img src="assets/id-trim-rom.webp" alt="Kontorlandskap med kontorstoler" loading="lazy"></div><div class="meta"><span>Eksempel</span></div><h3>Delte arbeidsplasser i landskap</h3></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="split-band">
+    <div class="new"><div class="inner"><span class="eyebrow">Nytt</span><h2>Se våre anbefalte kontorstoler</h2><p class="muted">Vi hjelper dere velge, leverer og stiller inn.</p><a class="btn btn-primary" href="#" data-open="quote" data-product="Kontorstoler">Be om tilbud</a></div></div>
+    <div class="used"><div class="inner"><span class="eyebrow">Brukt</span><h2>Vil dere heller kjøpe brukt?</h2><p class="muted">Sett Møbelscout på saken. Vi finner brukte HÅG, RH og andre kvalitetsstoler, og kan komplettere med nye.</p><a class="btn btn-secondary" href="#mobelscout" data-scout-prefill="Vi ser etter brukte ergonomiske kontorstoler.">Start Møbelscout</a></div></div>
+  </div>
+
+  <section class="band" aria-labelledby="h-faq">
+    <div class="wrap two-col">
+      <div class="stack"><span class="eyebrow">Spørsmål og svar</span><h2 id="h-faq">Det kundene ofte spør om</h2></div>
+      <div class="faq">
+        <details><summary>Kan vi prøve stolene før vi bestemmer oss?</summary><p>Ja. Kom innom showroomet i Tollbugata 115 i Drammen, eller be om prøvestoler til kontoret for noen dager.</p></details>
+        <details><summary>Stiller dere inn stolene ved levering?</summary><p>Ja. Vi monterer og viser de ansatte hvordan stolen justeres. Brukerguidene våre ligger på guides.kontorcompaniet.no.</p></details>
+        <details><summary>Kan vi lease i stedet for å kjøpe?</summary><p>Ja, via tredjepart over 3 eller 5 år, med mulighet til å kjøpe møblene til en gunstig pris etter leieperioden.</p></details>
+        <details><summary>Hva gjør vi med de gamle stolene?</summary><p>Vi vurderer sammen med dere om de kan justeres, trekkes om, brukes et annet sted eller selges videre.</p></details>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- =====================================================================
+     MERKESIDE – HÅG
+     ===================================================================== -->
+<div class="route" data-route="merke" hidden>
+  <section class="brand-hero" aria-labelledby="h-brand">
+    <div class="wrap">
+      <div class="stack" style="--st:1.2rem">
+        <nav class="crumbs" aria-label="Brødsmuler" style="color:var(--night-ink-2);padding-top:0"><a href="#forside">Forside</a><span aria-hidden="true">/</span><a href="#merke">Merkevarer</a><span aria-hidden="true">/</span><span>HÅG</span></nav>
+        <h1 id="h-brand" class="wordmark">HÅG</h1>
+        <p class="measure" style="color:var(--night-ink-2);font-size:1.15rem">Norsk produsent av ergonomiske kontorstoler, kjent for stoler som følger kroppens bevegelser. HÅG er en del av Flokk.</p>
+        <div class="btn-row on-dark"><a class="btn btn-primary" href="#" data-open="quote" data-product="HÅG">Be om tilbud på HÅG</a><a class="btn btn-secondary" href="#" data-open="advisor" data-product="HÅG">Snakk med rådgiver</a></div>
+      </div>
+      <div class="im"><img src="assets/int-kontorstol.webp" alt="HÅG-stol i lyst rom" width="560" height="560"></div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <dl class="factstrip">
+      <div><dt>Opprinnelse</dt><dd>Norge</dd></div>
+      <div><dt>Konsern</dt><dd>Flokk</dd></div>
+      <div><dt>Garanti</dt><dd class="num">Opptil 10 år</dd></div>
+      <div><dt>Miljø</dt><dd>EPD · Greenguard · Møbelfakta</dd></div>
+    </dl>
+  </div>
+
+  <nav class="kobl" aria-label="Denne siden henger sammen med">
+    <div class="wrap">
+      <span class="kobl-label">Henger sammen med</span>
+      <ol>
+        <li><span class="here"><span class="kt">Merke</span><span class="kn">HÅG</span></span></li>
+        <li><a href="#produkt"><span class="kt">Produkter</span><span class="kn">6 modeller</span></a></li>
+        <li><a href="#prosjekt"><span class="kt">Prosjekter</span><span class="kn">2 prosjekter</span></a></li>
+        <li><a href="#kategori"><span class="kt">Kategori</span><span class="kn">Kontorstoler</span></a></li>
+        <li class="scout"><a href="#mobelscout"><span class="kt">Møbelscout</span><span class="kn">Brukt HÅG</span></a></li>
+      </ol>
+    </div>
+  </nav>
+
+  <section class="band" aria-labelledby="h-why">
+    <div class="wrap two-col">
+      <div class="stack"><span class="eyebrow">Hvorfor vi bruker HÅG</span><h2 id="h-why">Stoler som tåler mange år og mange brukere</h2></div>
+      <div class="stack" style="--st:1rem">
+        <p class="measure">Vi har levert HÅG i en årrekke. Stolene er enkle å justere, tåler daglig bruk på delte arbeidsplasser og har reservedeler i mange år. Det gjør dem gode å bruke igjen når et kontor flytter eller endrer seg. <span class="example">Utkast til tekst</span></p>
+        <p class="measure muted">For HÅG handler ergonomi om bevegelse. Mekanismen HÅG inBalance lar setet og ryggen følge kroppen, slik at du sitter aktivt i stedet for stille.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band sand tight" aria-labelledby="h-fam">
+    <div class="wrap">
+      <div class="sec-head"><div class="stack"><span class="eyebrow">Produktfamilier</span><h2 id="h-fam">HÅG hos Kontorcompaniet</h2></div></div>
+      <div class="families">
+        <a href="#produkt">Capisco<small>SADELSTOL</small></a><a href="#produkt">Tribute<small>KONTORSTOL</small></a><a href="#produkt">Futu<small>KONTORSTOL</small></a><a href="#produkt">Sofi<small>KONTORSTOL</small></a><a href="#produkt">Creed<small>KONTORSTOL</small></a><a href="#produkt">Celi<small>KANTINE/MØTE</small></a>
+      </div>
+      <div class="grid g-4" style="margin-top:36px">
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/capisco-side.webp" alt="HÅG Capisco 8106" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Capisco 8106</span><span class="fit">Aktiv sitting</span></div></a>
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/futu.webp" alt="HÅG Futu Mesh" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Futu Mesh</span><span class="fit">Hele arbeidsdagen</span></div></a>
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/tribute.webp" alt="HÅG Tribute" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Tribute</span><span class="fit">Høy rygg</span></div></a>
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/celi.webp" alt="HÅG Celi" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Celi 9100</span><span class="fit">Kantine og møterom</span></div></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="h-bp">
+    <div class="wrap">
+      <div class="sec-head"><div class="stack"><span class="eyebrow">I prosjekter</span><h2 id="h-bp">HÅG i prosjektene våre <span class="example">Eksempelkobling</span></h2></div></div>
+      <div class="grid g-2">
+        <a class="prj" href="#prosjekt"><div class="im"><img src="assets/norwegian-hq.webp" alt="Norwegians hovedkontor" loading="lazy"></div><div class="meta"><span>Norwegian</span><span>Fornebu</span></div><h3>750 arbeidsplasser på Fornebu</h3></a>
+        <a class="prj" href="#prosjekt"><div class="im"><img src="assets/ice.webp" alt="Ice i Nydalen" loading="lazy"></div><div class="meta"><span>Ice</span><span>Nydalen</span></div><h3>Nye lokaler i Nydalen</h3></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band sand tight" aria-labelledby="h-be">
+    <div class="wrap grid g-2" style="align-items:start">
+      <div class="stack" style="--st:.8rem"><span class="eyebrow">Ergonomi</span><h2 id="h-be" style="font-size:1.5rem">Brukerguider for HÅG-stoler</h2><p class="muted">Steg-for-steg-justering for Capisco og Sofi Mesh, med video fra produsenten.</p><a class="textlink" href="https://guides.kontorcompaniet.no/">guides.kontorcompaniet.no</a></div>
+      <div class="stack" style="--st:.8rem"><span class="eyebrow">Miljø</span><h2 style="font-size:1.5rem">Dokumentert miljøprofil</h2><p class="muted">Flere HÅG-modeller har EPD, Greenguard og Møbelfakta. Vi legger ved dokumentasjonen i tilbudet.</p><a class="textlink" href="#forside">Om bærekraft hos oss</a></div>
+    </div>
+  </section>
+
+  <div class="split-band">
+    <div class="new"><div class="inner"><span class="eyebrow">Nytt</span><h2>HÅG til hele kontoret</h2><p class="muted">Vi setter sammen modeller og utførelse og leverer ferdig montert.</p><a class="btn btn-primary" href="#" data-open="quote" data-product="HÅG">Be om tilbud på HÅG</a></div></div>
+    <div class="used"><div class="inner"><span class="eyebrow">Brukt</span><h2>Brukt HÅG?</h2><p class="muted">Møbelscout finner brukte HÅG-stoler i god stand og sier fra når et parti passer.</p><a class="btn btn-secondary" href="#mobelscout" data-scout-prefill="Vi ser etter brukte HÅG kontorstoler.">Sett Møbelscout på saken</a></div></div>
+  </div>
+</div>
+
+<!-- =====================================================================
+     PROSJEKTSIDE – Norwegian
+     ===================================================================== -->
+<div class="route" data-route="prosjekt" hidden>
+  <section class="prj-hero" aria-labelledby="h-nor">
+    <img src="assets/norwegian-hq.webp" alt="Norwegians hovedkontor på Fornebu" width="1030" height="640">
+    <div class="over"><div class="wrap">
+      <nav class="crumbs" aria-label="Brødsmuler" style="color:#D9D2C4;padding-top:0"><a href="#forside">Forside</a><span aria-hidden="true">/</span><a href="#prosjekt">Prosjekter</a><span aria-hidden="true">/</span><span>Norwegian</span></nav>
+      <h1 id="h-nor">Norwegian: 750 arbeidsplasser på Fornebu</h1>
+    </div></div>
+  </section>
+  <div class="wrap">
+    <dl class="keystrip">
+      <div><dt>Kunde</dt><dd>Norwegian</dd></div>
+      <div><dt>Sted</dt><dd>Fornebu</dd></div>
+      <div><dt>Arbeidsplasser</dt><dd class="big num">750</dd></div>
+      <div><dt>Leveranse</dt><dd>Kontor, konferanse, kantine og sosiale soner</dd></div>
+    </dl>
+  </div>
+
+  <nav class="kobl" aria-label="Denne siden henger sammen med">
+    <div class="wrap">
+      <span class="kobl-label">Henger sammen med</span>
+      <ol>
+        <li><span class="here"><span class="kt">Prosjekt</span><span class="kn">Norwegian</span></span></li>
+        <li><a href="#forside"><span class="kt">Løsninger</span><span class="kn">Kontorlandskap · Møterom · Kantine</span></a></li>
+        <li><a href="#produkt"><span class="kt">Produkter</span><span class="kn">4 produkter</span></a></li>
+        <li><a href="#merke"><span class="kt">Merker</span><span class="kn">HÅG · Fora Form</span></a></li>
+        <li><a href="#" data-open="advisor" data-product="Prosjekt som Norwegian"><span class="kt">Rådgiver</span><span class="kn">Pål Moen</span></a></li>
+      </ol>
+    </div>
+  </nav>
+
+  <section class="band" aria-label="Prosjektbeskrivelse">
+    <div class="wrap">
+      <div class="story"><h2>Utfordringen</h2><div class="stack"><p class="measure">Norwegian skulle samle hovedkontoret på Fornebu. 750 arbeidsplasser, konferanse, kantine og sosiale møbler skulle leveres og monteres innenfor et stramt tidsvindu, i Norwegians egen fargepalett.</p></div></div>
+      <div class="story"><h2>Løsningen</h2><div class="stack"><p class="measure">Vi dro på leverandørbesøk for å velge tekstiler og farger som passet Norwegians profil, planla leveransen i etapper og koordinerte levering og montering over fire uker.</p><div class="grid g-2" style="margin-top:20px"><img src="assets/int-konferanse.webp" alt="Konferanserom med lange bord og stoler" loading="lazy" style="border-radius:3px;aspect-ratio:1/1;object-fit:cover"><img src="assets/int-kantine.webp" alt="Kantine med stoler og bord" loading="lazy" style="border-radius:3px;aspect-ratio:1/1;object-fit:cover"></div><p class="hint">Illustrasjonsbilder. Prosjektbilder fra Norwegian legges inn når de er avklart.</p></div></div>
+      <div class="story"><h2>Resultatet</h2><div class="stack"><p class="measure">Fire intense uker med montering endte med ferdigbefaring og et hovedkontor klart til bruk. Kontrakten ga også oppmerksomhet i lokalpressen.</p></div></div>
+    </div>
+  </section>
+
+  <section class="band sand" aria-label="Kundens vurdering">
+    <div class="wrap">
+      <figure style="margin:0" class="stack"><blockquote class="bigquote">«These people delivered and we as the customer could not wish for any other result.»</blockquote><figcaption class="muted">Jørgen Horlings, Head of Facility Management, Norwegian ASA</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="band night" aria-labelledby="h-vid">
+    <div class="wrap">
+      <div class="sec-head"><div class="stack"><span class="eyebrow">Bak kulissene</span><h2 id="h-vid">Prosjektet i fire episoder</h2></div></div>
+      <div class="videos">
+        <a class="video" href="https://vimeo.com/kontorcompaniet"><div class="frame"><img src="assets/norwegian-hq-2.webp" alt="" loading="lazy"><span class="play" aria-hidden="true"></span></div><b>Episode 1</b><span>Kontrakten og journalistbesøk</span></a>
+        <a class="video" href="https://vimeo.com/kontorcompaniet"><div class="frame"><img src="assets/int-lounge.webp" alt="" loading="lazy"><span class="play" aria-hidden="true"></span></div><b>Episode 2</b><span>Leverandørbesøk, tekstiler og farger</span></a>
+        <a class="video" href="https://vimeo.com/kontorcompaniet"><div class="frame"><img src="assets/int-moterom.webp" alt="" loading="lazy"><span class="play" aria-hidden="true"></span></div><b>Episode 3</b><span>Leveringsstart</span></a>
+        <a class="video" href="https://vimeo.com/kontorcompaniet"><div class="frame"><img src="assets/int-skrivebord.webp" alt="" loading="lazy"><span class="play" aria-hidden="true"></span></div><b>Episode 4</b><span>Ferdigbefaring</span></a>
+      </div>
+      <p class="muted" style="margin-top:14px;font-size:.85rem">Videoene lastes først når de spilles av, så siden holder seg rask.</p>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="h-inp">
+    <div class="wrap">
+      <div class="sec-head"><div class="stack"><span class="eyebrow">I prosjektet</span><h2 id="h-inp">Løsninger, tjenester og produkter <span class="example">Eksempelkobling</span></h2></div></div>
+      <div class="inproject">
+        <div><h3>Løsninger</h3><ul><li><a href="#forside">Kontorlandskap</a></li><li><a href="#forside">Møterom og konferanse</a></li><li><a href="#forside">Kantine</a></li></ul></div>
+        <div><h3>Tjenester</h3><ul><li><a href="#forside">Prosjektledelse</a></li><li><a href="#forside">Levering og montering</a></li></ul></div>
+        <div><h3>Merker</h3><ul><li><a href="#merke">HÅG</a></li><li><a href="#merke">Fora Form</a></li><li><a href="#merke">Dencon</a></li></ul></div>
+      </div>
+      <div class="grid g-4" style="margin-top:40px">
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/futu.webp" alt="HÅG Futu Mesh" loading="lazy"></div><div class="pb"><span class="brand">HÅG</span><span class="name">Futu Mesh</span></div></a>
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/bud-unite.webp" alt="Fora Form Bud Unite" loading="lazy"></div><div class="pb"><span class="brand">Fora Form</span><span class="name">Bud Unite</span></div></a>
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/delta.webp" alt="Dencon Delta konferansebord" loading="lazy"></div><div class="pb"><span class="brand">Dencon</span><span class="name">Delta konferansebord</span></div></a>
+        <a class="pcard" href="#produkt"><div class="ph"><img src="assets/city.webp" alt="Fora Form City" loading="lazy"></div><div class="pb"><span class="brand">Fora Form</span><span class="name">City</span></div></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band night" aria-labelledby="h-plan">
+    <div class="wrap contact-cta">
+      <div class="stack" style="--st:1rem"><span class="eyebrow">Neste prosjekt</span><h2 id="h-plan">Planlegger dere noe lignende?</h2><p class="muted measure">Vi har levert alt fra et par arbeidsplasser til hele hovedkontorer. Fortell oss litt om planene, så tar vi en prat.</p><div class="btn-row on-dark"><a class="btn btn-primary" href="#" data-open="quote" data-product="Prosjekt som Norwegian">Start et prosjekt</a></div></div>
+      <div class="person"><div class="avatar">PM</div><div><b style="color:var(--night-ink)">Pål Moen</b><br><span class="muted">Daglig leder og salg</span></div></div>
+    </div>
+  </section>
+</div>
+
+<!-- =====================================================================
+     MØBELSCOUT – landingsside + flyt
+     ===================================================================== -->
+<div class="route" data-route="mobelscout" hidden>
+  <section class="scout-hero" aria-labelledby="h-scout">
+    <div class="wrap">
+      <div class="stack" style="--st:1.2rem">
+        <span class="eyebrow">Møbelscout</span>
+        <h1 id="h-scout">Brukte kontormøbler. Vi leter for dere.</h1>
+        <p class="lead">Fortell oss hva dere trenger én gang. Møbelscout følger markedet og sier fra når vi finner noe som passer. Gratis og uforpliktende.</p>
+        <ul class="muted" style="margin:0;padding-left:1.1em;display:grid;gap:4px">
+          <li>Kontorstoler, skrivebord, møtebord, oppbevaring og mer</li>
+          <li>Vi kan komplettere med nye møbler når partiet ikke er stort nok</li>
+          <li>Frakt, klargjøring og montering fra én leverandør</li>
+        </ul>
+      </div>
+
+      <div class="panel" id="scoutPanel" aria-live="polite">
+        <!-- Steg 1: behov -->
+        <form id="s1" class="scout-step" novalidate>
+          <div class="steps-indicator"><span class="on">Behov</span><span>Bekreft</span><span>Kontakt</span></div>
+          <h2>Hva trenger dere?</h2>
+          <div style="margin-top:14px">
+            <label for="need">Beskriv behovet med egne ord</label>
+            <textarea id="need" name="need">Vi trenger ca. 30 ergonomiske kontorstoler fra HÅG eller RH, maks 4–5 000 kr per stol. Oslo/Drammen. Vi trenger dem før november.</textarea>
+          </div>
+          <div class="input-tools">
+            <button type="button" class="mic" id="micBtn" aria-pressed="false">Snakk</button>
+            <span class="hint" id="micHint">Tale er et tillegg. Tekst fungerer alltid.</span>
+          </div>
+          <div class="chips" aria-label="Legg til detaljer">
+            <button type="button" data-append=" Antall: ">+ Antall</button>
+            <button type="button" data-append=" Budsjett per stk: ">+ Budsjett</button>
+            <button type="button" data-append=" Leveres til: ">+ Sted</button>
+            <button type="button" data-append=" Frist: ">+ Frist</button>
+          </div>
+          <div class="btn-row" style="margin-top:20px"><button class="btn btn-primary" type="submit">Fortsett</button></div>
+        </form>
+
+        <!-- Steg 2: bekreftelse -->
+        <div id="s2" class="scout-step" hidden>
+          <div class="steps-indicator"><span class="done">Behov</span><span class="on">Bekreft</span><span>Kontakt</span></div>
+          <h2>Slik forstår Møbelscout behovet deres</h2>
+          <ul class="understood">
+            <li class="hard"><span><b class="num">30 ergonomiske kontorstoler</b> <small>(minst 20)</small></span><button type="button" data-edit>Endre</button></li>
+            <li><span><b>HÅG, RH eller tilsvarende</b></span><button type="button" data-edit>Endre</button></li>
+            <li class="hard"><span><b class="num">Maks 5 000 kr/stk eks. mva.</b></span><button type="button" data-edit>Endre</button></li>
+            <li class="hard"><span><b>Levering Oslo eller Drammen</b></span><button type="button" data-edit>Endre</button></li>
+            <li class="hard"><span><b>Før 1. november</b></span><button type="button" data-edit>Endre</button></li>
+            <li><span><b>Brukt eller refurbished</b></span><button type="button" data-edit>Endre</button></li>
+          </ul>
+          <div class="legend"><span><i class="h"></i>Må oppfylles</span><span><i></i>Ønske</span></div>
+          <div class="question" style="margin-top:16px">
+            <p>Kan dere tenke dere nye stoler for å fylle opp hvis vi ikke finner alle 30 brukt?</p>
+            <div class="chips"><button type="button" aria-pressed="true" data-q>Ja, gjerne</button><button type="button" aria-pressed="false" data-q>Nei, bare brukt</button></div>
+          </div>
+          <div class="btn-row"><button class="btn btn-primary" type="button" id="toS3">Start Møbelscout</button><button class="btn-quiet" type="button" id="backS1">Endre beskrivelsen</button></div>
+          <p class="hint" style="margin-top:12px">I prototypen er tolkningen forhåndsutfylt. I løsningen gjøres den av AI og kan alltid endres.</p>
+        </div>
+
+        <!-- Steg 3: kontakt -->
+        <form id="s3" class="scout-step" hidden novalidate>
+          <div class="steps-indicator"><span class="done">Behov</span><span class="done">Bekreft</span><span class="on">Kontakt</span></div>
+          <h2>Hvem skal vi si fra til?</h2>
+          <div class="form-grid" style="margin-top:14px">
+            <div><label for="c-company">Bedrift</label><input id="c-company" type="text" autocomplete="organization" value="Eksempel AS" required></div>
+            <div><label for="c-name">Kontaktperson</label><input id="c-name" type="text" autocomplete="name" value="Kari Nordmann" required></div>
+            <div><label for="c-email">E-post</label><input id="c-email" type="email" autocomplete="email" value="kari@eksempel.no" required></div>
+            <div><label for="c-phone">Telefon <span class="hint">(valgfritt)</span></label><input id="c-phone" type="tel" autocomplete="tel"></div>
+            <label class="check full" for="c-consent"><input id="c-consent" type="checkbox" checked> Dere kan kontakte meg om treff. Se personvernerklæringen.</label>
+          </div>
+          <div class="btn-row" style="margin-top:18px"><button class="btn btn-primary" type="submit">Start Møbelscout</button></div>
+        </form>
+
+        <!-- Kvittering -->
+        <div id="s4" class="scout-step" hidden>
+          <span class="statuspill">Leter aktivt</span>
+          <h2 style="margin-top:14px">Møbelscout er i gang</h2>
+          <p class="muted" style="margin-top:10px">Vi sier fra på e-post når vi finner noe som passer. Dere kan følge med og endre behovet på resultatsiden.</p>
+          <div class="btn-row" style="margin-top:18px"><a class="btn btn-primary" href="#scout-resultat">Se resultatsiden</a></div>
+          <p class="hint" style="margin-top:12px">Prototype: ingenting sendes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="h-how">
+    <div class="wrap">
+      <div class="sec-head"><div class="stack"><span class="eyebrow">Slik fungerer det</span><h2 id="h-how">Fra behov til levert</h2></div></div>
+      <ol class="how">
+        <li><h3>Beskriv behovet</h3><p>Skriv eller snakk. Antall, merker, budsjett, sted og frist.</p></li>
+        <li><h3>Bekreft</h3><p>Vi viser hvordan vi forstod det, og dere kan endre.</p></li>
+        <li><h3>Vi leter</h3><p>Møbelscout følger relevante kilder løpende.</p></li>
+        <li><h3>Dere får treff</h3><p>Vi kvalitetssikrer før vi viser dere et forslag.</p></li>
+        <li><h3>Vi leverer</h3><p>Tilgjengelighet og stand bekreftes, så kommer tilbud og levering.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band sand" aria-labelledby="h-ex">
+    <div class="wrap two-col">
+      <div class="stack" style="--st:1rem"><span class="eyebrow">Eksempel på treff</span><h2 id="h-ex">Slik ser et forslag ut</h2><p class="muted">Dere ser det dere trenger for å ta stilling: modell, antall, stand, område og vår pris. Vi bekrefter alltid tilgjengelighet før dere får et bindende tilbud.</p></div>
+      <article class="match">
+        <div class="ph"><img src="assets/tribute.webp" alt="Illustrasjon av kontorstol" loading="lazy"></div>
+        <div>
+          <div class="top"><h3>RH Logic 400</h3><span class="score"><span class="bar"><i style="width:92%"></i></span>92 % match</span></div>
+          <dl><div><dt>Antall</dt><dd class="num">24 stk</dd></div><div><dt>Stand</dt><dd>Brukt, god</dd></div><div><dt>Område</dt><dd>Oslo</dd></div></dl>
+          <p class="price num">3 490 kr/stk <span class="hint">eks. mva.</span></p>
+          <p class="complete" style="margin-top:10px">Dekker 24 av 30 stoler. Vi kan komplettere de resterende seks med nye.</p>
+          <span class="example">Eksempel</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="h-what">
+    <div class="wrap grid g-2" style="align-items:start">
+      <div class="stack" style="--st:1rem"><span class="eyebrow">Hva Møbelscout finner</span><h2 id="h-what">Brukte kontormøbler til bedrifter</h2><p class="muted measure">Brukte kontorstoler, skrivebord, møtebord, oppbevaring, sofaer og akustikk. Mest etterspurt er brukte HÅG- og RH-stoler, hev/senk-skrivebord og møteromsstoler.</p><div class="cats" style="margin-top:8px"><a href="#kategori">Brukte kontorstoler</a><a href="#kategori">Brukte skrivebord</a><a href="#kategori">Brukte møtebord</a><a href="#merke">Brukt HÅG</a></div></div>
+      <div class="stack" style="--st:1rem"><span class="eyebrow">Mer enn brukt</span><h2>Én leverandør for hele leveransen</h2><p class="muted measure">Vi kan fylle opp med nye møbler, frakte, bære inn, klargjøre og montere. Påslaget på bruktvaren er lavt. Dere betaler for logistikk og montering bare hvis dere ønsker det.</p></div>
+    </div>
+  </section>
+</div>
+
+<!-- =====================================================================
+     MØBELSCOUT – resultatside
+     ===================================================================== -->
+<div class="route" data-route="scout-resultat" hidden>
+  <section class="band tight sand">
+    <div class="wrap stack" style="--st:1rem">
+      <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center"><span class="eyebrow">Møbelscout</span><span class="statuspill">Leter aktivt</span></div>
+      <h1>30 ergonomiske kontorstoler</h1>
+      <p class="muted">30 stk (minst 20) · HÅG, RH eller tilsvarende · maks 5 000 kr/stk eks. mva. · Oslo/Drammen · før 1. november · brukt eller refurbished <a class="textlink" href="#mobelscout" style="margin-left:8px">Endre</a></p>
+    </div>
+  </section>
+  <section class="band tight" aria-labelledby="h-funn">
+    <div class="wrap stack" style="--st:20px">
+      <div class="sec-head" style="margin-bottom:0"><div class="stack"><h2 id="h-funn">Funn (2)</h2><p class="muted">Kvalitetssikret av Kontorcompaniet. Tilgjengelighet bekreftes før tilbud. <span class="example">Eksempeldata</span></p></div></div>
+      <article class="match" id="m1">
+        <div class="ph"><img src="assets/tribute.webp" alt="Illustrasjon av kontorstol med høy rygg" loading="lazy"></div>
+        <div>
+          <div class="top"><h3>RH Logic 400</h3><span class="score"><span class="bar"><i style="width:92%"></i></span>92 % match</span></div>
+          <dl><div><dt>Antall</dt><dd class="num">24 stk</dd></div><div><dt>Stand</dt><dd>Brukt, god</dd></div><div><dt>Farge</dt><dd>Sort tekstil</dd></div><div><dt>Område</dt><dd>Oslo</dd></div><div><dt>Levering</dt><dd>Før november</dd></div></dl>
+          <p class="price num">3 490 kr/stk <span class="hint">eks. mva.</span></p>
+          <p class="why" style="margin-top:8px">Riktig modell, innenfor budsjett og ønsket område. 24 tilgjengelig mot ønsket 30.</p>
+          <p class="complete">Dette partiet dekker 24 av 30 stoler. Vi kan komplettere de resterende seks med nye RH Logic.</p>
+          <div class="btn-row"><button class="btn btn-primary" type="button" data-interest="m1">Dette er interessant</button><button class="btn-quiet" type="button" data-reject="m1">Ikke aktuelt</button></div>
+          <p class="done">Takk! Pål Moen kontakter dere innen én arbeidsdag for å bekrefte tilgjengelighet, stand og levering.</p>
+        </div>
+      </article>
+      <article class="match" id="m2">
+        <div class="ph"><img src="assets/futu.webp" alt="Illustrasjon av kontorstol med mesh-rygg" loading="lazy"></div>
+        <div>
+          <div class="top"><h3>HÅG Futu</h3><span class="score"><span class="bar"><i style="width:78%"></i></span>78 % match</span></div>
+          <dl><div><dt>Antall</dt><dd class="num">12 stk</dd></div><div><dt>Stand</dt><dd>Refurbished</dd></div><div><dt>Farge</dt><dd>Grå</dd></div><div><dt>Område</dt><dd>Drammen</dd></div><div><dt>Levering</dt><dd>2–3 uker</dd></div></dl>
+          <p class="price num">4 250 kr/stk <span class="hint">eks. mva.</span></p>
+          <p class="why" style="margin-top:8px">Riktig merke og område, innenfor budsjett. Dekker 12 av 30, og kan kombineres med partiet over.</p>
+          <div class="btn-row"><button class="btn btn-primary" type="button" data-interest="m2">Dette er interessant</button><button class="btn-quiet" type="button" data-reject="m2">Ikke aktuelt</button></div>
+          <p class="done">Takk! Pål Moen kontakter dere innen én arbeidsdag for å bekrefte tilgjengelighet, stand og levering.</p>
+        </div>
+      </article>
+      <div class="btn-row" style="justify-content:space-between;border-top:1px solid var(--line);padding-top:20px"><span class="muted">Møbelscout fortsetter å lete til dere pauser eller avslutter.</span><div class="btn-row"><button class="btn btn-secondary" type="button">Pause Møbelscout</button><button class="btn-quiet" type="button">Avslutt</button></div></div>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<!-- ======================= FOOTER ======================= -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div class="stack" style="--st:.8rem"><img src="assets/logo.png" alt="Kontorcompaniet" width="164" height="26" style="height:24px;width:auto"><p class="addr">Kontorcompaniet AS<br>Tollbugata 115 (inngang A, 2. etg.)<br>3041 Drammen<br><span class="phone">32 88 20 20</span><br><span style="user-select:all">post@kontorcompaniet.no</span></p><p>Showroom hverdager 08–16</p></div>
+      <div><h4>Løsninger</h4><ul><li><a href="#forside">Kontorinnredning</a></li><li><a href="#forside">Kontorlandskap</a></li><li><a href="#forside">Møterom</a></li><li><a href="#forside">Akustikk</a></li><li><a href="#forside">Ergonomi</a></li><li><a href="#forside">Leasing</a></li></ul></div>
+      <div><h4>Produkter</h4><ul><li><a href="#kategori">Kontorstoler</a></li><li><a href="#kategori">Skrivebord</a></li><li><a href="#kategori">Møtebord</a></li><li><a href="#kategori">Sofa og lounge</a></li><li><a href="#merke">Merkevarer</a></li></ul></div>
+      <div><h4>Gjenbruk</h4><ul><li><a href="#mobelscout">Møbelscout</a></li><li><a href="#mobelscout">Brukte møbler</a></li><li><a href="#forside">Bærekraft</a></li></ul></div>
+      <div><h4>Kontorcompaniet</h4><ul><li><a href="#prosjekt">Prosjekter</a></li><li><a href="#forside">Om oss</a></li><li><a href="#forside">Inspirasjon</a></li><li><a href="#forside">Kontakt</a></li></ul></div>
+    </div>
+    <div class="legal"><span>© Kontorcompaniet AS · Siden 1981 · Miljøfyrtårn</span><span>Salgsbetingelser · Personvern · Informasjonskapsler</span></div>
+  </div>
+</footer>
+
+<!-- ======================= Dialoger ======================= -->
+<dialog id="dlgQuote" aria-labelledby="dq-h">
+  <div class="dh"><div class="stack" style="--st:.4rem"><span class="eyebrow" id="dq-eyebrow">Be om tilbud</span><h2 id="dq-h" style="font-size:1.5rem">Fortell oss litt om behovet</h2></div><button class="x" type="button" data-close aria-label="Lukk">×</button></div>
+  <form class="db" id="quoteForm" novalidate>
+    <div class="form-grid">
+      <div class="full"><label for="q-product">Gjelder</label><input id="q-product" type="text"></div>
+      <div><label for="q-company">Bedrift</label><input id="q-company" type="text" autocomplete="organization"></div>
+      <div><label for="q-name">Navn</label><input id="q-name" type="text" autocomplete="name"></div>
+      <div><label for="q-email">E-post</label><input id="q-email" type="email" autocomplete="email"></div>
+      <div><label for="q-phone">Telefon <span class="hint">(valgfritt)</span></label><input id="q-phone" type="tel" autocomplete="tel"></div>
+      <div class="full"><label for="q-msg">Antall, tidspunkt eller andre ønsker</label><textarea id="q-msg" style="min-height:90px"></textarea></div>
+    </div>
+    <div class="btn-row" style="margin-top:18px"><button class="btn btn-primary" type="submit">Send forespørsel</button><span class="hint">Vi svarer innen én arbeidsdag.</span></div>
+    <p class="hint" id="q-done" hidden style="margin-top:12px;color:var(--ink)"><b>Takk!</b> Forespørselen er registrert. (Prototype: ingenting sendes.)</p>
+  </form>
+</dialog>
+
+<aside class="drawer" id="drawer" hidden aria-labelledby="dr-h">
+  <header><span id="dr-h">Prosjektliste (<span id="dr-count">0</span>)</span><button class="x" type="button" id="drClose" aria-label="Skjul">×</button></header>
+  <ul id="dr-list"></ul>
+  <div class="foot"><button class="btn btn-primary" type="button" data-open="quote" data-product="Prosjektliste">Send som prosjektforespørsel</button><p>Ingen priser og ingen handlekurv. Vi bruker listen som utgangspunkt for rådgivning og tilbud.</p></div>
+</aside>
+
+<nav class="protobar" aria-label="Prototype-sider">
+  <b>Prototype 0b</b>
+  <a href="#forside">Forside</a><a href="#produkt">Produkt</a><a href="#kategori">Kategori</a><a href="#merke">Merke</a><a href="#prosjekt">Prosjekt</a><a href="#mobelscout">Møbelscout</a><a href="#scout-resultat">Scout-treff</a>
+</nav>
+
+<script>
+(() => {
+  const routes = [...document.querySelectorAll('.route')];
+  const navMap = {forside:null, produkt:'produkter', kategori:'produkter', merke:'produkter', prosjekt:'prosjekter', mobelscout:'mobelscout', 'scout-resultat':'mobelscout'};
+
+  function show(name, scroll = true) {
+    if (!routes.some(r => r.dataset.route === name)) name = 'forside';
+    routes.forEach(r => { const on = r.dataset.route === name; r.hidden = !on; if (on) { r.classList.remove('fade-in'); void r.offsetWidth; r.classList.add('fade-in'); } });
+    document.querySelectorAll('.protobar a').forEach(a => { if (a.getAttribute('href') === '#' + name) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+    document.querySelectorAll('.mainnav a').forEach(a => { if (a.dataset.nav === navMap[name]) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+    if (scroll) window.scrollTo({top: 0, behavior: 'auto'});
+    document.getElementById('mainnav').closest('.site-header').classList.remove('open');
+  }
+  function current() { return (location.hash || '#forside').slice(1); }
+
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const id = a.getAttribute('href').slice(1);
+    if (a.hasAttribute('data-open')) return;             // håndteres under
+    if (a.hasAttribute('data-scroll')) {                  // ankere innenfor en side
+      e.preventDefault(); const t = document.getElementById(id); if (t) t.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); return;
+    }
+    if (routes.some(r => r.dataset.route === id)) {
+      e.preventDefault();
+      if (a.dataset.scoutPrefill) { document.getElementById('need').value = a.dataset.scoutPrefill; setStep('s1'); }
+      try { history.pushState(null, '', '#' + id); } catch (_) {}
+      show(id);
+    }
+  });
+  window.addEventListener('popstate', () => show(current()));
+  window.addEventListener('hashchange', () => show(current()));
+  show(current(), false);
+
+  // Mobilmeny
+  const menuBtn = document.getElementById('menuBtn');
+  menuBtn.addEventListener('click', () => { const h = menuBtn.closest('.site-header'); const open = h.classList.toggle('open'); menuBtn.setAttribute('aria-expanded', open); });
+
+  // Tilbuds-/rådgiverdialog
+  const dlg = document.getElementById('dlgQuote');
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-open]');
+    if (!t) return;
+    e.preventDefault();
+    const kind = t.dataset.open, product = t.dataset.product || '';
+    document.getElementById('dq-eyebrow').textContent = kind === 'advisor' ? 'Snakk med rådgiver' : (product === 'Prosjektliste' ? 'Prosjektforespørsel' : (product ? 'Be om tilbud' : 'Start et prosjekt'));
+    document.getElementById('dq-h').textContent = kind === 'advisor' ? 'Når passer det å ta en prat?' : 'Fortell oss litt om behovet';
+    document.getElementById('q-product').value = product === 'Prosjektliste' ? list.join(', ') : product;
+    document.getElementById('q-done').hidden = true;
+    if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
+  });
+  dlg.addEventListener('click', e => { if (e.target.closest('[data-close]') || e.target === dlg) dlg.close(); });
+  document.getElementById('quoteForm').addEventListener('submit', e => { e.preventDefault(); document.getElementById('q-done').hidden = false; });
+
+  // «Legg til i prosjekt» – forespørselsliste, ikke handlekurv
+  const list = []; const drawer = document.getElementById('drawer');
+  function renderList() {
+    document.getElementById('dr-count').textContent = list.length;
+    const ul = document.getElementById('dr-list'); ul.innerHTML = '';
+    list.forEach((p, i) => { const li = document.createElement('li'); li.textContent = p; const b = document.createElement('button'); b.type = 'button'; b.textContent = 'Fjern'; b.onclick = () => { list.splice(i, 1); renderList(); }; li.append(b); ul.append(li); });
+    drawer.hidden = list.length === 0;
+  }
+  document.addEventListener('click', e => { const t = e.target.closest('[data-add]'); if (!t) return; if (!list.includes(t.dataset.add)) list.push(t.dataset.add); t.textContent = '✓ Lagt til i prosjekt'; renderList(); });
+  document.getElementById('drClose').onclick = () => { drawer.hidden = true; };
+
+  // Møbelscout-flyt
+  function setStep(id) { document.querySelectorAll('.scout-step').forEach(s => s.hidden = s.id !== id); }
+  document.getElementById('s1').addEventListener('submit', e => { e.preventDefault(); setStep('s2'); document.getElementById('scoutPanel').scrollIntoView({block:'nearest'}); });
+  document.getElementById('backS1').onclick = () => setStep('s1');
+  document.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => setStep('s1'));
+  document.getElementById('toS3').onclick = () => setStep('s3');
+  document.getElementById('s3').addEventListener('submit', e => { e.preventDefault(); setStep('s4'); });
+  document.querySelectorAll('[data-q]').forEach(b => b.onclick = () => { b.parentElement.querySelectorAll('[data-q]').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+  document.querySelectorAll('[data-append]').forEach(b => b.onclick = () => { const ta = document.getElementById('need'); ta.value = ta.value.trimEnd() + b.dataset.append; ta.focus(); });
+  const mic = document.getElementById('micBtn');
+  mic.onclick = () => { const on = mic.getAttribute('aria-pressed') !== 'true'; mic.setAttribute('aria-pressed', on); mic.textContent = on ? 'Stopp' : 'Snakk'; document.getElementById('micHint').textContent = on ? 'Prototype: opptak simuleres. I løsningen blir talen til tekst du kan redigere.' : 'Tale er et tillegg. Tekst fungerer alltid.'; };
+
+  // Treff: interessant / ikke aktuelt
+  document.addEventListener('click', e => {
+    const i = e.target.closest('[data-interest]'); if (i) { document.getElementById(i.dataset.interest).classList.add('interested'); }
+    const r = e.target.closest('[data-reject]'); if (r) { const m = document.getElementById(r.dataset.reject); m.classList.add('rejected'); r.textContent = 'Markert som ikke aktuelt'; r.disabled = true; }
+  });
+})();
+</script>
+</body>
+</html>
