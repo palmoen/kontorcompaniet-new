@@ -19,16 +19,20 @@ export type AiLogger = (entry: { purpose: "scout_parse" | "scout_semantic" | "tr
  * Tolker behovet. AI når konfigurert (validert med Zod), ellers – eller ved feil –
  * regelbasert tolkning. Kunden får alltid et resultat å bekrefte eller endre.
  */
-export async function interpretNeed(text: string, log?: AiLogger, now = new Date()): Promise<{ need: ScoutNeed; source: "ai" | "rules" }> {
+export async function interpretNeed(text: string, logger?: AiLogger, now = new Date()): Promise<{ need: ScoutNeed; source: "ai" | "rules" }> {
+  // Logging er nyttig, men skal aldri stoppe tolkningen (f.eks. når databasen er nede)
+  const log: AiLogger = async (entry) => {
+    try { await logger?.(entry); } catch (e) { console.error("[scout] AI-logg feilet", e); }
+  };
   const ai = getAiProvider();
   if (ai) {
     try {
       const { raw, usage } = await ai.parseNeed(text, now.toISOString().slice(0, 10));
       const parsed = scoutNeedSchema.safeParse(raw);
-      await log?.({ purpose: "scout_parse", ok: parsed.success, usage, error: parsed.success ? undefined : "schema" });
+      await log({ purpose: "scout_parse", ok: parsed.success, usage, error: parsed.success ? undefined : "schema" });
       if (parsed.success) return { need: parsed.data, source: "ai" };
     } catch (e) {
-      await log?.({ purpose: "scout_parse", ok: false, error: e instanceof Error ? e.message.slice(0, 300) : "ukjent" });
+      await log({ purpose: "scout_parse", ok: false, error: e instanceof Error ? e.message.slice(0, 300) : "ukjent" });
     }
   }
   return { need: parseNeedRules(text, now), source: "rules" };

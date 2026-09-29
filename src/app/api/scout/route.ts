@@ -1,5 +1,6 @@
 import { after, NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
+import { jsonRoute } from "@/lib/api";
 import { env } from "@/lib/env";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { scoutContext } from "@/lib/scout/context";
@@ -26,7 +27,7 @@ const body = z.object({
   website: z.string().max(0).optional(), // honeypot – skal være tom
 });
 
-export async function POST(req: NextRequest) {
+export const POST = jsonRoute("scout", async (req: NextRequest) => {
   if (!rateLimit(`scout:${clientIp(req.headers)}`, 5, 10 * 60_000)) {
     return NextResponse.json({ error: "For mange forsøk. Prøv igjen senere, eller ring oss." }, { status: 429 });
   }
@@ -60,4 +61,4 @@ export async function POST(req: NextRequest) {
   });
 
   return NextResponse.json({ token: created.token, resultUrl: `/mobelscout/resultat/${created.token}` }, { status: 201 });
-}
+});

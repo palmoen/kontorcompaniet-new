@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { captureAttribution, readAttribution, track } from "@/lib/client/attribution";
+import { readJson } from "@/lib/client/read-json";
 import type { FollowUp, ScoutNeed, SummaryLine } from "@/lib/scout/need";
 
 type Step = "input" | "confirm" | "contact" | "done";
@@ -42,9 +43,9 @@ export function ScoutFlow({ voiceEnabled, initialText = "", phone }: { voiceEnab
     setBusy(true); setError(null);
     try {
       const res = await fetch("/api/scout/parse", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: t }) });
-      const data = await res.json();
+      const data = await readJson(res);
       if (!res.ok) throw new Error(data.error ?? "Noe gikk galt.");
-      setParsed(data); setStep("confirm");
+      setParsed(data as unknown as Parsed); setStep("confirm");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Noe gikk galt.");
     } finally { setBusy(false); }
@@ -73,9 +74,10 @@ export function ScoutFlow({ voiceEnabled, initialText = "", phone }: { voiceEnab
           const form = new FormData();
           form.append("audio", new File([blob], "opptak.webm", { type: blob.type }));
           const res = await fetch("/api/scout/transcribe", { method: "POST", body: form });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error);
-          setText((prev) => (prev && prev !== EXAMPLE ? `${prev.trim()} ${data.text}` : data.text));
+          const data = await readJson(res);
+          if (!res.ok) throw new Error(data.error ?? "");
+          const said = String(data.text ?? "");
+          setText((prev) => (prev && prev !== EXAMPLE ? `${prev.trim()} ${said}` : said));
           setInputMode("voice");
           onFirstInput();
         } catch (e) {
@@ -105,9 +107,9 @@ export function ScoutFlow({ voiceEnabled, initialText = "", phone }: { voiceEnab
           website: f.get("website") || undefined,
         }),
       });
-      const data = await res.json();
+      const data = await readJson(res);
       if (!res.ok) throw new Error(data.error ?? "Noe gikk galt.");
-      setResultUrl(data.resultUrl); setStep("done");
+      setResultUrl(String(data.resultUrl)); setStep("done");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Noe gikk galt.");
     } finally { setBusy(false); }
