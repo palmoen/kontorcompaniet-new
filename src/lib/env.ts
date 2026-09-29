@@ -25,7 +25,9 @@ const schema = z.object({
   SITE_INDEXABLE: z.enum(["true", "false"]).default("false"),
 });
 
-const parsed = schema.safeParse(process.env);
+// Tomme verdier (f.eks. en variabel lagt inn uten verdi i Vercel) regnes som ikke satt, så standardverdiene gjelder
+const defined = Object.fromEntries(Object.entries(process.env).filter(([, v]) => v !== undefined && v.trim() !== ""));
+const parsed = schema.safeParse(defined);
 if (!parsed.success) {
   throw new Error(`Ugyldige miljøvariabler: ${z.prettifyError(parsed.error)}`);
 }
