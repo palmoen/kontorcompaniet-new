@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Schibsted_Grotesk, Source_Serif_4 } from "next/font/google";
+import { DM_Sans, Lora } from "next/font/google";
 import { siteUrl } from "@/lib/env";
 import "./globals.css";
 
 // Selvhostet via next/font (ingen forespørsler til Google fra nettleseren)
-// Schibsted Grotesk: norsk avisgrotesk til overskrifter og tekst. Source Serif 4: ingresser og sitater.
-const sans = Schibsted_Grotesk({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
-const serif = Source_Serif_4({ subsets: ["latin"], axes: ["opsz"], style: ["normal", "italic"], variable: "--font-serif", display: "swap" });
+// DM Sans: tekst, navigasjon og skjema. Lora: overskrifter, ingresser og sitater.
+const sans = DM_Sans({ subsets: ["latin"], axes: ["opsz"], variable: "--font-sans", display: "swap" });
+const serif = Lora({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-serif", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
