@@ -46,6 +46,14 @@ Kunde    →  /mobelscout/resultat/{token}  →  «Dette er interessant»  →  
     config = '{"pages": {"office_chair": ["https://…/brukte-kontorstoler"]}, "maxPages": 2, "delayMs": 3000}'
   where key = 'secundo';
   ```
+- Status testkilder (29.09.2026):
+
+  | Kilde | Oversiktssider | robots.txt | Status |
+  |---|---|---|---|
+  | `loopr` | Shopify-butikken `brukte-kontormobler.loopr.no/collections/…` (kontorstoler-1, konferansestoler, skrivebord-1, motebord-1, oppbevaring, sofa-1, loungemobler, lenestol-1, lyddemping-og-skjerming, lydabsorbenter-1, skillevegger), lenket fra loopr.no/kontormobler | www.loopr.no: ingen regler, bare sitemap. Butikkdomenet sjekkes av adapteren ved hver kjøring | Aktiv test |
+  | `movement` | Ikke funnet ennå | Ikke sjekket | Inaktiv |
+  | `secundo` | Ikke funnet ennå | Ikke sjekket | Inaktiv |
+  | `mobelmeglerne` | Ikke funnet ennå | Cloudflare-utfordring («Verify your connection») også på robots.txt | Inaktiv. Utfordringen skal ikke omgås; krever feed eller avtale |
 - Rekkefølge: `mock` (kun utvikling) → `manual` (CSV/skjema) → `own_stock` (eget bruktlager) → partnerfeeder etter avtale.
 - **FINN:** kun via offisielt API eller avtale. Ingen scraping, og ingen omgåelse av innlogging, CAPTCHA eller rate limits.
 - Nye adaptere implementerer `ScoutSourceAdapter` (`src/lib/scout/sources/types.ts`) og registreres i `src/lib/scout/sources/index.ts`.
