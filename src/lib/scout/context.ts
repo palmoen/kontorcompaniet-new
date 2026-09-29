@@ -1,7 +1,7 @@
 import "server-only";
 import { getSql } from "@/lib/db";
 import { createMailer } from "@/lib/email";
-import { env, siteUrl } from "@/lib/env";
+import { env, isIndexable, siteUrl } from "@/lib/env";
 import { getAiProvider } from "./ai";
 import { scoutStore } from "./store";
 
@@ -14,5 +14,7 @@ export function scoutContext() {
     ai: getAiProvider(),
     mailer: createMailer({ apiKey: env.RESEND_API_KEY, from: env.EMAIL_FROM }),
     siteUrl,
+    // Testkilder (legal_status «test») kjøres bare når nettstedet ikke er i produksjon
+    allowTestSources: !isIndexable,
   };
 }

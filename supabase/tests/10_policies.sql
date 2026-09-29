@@ -116,3 +116,24 @@ do $$ begin
 end $$;
 reset role;
 select 'OK: Supabase-oppsett' as resultat;
+
+-- 9) Møbelscout: testkilder kan kjøres, men treff derfra når aldri kunder
+insert into scout.sources (key, name, adapter, is_active, legal_status) values ('testkilde', 'Testkilde', 'web', true, 'test');
+do $$ begin
+  insert into scout.sources (key, name, adapter, is_active, legal_status) values ('uvurdert', 'Uvurdert', 'web', true, 'not_assessed');
+  raise exception 'kilde uten vurdering ble aktivert';
+exception when check_violation then null; end $$;
+insert into crm.contacts (name, email) values ('Kunde', 'kunde@example.com');
+insert into scout.requests (need, original_prompt, contact_id, status)
+  select '{}'::jsonb, 'test', c.id, 'active' from crm.contacts c where c.email = 'kunde@example.com';
+insert into scout.request_lines (request_id, line_no, category, quantity_target)
+  select r.id, 1, 'office_chair', 1 from scout.requests r where r.original_prompt = 'test';
+insert into scout.items (source_id, external_id, dedupe_key, category, title_raw, quantity)
+  select s.id, 'x1', 'office_chair|x|1', 'office_chair', 'Teststol', 1 from scout.sources s where s.key = 'testkilde';
+insert into scout.matches (request_id, request_line_no, item_id, score, explanation, covered_qty)
+  select r.id, 1, i.id, 80, 'test', 1 from scout.requests r, scout.items i where r.original_prompt = 'test' and i.external_id = 'x1';
+do $$ begin
+  update scout.matches set status = 'approved' where item_id = (select id from scout.items where external_id = 'x1');
+  raise exception 'treff fra testkilde ble godkjent for kunde';
+exception when check_violation then null; end $$;
+select 'OK: testkilder' as resultat;

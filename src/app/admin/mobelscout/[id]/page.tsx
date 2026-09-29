@@ -53,7 +53,7 @@ export default async function AdminScoutDetail({ params }: PageProps<"/admin/mob
             <dl>
               <div><dt>Status</dt><dd>{MATCH[m.status] ?? m.status}</dd></div>
               <div><dt>Antall</dt><dd>{m.quantity} (dekker {m.covered_qty})</dd></div>
-              <div><dt>Kilde</dt><dd>{m.source_name}</dd></div>
+              <div><dt>Kilde</dt><dd>{m.source_name}{m.source_status === "test" && <> · <b>testkilde</b></>}</dd></div>
               <div><dt>Område</dt><dd>{m.municipality ?? "–"}</dd></div>
               <div><dt>Kildepris</dt><dd>{kr(m.source_price_snapshot)}</dd></div>
               <div><dt>Kundepris</dt><dd>{kr(m.customer_price_ex_vat)}</dd></div>
@@ -62,7 +62,10 @@ export default async function AdminScoutDetail({ params }: PageProps<"/admin/mob
             </dl>
             <p className="why">{m.explanation}</p>
             {m.source_url && <p className="hint">Kilde-URL (kun internt): <a href={m.source_url} rel="noopener noreferrer">{m.source_url}</a></p>}
-            {(m.status === "candidate" || m.status === "approved") && (
+            {m.source_status !== "approved" && (
+              <p className="hint">Treff fra en testkilde. Kan ikke godkjennes eller sendes til kunden før kilden er avklart og godkjent.</p>
+            )}
+            {m.source_status === "approved" && (m.status === "candidate" || m.status === "approved") && (
               <div className="btn-row" style={{ alignItems: "end" }}>
                 <form action={approveMatch} className="btn-row" style={{ alignItems: "end" }}>
                   <input type="hidden" name="matchId" value={m.id} /><input type="hidden" name="requestId" value={r.id} />

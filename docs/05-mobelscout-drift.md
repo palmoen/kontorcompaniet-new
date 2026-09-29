@@ -38,7 +38,14 @@ Kunde    →  /mobelscout/resultat/{token}  →  «Dette er interessant»  →  
 
 ## Kilder
 
-- En kilde kan **ikke** aktiveres før `legal_status = 'approved'` (skjemaet håndhever det).
+- En kilde kan **ikke** aktiveres før `legal_status = 'approved'` eller `'test'` (skjemaet håndhever det).
+- **Testkilder** (`legal_status = 'test'`) er for intern test før avtale eller avklaring med kilden. De kjøres bare når `SITE_INDEXABLE=false`, og treff derfra kan **aldri** godkjennes, vises eller sendes til kunder (trigger på `scout.matches`). Før lansering: sett hver testkilde til `approved` (med `legal_approved_by`/`legal_approved_at`) eller deaktiver den.
+- **Nettside-kilder** (`adapter = 'web'`) leser offentlige oversiktssider og lar AI lese ut varene. De følger robots.txt, identifiserer seg (`KontorcompanietScout/1.0`), henter maks `maxPages` sider med `delayMs` pause, og lagrer ingen bilder. Oppsett:
+  ```sql
+  update scout.sources set adapter = 'web', legal_status = 'test', is_active = true,
+    config = '{"pages": {"office_chair": ["https://…/brukte-kontorstoler"]}, "maxPages": 2, "delayMs": 3000}'
+  where key = 'secundo';
+  ```
 - Rekkefølge: `mock` (kun utvikling) → `manual` (CSV/skjema) → `own_stock` (eget bruktlager) → partnerfeeder etter avtale.
 - **FINN:** kun via offisielt API eller avtale. Ingen scraping, og ingen omgåelse av innlogging, CAPTCHA eller rate limits.
 - Nye adaptere implementerer `ScoutSourceAdapter` (`src/lib/scout/sources/types.ts`) og registreres i `src/lib/scout/sources/index.ts`.

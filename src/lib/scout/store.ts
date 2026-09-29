@@ -184,10 +184,28 @@ export function scoutStore(sql: Sql) {
 
     // ------------------------------------------------------------------ kilder
 
-    async dueSources() {
+    async dueSources(opts: { allowTest?: boolean } = {}) {
+      const statuses = opts.allowTest ? ["approved", "test"] : ["approved"];
       return sql<{ id: string; key: string; adapter: string; config: Record<string, unknown>; categories: string[]; interval_minutes: number }[]>`
         select id, key, adapter, config, categories, interval_minutes from scout.sources
-        where is_active and legal_status = 'approved' and next_run_at <= now() order by next_run_at`;
+        where is_active and legal_status = any(${sql.array(statuses)}) and next_run_at <= now() order by next_run_at`;
+    },
+
+    /** «Kjør søk nå» i admin: alle aktive kilder regnes som forfalt */
+    async makeActiveSourcesDue() {
+      await sql`update scout.sources set next_run_at = now() where is_active`;
+    },
+
+    /** Oversikt i admin: kilder med status og siste kjøring */
+    async sourcesOverview() {
+      return sql<{ key: string; name: string; adapter: string; is_active: boolean; legal_status: string; interval_minutes: number;
+        last_run_at: Date | null; items: number; last_ok: boolean | null; last_fetched: number | null; last_error: string | null }[]>`
+        select s.key, s.name, s.adapter, s.is_active, s.legal_status, s.interval_minutes, s.last_run_at,
+               (select count(*)::int from scout.items i where i.source_id = s.id and i.availability <> 'gone') as items,
+               r.ok as last_ok, r.fetched as last_fetched, r.error as last_error
+        from scout.sources s
+        left join lateral (select ok, fetched, error from scout.source_runs where source_id = s.id order by finished_at desc limit 1) r on true
+        order by s.is_active desc, s.name`;
     },
 
     /** Upsert av normaliserte varer + historikk. Returnerer id-er for nye/endrede og forsvunne varer. */
@@ -321,9 +339,9 @@ export function scoutStore(sql: Sql) {
       const matches = await sql<{ id: string; status: string; score: number; explanation: string; covered_qty: number; request_line_no: number;
         customer_price_ex_vat: string | null; source_price_snapshot: string | null; margin_nok: string | null; item_id: string;
         title_raw: string | null; quantity: number; condition: string | null; municipality: string | null; source_url: string | null;
-        source_name: string; display_name: string | null }[]>`
+        source_name: string; source_status: string; display_name: string | null }[]>`
         select m.id, m.status, m.score, m.explanation, m.covered_qty, m.request_line_no, m.customer_price_ex_vat, m.source_price_snapshot,
-               m.margin_nok, i.id as item_id, i.title_raw, i.quantity, i.condition, i.municipality, i.source_url, s.name as source_name,
+               m.margin_nok, i.id as item_id, i.title_raw, i.quantity, i.condition, i.municipality, i.source_url, s.name as source_name, s.legal_status as source_status,
                ip.display_name
         from scout.matches m join scout.items i on i.id = m.item_id join scout.sources s on s.id = i.source_id
         left join scout.item_presentation ip on ip.item_id = i.id

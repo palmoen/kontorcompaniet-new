@@ -1,3 +1,4 @@
+import type { AiProvider } from "../ai/provider";
 import type { CategoryKey, Condition } from "../need";
 
 /** Rådata fra en kilde – formatet varierer per kilde */
@@ -28,9 +29,9 @@ export type ScoutItemInput = {
  * En kilde kan ikke aktiveres i databasen uten godkjent juridisk vurdering.
  */
 export interface ScoutSourceAdapter {
-  readonly adapter: "mock" | "manual" | "own_stock" | "feed" | "api";
+  readonly adapter: "mock" | "manual" | "own_stock" | "feed" | "api" | "web";
   /** Hent varer for ÉN kategori (kalles én gang per kilde × etterspurt kategori, aldri per Scout) */
-  fetchItems(scope: { category: CategoryKey; config: Record<string, unknown> }): Promise<ScoutRawItem[]>;
+  fetchItems(scope: { category: CategoryKey; config: Record<string, unknown>; ai?: AiProvider | null }): Promise<ScoutRawItem[]>;
   normalize(raw: ScoutRawItem): ScoutItemInput | null;
   refreshItem?(externalId: string): Promise<ScoutItemInput | "gone">;
 }

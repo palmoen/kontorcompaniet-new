@@ -50,6 +50,8 @@ export async function notifyNow(formData: FormData) {
 
 export async function runTickNow() {
   await requireAdmin(["sales"]);
-  await tick(ctxOrThrow());
+  const ctx = ctxOrThrow();
+  await ctx.store.makeActiveSourcesDue();
+  await tick(ctx);
   revalidatePath("/admin/mobelscout");
 }

@@ -50,14 +50,14 @@ export async function runMatching(store: ScoutStore, scope: { requestId?: string
 
 export type TickSummary = { sources: number; fetched: number; changed: number; gone: number; matches: number; notified: number };
 
-export async function tick(deps: { store: ScoutStore; ai?: AiProvider | null; mailer: Mailer; siteUrl: string }): Promise<TickSummary> {
+export async function tick(deps: { store: ScoutStore; ai?: AiProvider | null; mailer: Mailer; siteUrl: string; allowTestSources?: boolean }): Promise<TickSummary> {
   const { store } = deps;
   const summary: TickSummary = { sources: 0, fetched: 0, changed: 0, gone: 0, matches: 0, notified: 0 };
   const demanded = await store.demandedCategories();
   const changed: string[] = [];
   const gone: string[] = [];
 
-  for (const src of await store.dueSources()) {
+  for (const src of await store.dueSources({ allowTest: deps.allowTestSources })) {
     const adapter = adapters[src.adapter as keyof typeof adapters];
     const categories = (src.categories.length ? src.categories.filter((c) => demanded.includes(c)) : demanded) as never[];
     const run = { categories: categories as string[], fetched: 0, created: 0, updated: 0, gone: 0, ok: true as boolean, error: undefined as string | undefined };
@@ -65,7 +65,7 @@ export async function tick(deps: { store: ScoutStore; ai?: AiProvider | null; ma
     try {
       if (!adapter) throw new Error(`Ingen adapter for «${src.adapter}»`);
       for (const category of categories) {
-        const raw = await adapter.fetchItems({ category, config: src.config ?? {} });
+        const raw = await adapter.fetchItems({ category, config: src.config ?? {}, ai: deps.ai });
         const items = raw.map((r) => adapter.normalize(r)).filter((x): x is NonNullable<typeof x> => x !== null);
         run.fetched += items.length;
         const res = await store.upsertItems(src.id, [category], items);

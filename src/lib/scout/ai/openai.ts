@@ -2,7 +2,7 @@ import "server-only";
 import OpenAI from "openai";
 import { env } from "@/lib/env";
 import { summarizeNeed } from "../need";
-import type { AiProvider } from "./provider";
+import type { AiProvider, ExtractedListing } from "./provider";
 import { PARSE_INSTRUCTIONS, scoutNeedJsonSchema } from "./schema";
 
 export function createOpenAiProvider(): AiProvider {
@@ -61,6 +61,50 @@ export function createOpenAiProvider(): AiProvider {
       });
       const out = JSON.parse(res.choices[0]?.message?.content ?? "{}") as { equivalent: boolean; confidence: number; reason: string };
       return { ...out, usage: { model, inputTokens: res.usage?.prompt_tokens, outputTokens: res.usage?.completion_tokens, latencyMs: Date.now() - t0 } };
+    },
+
+    async extractListings({ pageText, pageUrl, categoryLabel }) {
+      const t0 = Date.now();
+      const nullable = (type: string) => ({ type: [type, "null"] });
+      const res = await client.chat.completions.create({
+        model,
+        messages: [
+          {
+            role: "system",
+            content:
+              `Du leser teksten fra en oversiktsside hos en forhandler av brukte kontormøbler og lister opp varene som er ${categoryLabel}. `
+              + "Ta bare med varer som faktisk står på siden. Ikke gjett: bruk null når noe ikke står. Pris i hele kroner uten mva hvis det står, ellers prisen som står. "
+              + "url er lenken til varen (står i hakeparentes etter teksten), gjort absolutt ut fra sidens adresse. Svar kun med JSON.",
+          },
+          { role: "user", content: `Side: ${pageUrl}\n\n${pageText}` },
+        ],
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "listings",
+            strict: true,
+            schema: {
+              type: "object", additionalProperties: false, required: ["items"],
+              properties: {
+                items: {
+                  type: "array",
+                  items: {
+                    type: "object", additionalProperties: false,
+                    required: ["title", "brand", "model", "quantity", "condition", "price_nok", "location", "url"],
+                    properties: {
+                      title: { type: "string" }, brand: nullable("string"), model: nullable("string"), quantity: nullable("integer"),
+                      condition: { type: ["string", "null"], enum: ["new", "used", "refurbished", "demo", null] },
+                      price_nok: nullable("number"), location: nullable("string"), url: nullable("string"),
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+      const out = JSON.parse(res.choices[0]?.message?.content ?? "{}") as { items?: ExtractedListing[] };
+      return { items: out.items ?? [], usage: { model, inputTokens: res.usage?.prompt_tokens, outputTokens: res.usage?.completion_tokens, latencyMs: Date.now() - t0 } };
     },
   };
 }

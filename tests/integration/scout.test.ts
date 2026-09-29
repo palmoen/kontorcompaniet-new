@@ -131,4 +131,16 @@ describe.skipIf(!url)("Møbelscout ende-til-ende (database)", () => {
     const [row] = await sql`select count(*)::int as n from scout.matches where request_id = ${r.id}`;
     expect(row.n).toBe(1);
   });
+
+  it("testkilder kjøres bare utenfor produksjon, og treff derfra kan aldri godkjennes for kunden", async () => {
+    await sql`update scout.sources set legal_status = 'test', next_run_at = now() where key = 'mock'`;
+    try {
+      expect((await store.dueSources()).map((s) => s.key)).not.toContain("mock");
+      expect((await store.dueSources({ allowTest: true })).map((s) => s.key)).toContain("mock");
+      const [candidate] = await sql`select m.id from scout.matches m where m.request_id = ${requestId} and m.status = 'candidate' limit 1`;
+      if (candidate) await expect(store.approveMatch(candidate.id, null)).rejects.toThrow(/ikke er godkjent/);
+    } finally {
+      await sql`update scout.sources set legal_status = 'approved' where key = 'mock'`;
+    }
+  });
 });
