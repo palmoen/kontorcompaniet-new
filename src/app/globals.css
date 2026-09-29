@@ -637,3 +637,47 @@ h1, h2, h3, h4 { font-weight: var(--weight-display); }
 
 /* Små etiketter som er overskrifter i HTML, men grensesnitt visuelt: DM Sans */
 .case-aside h2, .case-intro h2, .site-footer h2, .list-head, .lead-form legend { font-family: var(--font-sans), system-ui, sans-serif; letter-spacing: 0; }
+
+/* ==========================================================================
+   «Et tilbud dere kan se»: forklaring av det digitale tilbudet + illustrasjon
+   ========================================================================== */
+.proposal { background: var(--sand); }
+.proposal-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(32px, 5vw, 88px); align-items: center; }
+.proposal-text { display: grid; gap: 18px; }
+.proposal-text h2 { max-width: 18ch; }
+.proposal-points { list-style: none; margin: 8px 0 0; padding: 0; counter-reset: pp; border-top: 1px solid var(--sand-2); }
+.proposal-points li { counter-increment: pp; display: grid; grid-template-columns: 2.2rem minmax(0, 1fr); gap: 2px 10px; padding: 14px 0; border-bottom: 1px solid var(--sand-2); }
+.proposal-points li::before { content: counter(pp); font-family: var(--font-serif), Georgia, serif; font-size: 1.2rem; color: var(--gold-text); line-height: 1.3; grid-row: span 2; }
+.proposal-points h3 { font-family: var(--font-sans), system-ui, sans-serif; font-size: 1.02rem; font-weight: 600; letter-spacing: 0; }
+.proposal-points p { grid-column: 2; color: var(--ink-2); font-size: var(--s-small); }
+.proposal-figure { margin: 0; display: grid; gap: 10px; }
+.proposal-figure figcaption { font-size: var(--s-small); color: var(--ink-3); }
+@media (max-width: 960px) { .proposal-grid { grid-template-columns: 1fr; } }
+
+.pv { background: var(--paper); border-radius: 10px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 30px 60px -30px rgba(0,0,0,.35); font-size: .82rem; user-select: none; }
+.pv-bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: #fff; border-bottom: 1px solid var(--line); }
+.pv-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--sand-2); }
+.pv-bar em { margin-left: 10px; font-style: normal; color: var(--ink-3); }
+.pv-body { padding: 16px; display: grid; gap: 14px; }
+.pv-rooms { display: flex; gap: 6px; flex-wrap: wrap; }
+.pv-rooms span { padding: .35em .9em; border-radius: 999px; background: var(--sand); color: var(--ink-2); font-weight: 500; }
+.pv-rooms span.on { background: var(--ink); color: var(--paper); }
+.pv-main { display: grid; grid-template-columns: minmax(0, 1fr) 190px; gap: 14px; align-items: start; }
+.pv-products { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-items: start; }
+.pv-card { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: 2px; min-width: 0; }
+.pv-card strong { font-weight: 600; line-height: 1.25; margin-top: 6px; }
+.pv-card small { color: var(--ink-3); }
+.pv-img { position: relative; aspect-ratio: 1; background: #fff; border: 1px solid var(--line); border-radius: 6px; }
+.pv-img img { object-fit: contain; padding: 8px; }
+.pv-pin { position: absolute; left: 56%; top: 62%; z-index: 1; width: 22px; height: 22px; border-radius: 50%; background: var(--signal); color: #fff; font-style: normal; font-weight: 600; display: grid; place-items: center; box-shadow: 0 0 0 4px rgba(207, 69, 32, .2); }
+.pv-note { position: relative; margin: 8px 0 2px; background: var(--ink); color: var(--paper); font-weight: 500; font-size: .72rem; padding: 6px 8px; border-radius: 6px; line-height: 1.3; }
+.pv-note::before { content: ""; position: absolute; top: -5px; left: 62%; border: 5px solid transparent; border-top: 0; border-bottom-color: var(--ink); }
+.pv-sum { display: grid; gap: 9px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+.pv-sum div { display: flex; justify-content: space-between; align-items: center; gap: 8px; color: var(--ink-2); }
+.pv-sum i { display: block; width: 56px; height: 8px; border-radius: 99px; background: var(--sand-2); }
+.pv-sum i.s { width: 38px; }
+.pv-sum .tot { padding-top: 8px; border-top: 1px solid var(--line); color: var(--ink); font-weight: 600; }
+.pv-sum .tot i { background: var(--ink-3); }
+.pv-lease { font-size: .75rem; }
+.pv-approve { margin-top: 4px; text-align: center; padding: .6em; border-radius: 999px; background: var(--signal); color: #fff; font-weight: 600; }
+@media (max-width: 600px) { .pv-main { grid-template-columns: 1fr; } }

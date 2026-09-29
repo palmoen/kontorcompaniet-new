@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ProjectTeaser } from "@/components/blocks";
 import { JsonLd } from "@/components/JsonLd";
+import { ProposalShowcase } from "@/components/ProposalShowcase";
 import { readDoc } from "@/lib/content/files";
 import { content } from "@/lib/content/repository";
 import { localBusiness } from "@/lib/seo/jsonld";
@@ -20,7 +21,7 @@ export const metadata = buildMetadata({
 const steps = [
   ["Behov og analyse", "Vi kartlegger hvordan dere jobber, hvor mange dere er, og hva som ikke fungerer i dag."],
   ["Plan og tegning", "Planløsning, soner og møbelvalg, tilpasset lokaler, budsjett og arbeidsform."],
-  ["Tilbud og finansiering", "Ett samlet tilbud. Kjøp eller leasing over 3–5 år."],
+  ["Tilbud og finansiering", "Ett samlet tilbud som en nettside, rom for rom med bilder. Dere kommenterer og godkjenner der. Kjøp eller leasing over 3–5 år."],
   ["Levering og montering", "Vi koordinerer leverandører, frakt, innbæring og montering."],
   ["Oppfølging og service", "Justering, tilleggsbestillinger, service og ombruk når behovene endrer seg."],
 ] as const;
@@ -126,6 +127,8 @@ export default async function HomePage() {
           <ol>{steps.map(([t, d]) => <li key={t}><h3>{t}</h3><p>{d}</p></li>)}</ol>
         </div>
       </section>
+
+      <ProposalShowcase />
 
       <section className="band night" aria-labelledby="h-contact">
         <div className="wrap contact-ed">
