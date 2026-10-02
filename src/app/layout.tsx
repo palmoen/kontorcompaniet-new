@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Lora } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import { siteUrl } from "@/lib/env";
 import "./globals.css";
 
 // Selvhostet via next/font (ingen forespørsler til Google fra nettleseren)
-// DM Sans: tekst, navigasjon og skjema. Lora: overskrifter, ingresser og sitater.
-const sans = DM_Sans({ subsets: ["latin"], axes: ["opsz"], variable: "--font-sans", display: "swap" });
-const serif = Lora({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-serif", display: "swap" });
+// Samme profil som Workshop Studio: Playfair Display til overskrifter (med kursiv aksent), Inter til alt annet.
+const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
+const serif = Playfair_Display({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-serif", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

@@ -40,7 +40,10 @@ export default async function HomePage() {
     <>
       <section className="hero-ed" aria-labelledby="h-hero">
         <div className="wrap text">
-          <h1 id="h-hero">Fra idé til ferdig arbeidsplass.</h1>
+          <div>
+            <p className="kicker-line">Kontorinnredning siden {settings.foundedYear}</p>
+            <h1 id="h-hero">Fra idé til <em>ferdig</em> arbeidsplass.</h1>
+          </div>
           <div className="aside">
             <p className="lead">
               Vi planlegger, leverer og monterer kontorer folk trives i. Én kontaktperson hele veien, fra første befaring til
@@ -80,7 +83,7 @@ export default async function HomePage() {
       <section className="band tight" aria-labelledby="h-sol">
         <div className="wrap">
           <div className="sec-head">
-            <h2 id="h-sol">Hva trenger dere hjelp med?</h2>
+            <h2 id="h-sol">Hva trenger dere <em>hjelp</em> med?</h2>
             <Link className="textlink" href="/losninger">Alle løsninger</Link>
           </div>
           <ul className="tiles">
@@ -106,7 +109,7 @@ export default async function HomePage() {
       <section className="band green" aria-labelledby="h-kat">
         <div className="wrap">
           <div className="sec-head">
-            <h2 id="h-kat">Møbler fra produsenter vi kjenner</h2>
+            <h2 id="h-kat">Møbler fra produsenter vi <em>kjenner</em></h2>
             <Link className="textlink" href="/merkevarer">Alle {brands.length} merker</Link>
           </div>
           <ul className="rows">
@@ -133,7 +136,7 @@ export default async function HomePage() {
       <section className="band night" aria-labelledby="h-contact">
         <div className="wrap contact-ed">
           <div className="stack" style={{ ["--st" as string]: "1.1rem" }}>
-            <h2 id="h-contact">Skal dere flytte, vokse eller fornye?</h2>
+            <h2 id="h-contact">Skal dere flytte, vokse eller <em>fornye</em>?</h2>
             <p className="lead">
               Vi tar en uforpliktende prat og kommer gjerne på befaring. Showroomet vårt i {settings.streetAddress} i {settings.city} er
               åpent hverdager.

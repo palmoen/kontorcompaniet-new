@@ -16,7 +16,7 @@ export function ProposalShowcase({ headingId = "h-tilbud" }: { headingId?: strin
     <section className="band proposal" aria-labelledby={headingId}>
       <div className="wrap proposal-inner">
         <div className="proposal-head">
-          <h2 id={headingId}>Et tilbud dere kan se, ikke bare lese</h2>
+          <h2 id={headingId}>Et tilbud dere kan <em>se</em>, ikke bare lese</h2>
           <p className="lead">
             Dere får tilbudet som en egen nettside, bygget opp rom for rom. Det gir oversikt, og det gjør det enklere å være med på å
             forme løsningen underveis. Prøv selv: velg et rom, trykk på møblene eller legg inn en kommentar.

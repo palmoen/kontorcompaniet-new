@@ -48,7 +48,7 @@ export default async function BrandPage({ params }: PageProps<"/merkevarer/[slug
   return (
     <>
       <div className="wrap"><Breadcrumbs crumbs={[{ name: "Merkevarer", path: "/merkevarer" }, { name: brand.name, path }]} /></div>
-      <PageIntro title={brand.name} lead={lead}>
+      <PageIntro kicker="Merkevare" title={brand.name} lead={lead}>
         {facts.length > 0 && <p className="facts-inline">{facts.join(" · ")}</p>}
         <div className="btn-row"><a className="btn btn-primary" href="#foresporsel">Be om tilbud på {brand.name}</a></div>
       </PageIntro>

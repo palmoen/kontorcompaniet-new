@@ -46,7 +46,7 @@ export default async function SolutionPage({ params }: PageProps<"/losninger/[sl
   return (
     <>
       <div className="wrap"><Breadcrumbs crumbs={[{ name: "Løsninger", path: "/losninger" }, { name: solution.name, path }]} /></div>
-      <PageIntro title={solution.name} lead={doc.data.lead} image={doc.data.image} imageAlt={doc.data.imageAlt}>
+      <PageIntro kicker={solution.group === "rom" ? "Løsninger" : "Tjenester"} title={solution.name} lead={doc.data.lead} image={doc.data.image} imageAlt={doc.data.imageAlt}>
         <div className="btn-row">
           <a className="btn btn-primary" href="#foresporsel">Snakk med en rådgiver</a>
         </div>

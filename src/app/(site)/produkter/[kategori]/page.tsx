@@ -47,7 +47,7 @@ export default async function CategoryPage({ params }: PageProps<"/produkter/[ka
   return (
     <>
       <div className="wrap"><Breadcrumbs crumbs={[{ name: "Produkter", path: "/produkter" }, { name: category.name, path }]} /></div>
-      <PageIntro title={category.name} lead={doc.data.lead} image={doc.data.image} imageAlt={doc.data.imageAlt}>
+      <PageIntro kicker="Produkter" title={category.name} lead={doc.data.lead} image={doc.data.image} imageAlt={doc.data.imageAlt}>
         <div className="btn-row">
           <a className="btn btn-primary" href="#foresporsel">Be om tilbud</a>
         </div>

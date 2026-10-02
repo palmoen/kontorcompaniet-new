@@ -2,29 +2,31 @@
 
 /* ==========================================================================
    Kontorcompaniet – designsystem (fra prototype 0b)
-   Skrifter lastes via next/font: DM Sans (--font-sans) til tekst og grensesnitt,
-   Lora (--font-serif) til overskrifter, ingresser og sitater. Ingen maskinskrift.
+   Skrifter lastes via next/font: Inter (--font-sans) til tekst og grensesnitt,
+   Playfair Display (--font-serif) til h1/h2, med kursiv aksent (<em>) på ett ord.
+   Fargeprofil: varm off-white, sorte knapper, brungull aksent. Se «Profil» nederst.
    ========================================================================== */
 :root {
   color-scheme: light;
   --font-display: var(--font-serif);
   --font-body: var(--font-sans);
   --font-mono: var(--font-sans);
-  --paper: #FAFAF7;
-  --sand: #EDEBE5;
-  --sand-2: #DEDBD2;
-  --line: #E2DFD7;
-  --ink: #1C1B18;
-  --ink-2: #57534B;
+  --paper: #F6F4F0;
+  --sand: #EEEBE5;
+  --sand-2: #DDD8CF;
+  --line: #E3DFD8;
+  --ink: #1E1C1A;
+  --ink-2: #5E5A54;
   --ink-3: #8A857A;
   --gold: #91762A;        /* Pantone 105 C – detaljer og store tall, aldri brødtekst */
-  --gold-text: #6F5A1F;
-  --signal: #CF4520;      /* Pantone 173 C – kun primær-CTA og «dot» */
-  --signal-deep: #A8371A;
-  --night: #1E1C19;
+  --gold-text: #75603F;      /* aksent i liten tekst (AA-kontrast) */
+  --accent: #8A7350;         /* kursiv aksent i store overskrifter */
+  --signal: #1E1E1E;      /* primærknapper: sorte */
+  --signal-deep: #000000;
+  --night: #1E1C1A;
   --night-2: #2A2723;
   --night-ink: #EDE8DE;
-  --night-ink-2: #B3AB9C;
+  --night-ink-2: #B8B2A8;
 
   --s-1: clamp(2.4rem, 1.6rem + 3.4vw, 4.4rem);
   --s-2: clamp(2rem, 1.4rem + 2.2vw, 3.1rem);
@@ -36,10 +38,10 @@
 
   --gutter: clamp(16px, 4vw, 56px);
   --maxw: 1400px;
-  --track-display: -.01em;  /* sporing i overskrifter, tilpasset skriften */
-  --weight-display: 500;
+  --track-display: -.02em;  /* sporing i overskrifter, tilpasset skriften */
+  --weight-display: 400;
   --radius: 2px;
-  --radius-btn: 999px;   /* knapper og menyknapp: helt runde ender */
+  --radius-btn: 10px;    /* knapper: avrundet rektangel */
   --ease: cubic-bezier(.2, .7, .2, 1);
   --header-h: 72px;
 }
@@ -769,3 +771,61 @@ h1, h2, h3, h4 { font-weight: var(--weight-display); }
 .band.green .rows, .band.green .link-list, .band.green-strong .contact-ed .person-lines { border-color: var(--green-line); }
 .band.green .rows li { border-color: var(--green-line); }
 .band.green .kind span { border-color: var(--green-line); background: var(--paper); }
+
+
+/* ==========================================================================
+   Profil (valgt 2026-10-02): Playfair Display + Inter, som Workshop Studio
+   – store serif-overskrifter med ett kursivt aksentord (<em>)
+   – Inter i ingresser, brødtekst og små titler
+   – lyse flater i sand, mørke flater nesten sorte, sorte knapper
+   ========================================================================== */
+body { background: var(--paper); }
+.site-header { background: color-mix(in srgb, var(--paper) 92%, transparent); }
+main h1, main h2 { font-family: var(--font-serif), Georgia, serif; font-weight: 400; letter-spacing: -.015em; }
+main h1 { line-height: 1.04; }
+.hero-ed h1 { font-size: clamp(3rem, 1.6rem + 5vw, 6.2rem); letter-spacing: -.025em; line-height: 1; max-width: 11ch; }
+.page-intro h1, .case-title h1, .article-head h1, .project-head h1 { font-size: clamp(2.8rem, 1.6rem + 4.2vw, 5.2rem); letter-spacing: -.02em; }
+main h2 { font-size: clamp(1.9rem, 1.3rem + 2vw, 3rem); line-height: 1.08; }
+.prose h2, .side-block h2, .case-aside h2, .list-head { font-size: clamp(1.4rem, 1.2rem + .8vw, 1.9rem); }
+.side-block h2, .case-aside h2 { font-family: var(--font-sans), system-ui, sans-serif; font-size: 1rem; font-weight: 600; letter-spacing: 0; }
+h1 em, h2 em { font-style: italic; color: var(--accent); }
+.band.night h1 em, .band.night h2 em { color: #CBB68E; }
+h3, .tile-title, .row-title, .bname, .pl-title, .al-title, .product h3, .steps-ed h3 {
+  font-family: var(--font-sans), system-ui, sans-serif; font-weight: 600; letter-spacing: -.01em;
+}
+.lead, .hero-ed .lead, .scout-hero .lead, .case-story li > :not(h2), .case-intro > :not(h2), .case-video p {
+  font-family: var(--font-sans), system-ui, sans-serif; font-weight: 400; line-height: 1.6;
+}
+.lead { color: var(--ink-2); }
+.intro-ed .big { font-family: var(--font-sans), system-ui, sans-serif; font-size: clamp(1.25rem, 1.05rem + .7vw, 1.6rem); line-height: 1.45; color: var(--ink); }
+.intro-ed .big em { font-family: var(--font-serif), Georgia, serif; font-style: italic; color: var(--accent); }
+
+/* Etiketter: strek + spredte versaler (over hovedoverskrift og på prosjektkort) */
+.kicker, .kicker-line, main .eyebrow {
+  display: flex; align-items: center; gap: 16px; margin: 0 0 4px;
+  font: 500 .8rem/1.2 var(--font-sans), sans-serif; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-text);
+}
+.kicker::before, .kicker-line::before, main .eyebrow::before { content: ""; width: 40px; height: 1px; background: currentColor; flex: none; }
+.project-teaser .kicker, .pl-meta, .certs { color: var(--gold-text); }
+main .eyebrow::before { display: block; border-radius: 0; }
+
+.btn { border-radius: var(--radius-btn); font-weight: 500; }
+.btn-primary { background: var(--signal); color: #fff; }
+.btn-primary:hover { background: var(--signal-deep); }
+
+/* Flater: «green» fra forrige runde blir sand; mørke flater nesten sorte */
+.band.green, .band.sand, .band.sand.lead-section, #skjema.band.sand, .scout-hero { background: var(--sand); }
+.band.green .rows, .band.green .rows li, .band.green .link-list { border-color: var(--sand-2); }
+.band.night, .band.green-strong { background: var(--night); color: #F2EFE9; }
+.band.night .muted, .band.night .lead, .band.night .person-lines .muted { color: var(--night-ink-2); }
+.band.night h2, .band.night b { color: #fff; }
+.band.night .btn-primary { background: var(--paper); color: var(--ink); }
+.band.night .btn-primary:hover { background: #fff; }
+.contact-ed .person-lines { border-color: rgba(255, 255, 255, .2); }
+
+.steps-ed li::before, .case-story li::before, .proposal-points li::before, .how li::before {
+  font-family: var(--font-serif), Georgia, serif; font-style: italic; color: var(--accent);
+}
+.quote blockquote, .case-quote blockquote { font-family: var(--font-serif), Georgia, serif; }
+.site-footer h2 { font-family: var(--font-sans), sans-serif; font-size: .78rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--night-ink); }
+.scout-hero .eyebrow { margin-top: 18px; }
