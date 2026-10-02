@@ -754,3 +754,18 @@ h1, h2, h3, h4 { font-weight: var(--weight-display); }
   .pd-summary { grid-column: 1; }
   .pd-cm-body { max-width: 150px; }
 }
+/* Grønne flater: logofargen (#9C8E00) med lav dekning over papir */
+:root {
+  --logo: #9C8E00;
+  --green-1: color-mix(in srgb, var(--logo) 11%, var(--paper));
+  --green-2: color-mix(in srgb, var(--logo) 20%, var(--paper));
+  --green-line: color-mix(in srgb, var(--logo) 30%, var(--paper));
+}
+.band.green { background: var(--green-1); }
+.band.green-strong, .band.night { background: var(--green-2); color: var(--ink); }
+.band.green .muted, .band.green-strong .muted, .band.night .muted { color: #4A463C; }
+.band.sand.lead-section, #skjema.band.sand { background: var(--green-1); }
+.scout-hero { background: var(--green-1); }
+.band.green .rows, .band.green .link-list, .band.green-strong .contact-ed .person-lines { border-color: var(--green-line); }
+.band.green .rows li { border-color: var(--green-line); }
+.band.green .kind span { border-color: var(--green-line); background: var(--paper); }

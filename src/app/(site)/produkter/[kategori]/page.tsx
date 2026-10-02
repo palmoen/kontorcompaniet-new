@@ -55,7 +55,7 @@ export default async function CategoryPage({ params }: PageProps<"/produkter/[ka
       <ConnectionLine items={links} />
 
       {p.products.length > 0 && (
-        <section className="band tight" aria-labelledby="h-utvalg">
+        <section className="band tight green" aria-labelledby="h-utvalg">
           <div className="wrap">
             <div className="sec-head">
               <h2 id="h-utvalg">Et utvalg vi leverer</h2>

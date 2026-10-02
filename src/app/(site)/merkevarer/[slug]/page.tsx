@@ -55,7 +55,7 @@ export default async function BrandPage({ params }: PageProps<"/merkevarer/[slug
       <ConnectionLine items={links} />
 
       {p.products.length > 0 && (
-        <section className="band tight" aria-labelledby="h-modeller">
+        <section className="band tight green" aria-labelledby="h-modeller">
           <div className="wrap">
             <div className="sec-head"><h2 id="h-modeller">Et utvalg fra {brand.name}</h2></div>
             <ProductGrid products={p.products} />

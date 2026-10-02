@@ -60,7 +60,7 @@ export default async function HomePage() {
         </figure>
       </section>
 
-      <section className="band" aria-labelledby="h-intro">
+      <section className="band green" aria-labelledby="h-intro">
         <div className="wrap intro-ed">
           <h2 id="h-intro">Et familieeid selskap i {settings.city}, siden {settings.foundedYear}</h2>
           <div>
@@ -103,7 +103,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      <section className="band tight" aria-labelledby="h-kat">
+      <section className="band green" aria-labelledby="h-kat">
         <div className="wrap">
           <div className="sec-head">
             <h2 id="h-kat">Møbler fra produsenter vi kjenner</h2>
