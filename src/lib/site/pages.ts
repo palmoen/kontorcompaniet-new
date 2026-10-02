@@ -13,6 +13,7 @@ import { articleGate, brandGate, categoryGate, projectGate, shouldIndex, solutio
 
 export const projectImages: Record<string, string[]> = {
   "norwegian-fornebu": ["/images/prosjekter/norwegian-fornebu.webp", "/images/prosjekter/norwegian-fornebu-2.webp"],
+  "ice-nydalen": ["/images/prosjekter/ice-nydalen.webp", "/images/prosjekter/ice.webp"],
 };
 
 const projectsForSolutions = (projects: Project[], solutionSlugs: string[]) =>

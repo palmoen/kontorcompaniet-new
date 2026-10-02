@@ -341,7 +341,7 @@ Før lansering må minst forside, hubsider, løsninger P1 og kategoriene bestå,
 
 1. **Tilgang til Search Console/GA4:** Site Kit er installert, så GSC er trolig allerede koblet til. Gi lesetilgang eller en eksport.
 2. **MerchMaker-domene og URL-struktur** for firmagave-redirects.
-3. **Prosjektdata:** kunde, år, størrelse, antall arbeidsplasser, bilder og tillatelse for Norwegian, Ice, Yara, Kontorhuset og nyere prosjekter.
+3. **Prosjektdata:** Sju prosjekter ligger inne (Norwegian, Ice, Yara, Kontorhuset, Axactor, Viken Fiber, Kjellstad Næringspark). De seks nye er demoer skrevet kun fra Kontorcompaniets egen korte beskrivelse: ingen tall, årstall eller sitater. Før lansering trengs for hvert prosjekt: bekreftet tekst, år, gjerne antall arbeidsplasser, minst 4 bilder med rettigheter, og kundens tillatelse til å bli omtalt med navn.
 4. **Kundesitater:** bekreft at de kan brukes med navn og tittel.
 5. **Katalogen** (først aktuelt i fase 7): bekreft KEEP/ARCHIVE og velg nye modeller. **For v1:** hvilke produkter skal vises som kort på merke- og kategorisidene?
 6. **Kategorinavn:** «Kantinestoler» (i dag «Stoler») og «Sofa og lounge».

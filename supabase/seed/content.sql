@@ -317,7 +317,13 @@ on conflict do nothing;
 insert into content.projects (slug, title, client_name, client_display, location_text, year, workstations, scope,
                               challenge_md, solution_md, result_md, description_md, architect_name, architect_url,
                               video_urls, featured, sort, status, published_at) values
-  ('norwegian-fornebu', 'Norwegian: 750 arbeidsplasser på Fornebu', 'Norwegian', 'named', 'Fornebu', null, 750, 'Kontor, konferanse, kantine og sosiale soner', 'Norwegian skulle samle hovedkontoret på Fornebu: 750 arbeidsplasser med tilhørende konferanse-, kantine- og sosiale møbler, i Norwegians egen fargepalett.', 'Vi dro på leverandørbesøk for å velge tekstiler og farger som passet Norwegians profil, planla leveransen i etapper og koordinerte levering og montering.', 'Fire intense uker med montering endte med ferdigbefaring og et hovedkontor klart til bruk.', null, null, null, array['https://vimeo.com/kontorcompaniet']::text[], true, 1, 'published', now())
+  ('norwegian-fornebu', 'Norwegian: 750 arbeidsplasser på Fornebu', 'Norwegian', 'named', 'Fornebu', null, 750, 'Kontor, konferanse, kantine og sosiale soner', 'Norwegian skulle samle hovedkontoret på Fornebu: 750 arbeidsplasser med tilhørende konferanse-, kantine- og sosiale møbler, i Norwegians egen fargepalett.', 'Vi dro på leverandørbesøk for å velge tekstiler og farger som passet Norwegians profil, planla leveransen i etapper og koordinerte levering og montering.', 'Fire intense uker med montering endte med ferdigbefaring og et hovedkontor klart til bruk.', null, null, null, array['https://vimeo.com/316655909']::text[], true, 1, 'published', now()),
+  ('ice-nydalen', 'Ice: aktivitetsbaserte lokaler over tre etasjer i Nydalen', 'Ice', 'named', 'Nydalen, Oslo', null, null, 'Komplette aktivitetsbaserte lokaler over tre etasjer', 'Lokalene skulle bygges for aktivitetsbasert arbeid: ingen faste plasser, men ulike soner for ulike oppgaver. Det krever flere typer arbeidsplasser enn et tradisjonelt landskap, og en tydelig plan for hva som skal skje hvor, fordelt på tre etasjer.', 'Vi planla sonene og møbleringen etasje for etasje: arbeidsplasser i landskap, møterom og uformelle møteplasser, og sosiale soner. Vi koordinerte leveransene fra produsentene og sto for levering og montering i alle tre etasjene.', 'Tre etasjer levert ferdig møblert og klare for aktivitetsbasert arbeid.', 'Ice samlet virksomheten i nye lokaler i Nydalen i Oslo. Vi leverte komplette aktivitetsbaserte lokaler over tre etasjer.', null, null, array['https://vimeo.com/269939976']::text[], false, 2, 'published', now()),
+  ('yara-skoyen', 'Yara: en komplett etasje på Skøyen', 'Yara', 'named', 'Skøyen, Oslo', null, null, 'Arbeidsplasser, sosiale soner, stillerom, møterom og pods', 'En hel etasje skulle fungere både for konsentrert arbeid og for samarbeid. Det betyr arbeidsplasser i landskap, men også steder å trekke seg tilbake til og rom for møter i ulike størrelser.', 'Vi leverte arbeidsplasser, møterom og sosiale soner, og supplerte med stillerom og pods for telefonsamtaler og arbeid som krever ro. Plasseringen av stillerom og pods ble planlagt sammen med resten av etasjen, slik at de ligger der de gjør mest nytte.', 'En komplett etasje med rom for både samarbeid og konsentrasjon, levert ferdig montert.', 'For Yara på Skøyen i Oslo møblerte vi en komplett etasje, fra arbeidsplasser til stillerom og pods.', null, null, array['https://vimeo.com/439311013']::text[], false, 3, 'published', now()),
+  ('kontorhuset-lierstranda', 'Kontorhuset: kontorfellesskap på Lierstranda', 'Kontorhuset', 'named', 'Lierstranda, Lier', null, null, 'Cellekontorer, møterom, teamkontorer og sosiale soner', 'I et kontorfellesskap deler mange ulike bedrifter de samme lokalene. Kontorene må fungere for leietakere med ulike behov, og fellesarealene må tåle mye bruk og mange brukere.', 'Vi leverte cellekontorer og teamkontorer for leietakerne, møterom som deles, og sosiale soner der folk fra ulike bedrifter møtes. Leveransen ble planlagt og montert som én helhet.', 'Et komplett møblert kontorfellesskap, klart for leietakerne.', 'Kontorhuset på Lierstranda er et kontorfellesskap. Vi sto for den komplette leveransen, fra cellekontorer til sosiale soner.', null, null, array['https://vimeo.com/269852960']::text[], false, 4, 'published', now()),
+  ('axactor-gronland', 'Axactor: nye lokaler over to etasjer på Grønland', 'Axactor', 'named', 'Grønland, Drammen', null, null, 'Landskap, møterom og sosiale soner over to etasjer', 'Nye lokaler over to etasjer skulle møbleres fra bunnen av, med arbeidsplasser i landskap, møterom og steder der de ansatte kan møtes uformelt.', 'Vi planla møbleringen for begge etasjene, med landskap for arbeidsplassene, møterom i ulike størrelser og sosiale soner. Vi sto for levering og montering.', 'To etasjer møblert og klare til innflytting.', 'Axactor flyttet inn i nye lokaler på Grønland i Drammen. Vi møblerte to etasjer med landskap, møterom og sosiale soner.', null, null, array[]::text[], false, 5, 'published', now()),
+  ('viken-fiber-gronland', 'Viken Fiber: møterom og sosiale soner på Grønland', 'Viken Fiber', 'named', 'Grønland, Drammen', null, null, 'Møterom og sosiale soner', 'Viken Fiber trengte møterom og sosiale soner som fungerer i hverdagen, både til formelle møter og til de uformelle samtalene.', 'Vi leverte møblering til møterommene og de sosiale sonene, og sto for levering og montering.', 'Møterom og sosiale soner levert ferdig montert.', 'For Viken Fiber på Grønland i Drammen leverte vi møterom og sosiale soner.', null, null, array[]::text[], false, 6, 'published', now()),
+  ('kjellstad-naeringspark', 'Kjellstad Næringspark: kantine for hele næringsbygget', 'Kjellstad Næringspark', 'named', 'Lierstranda, Lier', null, null, 'Kantine for hele næringsbygget', 'En kantine for et helt næringsbygg brukes av mange bedrifter og mange mennesker hver dag. Møblene må tåle mye bruk og hyppig vask, og rommet må fungere både i lunsjen og resten av dagen.', 'Vi leverte kantinemøblene til hele næringsbygget, og sto for levering og montering.', 'En felles kantine for alle bedriftene i bygget, levert ferdig montert.', 'Kjellstad Næringspark på Lierstranda har én felles kantine for alle bedriftene i bygget. Vi leverte møblene til kantinen.', null, null, array[]::text[], false, 7, 'published', now())
 on conflict (slug) do nothing;
 
 insert into content.project_solutions (project_id, solution_id)
@@ -327,7 +333,29 @@ select pr.id, t.id from (values
   ('norwegian-fornebu', 'moterom'),
   ('norwegian-fornebu', 'kantine'),
   ('norwegian-fornebu', 'prosjektledelse'),
-  ('norwegian-fornebu', 'levering-og-montering')
+  ('norwegian-fornebu', 'levering-og-montering'),
+  ('ice-nydalen', 'kontorinnredning'),
+  ('ice-nydalen', 'kontorlandskap'),
+  ('ice-nydalen', 'moterom'),
+  ('ice-nydalen', 'prosjektledelse'),
+  ('ice-nydalen', 'levering-og-montering'),
+  ('yara-skoyen', 'kontorinnredning'),
+  ('yara-skoyen', 'kontorlandskap'),
+  ('yara-skoyen', 'moterom'),
+  ('yara-skoyen', 'stillerom'),
+  ('yara-skoyen', 'akustikk'),
+  ('kontorhuset-lierstranda', 'kontorinnredning'),
+  ('kontorhuset-lierstranda', 'moterom'),
+  ('kontorhuset-lierstranda', 'prosjektledelse'),
+  ('kontorhuset-lierstranda', 'levering-og-montering'),
+  ('axactor-gronland', 'kontorinnredning'),
+  ('axactor-gronland', 'kontorlandskap'),
+  ('axactor-gronland', 'moterom'),
+  ('axactor-gronland', 'levering-og-montering'),
+  ('viken-fiber-gronland', 'moterom'),
+  ('viken-fiber-gronland', 'levering-og-montering'),
+  ('kjellstad-naeringspark', 'kantine'),
+  ('kjellstad-naeringspark', 'levering-og-montering')
 ) v (project, target)
 join content.projects pr on pr.slug = v.project join content.solutions t on t.slug = v.target
 on conflict do nothing;
