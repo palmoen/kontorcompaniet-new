@@ -125,7 +125,8 @@ p { margin: 0; }
   background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
 }
 .site-header .wrap { display: flex; align-items: center; gap: 24px; height: var(--header-h); }
-.logo img { height: 26px; width: auto; }
+.logo img { height: 36px; width: auto; }
+@media (max-width: 600px) { .logo img { height: 30px; } }
 .mainnav { display: flex; gap: 4px; margin-left: auto; }
 .mainnav a { text-decoration: none; font-weight: 600; font-size: .97rem; padding: .55em .9em; border-radius: var(--radius-btn); }
 .mainnav a:hover { background: var(--sand); }

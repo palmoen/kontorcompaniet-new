@@ -9,7 +9,7 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="wrap">
         <Link className="logo" href="/" aria-label="Kontorcompaniet – til forsiden">
-          <Image src="/logo.png" alt="Kontorcompaniet" width={164} height={26} priority />
+          <Image src="/logo.png" alt="Kontorcompaniet" width={226} height={36} priority />
         </Link>
         <nav className="mainnav" id="hovedmeny" aria-label="Hovedmeny">
           {liveNav().map((item) => (
