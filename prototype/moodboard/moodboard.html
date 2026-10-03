@@ -1,0 +1,809 @@
+<title>Kontorcompaniet Moodboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;1,400&display=swap">
+<style>
+/* Layout: 3D-rommet fyller flaten; panel til høyre på PC, nedtrekksark på mobil.
+   Profil som kontorcompaniet.no: Playfair i overskrifter, Inter ellers, sorte knapper. */
+:root {
+  color-scheme: light;
+  --paper: #F6F4F0;
+  --sand: #EEEBE5;
+  --line: #E1DCD3;
+  --ink: #1E1C1A;
+  --ink-2: #5E5A54;
+  --accent: #8A7350;
+  --accent-text: #75603F;
+  --scene: #E9E5DE;
+  --display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --panel-w: 380px;
+}
+html, body { height: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow: hidden; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.app { height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr); grid-template-columns: minmax(0, 1fr); }
+.top { display: flex; align-items: center; gap: 16px; padding: 12px 20px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.top img { height: 26px; width: auto; display: block; }
+.top .tag { margin-left: auto; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--accent-text); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+.top .tag::before { content: ""; width: 28px; height: 1px; background: currentColor; }
+
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) var(--panel-w); min-height: 0; min-width: 0; }
+.viewport { position: relative; min-width: 0; min-height: 0; background: var(--scene); overflow: hidden; touch-action: none; }
+.viewport canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+.viewport canvas.hovering { cursor: pointer; }
+.viewport canvas:active { cursor: grabbing; }
+
+.hotspot { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 8px; padding: 6px 12px 6px 6px; border: 0; border-radius: 99px; background: rgba(246, 244, 240, .92); color: var(--ink); font-size: .82rem; font-weight: 500; cursor: pointer; box-shadow: 0 2px 10px rgba(30, 28, 26, .15); white-space: nowrap; transition: opacity .25s; }
+.hotspot .dot { width: 18px; height: 18px; border-radius: 50%; background: var(--ink); position: relative; flex: none; }
+.hotspot .dot::after { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: var(--paper); }
+.hotspot:hover .dot { background: var(--accent); }
+.hotspot[hidden] { display: none !important; }
+@media (prefers-reduced-motion: no-preference) {
+  .hotspot .dot::before { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid var(--ink); opacity: .35; animation: ping 2.2s infinite; }
+  @keyframes ping { 0% { transform: scale(.7); opacity: .5; } 80%, 100% { transform: scale(1.5); opacity: 0; } }
+}
+
+.hint { position: absolute; left: 16px; bottom: 16px; padding: 8px 14px; border-radius: 99px; background: rgba(30, 28, 26, .78); color: #F6F4F0; font-size: .8rem; pointer-events: none; }
+.back { position: absolute; left: 16px; top: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border: 0; border-radius: 10px; background: var(--paper); font-weight: 500; font-size: .88rem; cursor: pointer; box-shadow: 0 2px 10px rgba(30, 28, 26, .12); }
+.back[hidden] { display: none !important; }
+
+.panel { border-left: 1px solid var(--line); background: var(--paper); overflow-y: auto; min-height: 0; min-width: 0; display: flex; flex-direction: column; }
+.panel-inner { padding: 24px 24px 28px; display: grid; gap: 22px; align-content: start; }
+.panel h1 { font-family: var(--display); font-weight: 400; font-size: 2rem; line-height: 1.08; letter-spacing: -.015em; margin: 0; text-wrap: balance; }
+.panel h1 em, .panel h2 em { color: var(--accent); }
+.panel h2 { font-family: var(--display); font-weight: 400; font-size: 1.6rem; line-height: 1.1; margin: 0; }
+.lede { color: var(--ink-2); margin: 8px 0 0; }
+.sub { color: var(--ink-2); font-size: .88rem; margin: 4px 0 0; }
+
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tabs button { border: 1px solid var(--line); background: transparent; border-radius: 99px; padding: 6px 12px; font-size: .85rem; font-weight: 500; cursor: pointer; }
+.tabs button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.part { display: grid; gap: 10px; }
+.part-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.part-head h3 { margin: 0; font-size: .95rem; font-weight: 600; }
+.part-head .chosen { font-size: .85rem; color: var(--ink-2); text-align: right; }
+.swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.swatch { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(30, 28, 26, .18); padding: 0; cursor: pointer; position: relative; background-size: cover; }
+.swatch[aria-checked="true"]::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 2px solid var(--ink); }
+.swatch:hover { transform: scale(1.06); }
+@media (prefers-reduced-motion: no-preference) { .swatch { transition: transform .15s; } }
+
+.board { display: grid; gap: 0; border-top: 1px solid var(--ink); }
+.board-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; padding: 12px 0; border-bottom: 1px solid var(--line); align-items: center; }
+.board-row button.name { border: 0; background: none; padding: 0; text-align: left; font-weight: 600; cursor: pointer; }
+.board-row button.name:hover { color: var(--accent-text); text-decoration: underline; text-underline-offset: 3px; }
+.board-row .chips { display: flex; gap: 4px; }
+.board-row .chip { width: 22px; height: 22px; border-radius: 50%; border: 1px solid rgba(30, 28, 26, .18); background-size: cover; }
+.board-row .desc { grid-column: 1 / -1; font-size: .82rem; color: var(--ink-2); }
+
+.actions { display: grid; gap: 10px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1.5px solid var(--ink); border-radius: 10px; padding: 12px 18px; font-weight: 500; cursor: pointer; background: transparent; }
+.btn-primary { background: var(--ink); color: var(--paper); }
+.btn-primary:hover { background: #000; }
+.btn-quiet { border: 0; background: none; padding: 6px 0; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; color: var(--ink-2); font-size: .88rem; justify-self: start; }
+.note { font-size: .8rem; color: var(--ink-2); border-left: 2px solid var(--accent); padding-left: 10px; margin: 0; }
+
+/* Dialoger */
+.modal { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 16px; background: rgba(30, 28, 26, .45); }
+.modal[hidden] { display: none !important; }
+.sheet { background: var(--paper); border-radius: 12px; width: min(720px, 100%); max-height: 92%; overflow: auto; padding: 24px; display: grid; gap: 16px; box-shadow: 0 30px 80px rgba(0, 0, 0, .3); }
+.sheet img { width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--line); }
+.sheet .row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.form { display: grid; gap: 12px; }
+.form label { display: grid; gap: 4px; font-weight: 500; font-size: .9rem; }
+.form input, .form textarea { font: inherit; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); }
+.form textarea { min-height: 90px; resize: vertical; }
+.done { background: var(--sand); padding: 14px 16px; border-radius: 8px; }
+
+/* Mobil: rommet øverst, panelet som ark under */
+@media (max-width: 860px) {
+  body { overflow: auto; }
+  .app { height: auto; min-height: 100%; }
+  .stage { grid-template-columns: minmax(0, 1fr); }
+  .top .tag::before { display: none; }
+  .top .tag { font-size: .66rem; letter-spacing: .12em; }
+  .viewport { height: 58vh; min-height: 340px; }
+  .panel { border-left: 0; border-top: 1px solid var(--line); overflow: visible; }
+  .panel-inner { padding: 20px 16px 32px; }
+  .panel h1 { font-size: 1.7rem; }
+  .top { padding: 10px 16px; }
+  .top img { height: 22px; }
+  .hint { left: 12px; bottom: 12px; font-size: .75rem; }
+}
+</style>
+
+<div class="app">
+  <header class="top">
+    <img src="LOGO_DATA_URI" alt="Kontorcompaniet" width="164" height="26">
+    <span class="tag">Moodboard · prototype</span>
+  </header>
+  <div class="stage">
+    <div class="viewport" id="viewport">
+      <button class="back" id="back" type="button" hidden>← Hele rommet</button>
+      <div class="hint" id="hint">Dra for å se rundt · trykk på et møbel</div>
+    </div>
+    <aside class="panel" aria-live="polite">
+      <div class="panel-inner" id="panel"></div>
+    </aside>
+  </div>
+</div>
+
+<div class="modal" id="snapModal" hidden role="dialog" aria-modal="true" aria-labelledby="snapTitle">
+  <div class="sheet">
+    <h2 id="snapTitle">Ditt <em>moodboard</em></h2>
+    <img id="snapImg" alt="Bilde av moodboardet med rommet og valgte farger">
+    <p class="sub">Høyreklikk eller hold fingeren på bildet for å lagre det.</p>
+    <div class="row"><button class="btn" type="button" data-close>Lukk</button></div>
+  </div>
+</div>
+
+<div class="modal" id="sendModal" hidden role="dialog" aria-modal="true" aria-labelledby="sendTitle">
+  <div class="sheet">
+    <h2 id="sendTitle">Send til en <em>rådgiver</em></h2>
+    <p class="sub">Vi tar kontakt med forslag til møbler i fargene du har valgt. Moodboardet sendes med.</p>
+    <form class="form" id="sendForm" novalidate>
+      <label for="f-name">Navn<input id="f-name" name="name" autocomplete="name" required></label>
+      <label for="f-company">Bedrift<input id="f-company" name="company" autocomplete="organization"></label>
+      <label for="f-email">E-post<input id="f-email" name="email" type="email" autocomplete="email" required></label>
+      <label for="f-msg">Kommentar<textarea id="f-msg" name="message" placeholder="For eksempel: 20 arbeidsplasser, flytter i mars."></textarea></label>
+      <div class="row"><button class="btn" type="button" data-close>Avbryt</button><button class="btn btn-primary" type="submit">Send moodboard</button></div>
+    </form>
+    <div class="done" id="sendDone" hidden>
+      <b>Dette er en prototype, så ingenting er sendt.</b><br>
+      På kontorcompaniet.no blir dette en henvendelse til en rådgiver, med moodboardet og fargevalgene vedlagt.
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/environments/RoomEnvironment.js"></script>
+<script>
+(() => {
+  "use strict";
+
+  // ------------------------------------------------------------------
+  // Produkter, deler og fargevalg (generiske møbler, ekte materialtyper)
+  // ------------------------------------------------------------------
+  const PRODUCTS = {
+    desk: {
+      name: "Skrivebord", sub: "Hev/senk, 160 × 80 cm",
+      parts: [
+        { id: "top", label: "Bordplate", options: [
+          { n: "Hvit", m: "Laminat", c: "#ECEAE5" },
+          { n: "Lys grå", m: "Laminat", c: "#C6C4BF" },
+          { n: "Eik", m: "Finér", c: "#C8A272", wood: true },
+          { n: "Valnøtt", m: "Finér", c: "#6A4930", wood: true },
+          { n: "Oliven", m: "Linoleum", c: "#6F7153" },
+          { n: "Antrasitt", m: "Linoleum", c: "#3B3C3D" },
+        ] },
+        { id: "frame", label: "Understell", options: [
+          { n: "Hvit", m: "Pulverlakk", c: "#E7E6E2" },
+          { n: "Sort", m: "Pulverlakk", c: "#1E1E1E" },
+          { n: "Aluminium", m: "Pulverlakk", c: "#A8AAAC", metal: true },
+        ] },
+      ],
+    },
+    chair: {
+      name: "Kontorstol", sub: "Med armlener og hjul",
+      parts: [
+        { id: "fabric", label: "Trekk", options: [
+          { n: "Lys grå", m: "Tekstil", c: "#9A9894" },
+          { n: "Antrasitt", m: "Tekstil", c: "#3C3D40" },
+          { n: "Skogsgrønn", m: "Tekstil", c: "#3E5A49" },
+          { n: "Blågrå", m: "Tekstil", c: "#5D6D7D" },
+          { n: "Okergul", m: "Tekstil", c: "#C4973C" },
+          { n: "Terrakotta", m: "Tekstil", c: "#B1603E" },
+          { n: "Sand", m: "Tekstil", c: "#CDBEA4" },
+        ] },
+        { id: "base", label: "Stell", options: [
+          { n: "Sort", m: "Plast", c: "#1F1F1F" },
+          { n: "Hvit", m: "Plast", c: "#E4E3DF" },
+          { n: "Polert aluminium", m: "Metall", c: "#C4C6C8", metal: true },
+        ] },
+      ],
+    },
+    cabinet: {
+      name: "Skap", sub: "To dører, 80 × 120 cm",
+      parts: [
+        { id: "carcass", label: "Korpus", options: [
+          { n: "Hvit", m: "Laminat", c: "#ECEAE5" },
+          { n: "Eik", m: "Finér", c: "#C8A272", wood: true },
+          { n: "Antrasitt", m: "Laminat", c: "#3B3C3D" },
+        ] },
+        { id: "fronts", label: "Fronter", options: [
+          { n: "Hvit", m: "Laminat", c: "#ECEAE5" },
+          { n: "Eik", m: "Finér", c: "#C8A272", wood: true },
+          { n: "Salvie", m: "Lakk", c: "#A5B19A" },
+          { n: "Blågrå", m: "Lakk", c: "#7B8B98" },
+          { n: "Terrakotta", m: "Lakk", c: "#B67252" },
+          { n: "Antrasitt", m: "Lakk", c: "#3B3C3D" },
+        ] },
+        { id: "handles", label: "Håndtak", options: [
+          { n: "Sort", m: "Metall", c: "#1E1E1E", metal: true },
+          { n: "Krom", m: "Metall", c: "#D2D4D6", metal: true },
+          { n: "Messing", m: "Metall", c: "#B48E55", metal: true },
+        ] },
+      ],
+    },
+    room: {
+      name: "Rommet", sub: "Vegger, gulv og teppe",
+      parts: [
+        { id: "wall", label: "Vegger", options: [
+          { n: "Kalkhvit", m: "Maling", c: "#EEEAE3" },
+          { n: "Varm grå", m: "Maling", c: "#D3CCC1" },
+          { n: "Salvie", m: "Maling", c: "#B8C1AC" },
+          { n: "Dus blå", m: "Maling", c: "#AEB9C3" },
+          { n: "Leire", m: "Maling", c: "#C9A898" },
+        ] },
+        { id: "floor", label: "Gulv", options: [
+          { n: "Lys eik", m: "Parkett", c: "#CBB08A", wood: true },
+          { n: "Røkt eik", m: "Parkett", c: "#7A604B", wood: true },
+          { n: "Grå", m: "Linoleum", c: "#9C9893" },
+        ] },
+        { id: "rug", label: "Teppe", options: [
+          { n: "Natur", m: "Ull", c: "#CFC4B1" },
+          { n: "Grafitt", m: "Ull", c: "#4A4A49" },
+          { n: "Rust", m: "Ull", c: "#A55E3F" },
+        ] },
+      ],
+    },
+  };
+  const ORDER = ["desk", "chair", "cabinet", "room"];
+
+  const DEFAULTS = { desk: { top: 2, frame: 1 }, chair: { fabric: 2, base: 0 }, cabinet: { carcass: 0, fronts: 2, handles: 0 }, room: { wall: 0, floor: 0, rug: 0 } };
+  const STORE = "kc-moodboard-v1";
+  let state = JSON.parse(JSON.stringify(DEFAULTS));
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORE) || "null");
+    if (saved) for (const p of ORDER) for (const part of PRODUCTS[p].parts) {
+      const v = saved?.[p]?.[part.id];
+      if (Number.isInteger(v) && v >= 0 && v < part.options.length) state[p][part.id] = v;
+    }
+  } catch (e) { /* lagring kan være blokkert */ }
+  const save = () => { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) { /* ignorer */ } };
+  const opt = (p, part) => PRODUCTS[p].parts.find((x) => x.id === part).options[state[p][part]];
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ------------------------------------------------------------------
+  // Panel (DOM)
+  // ------------------------------------------------------------------
+  const panel = document.getElementById("panel");
+  const backBtn = document.getElementById("back");
+  const hint = document.getElementById("hint");
+  let selected = null;
+
+  function swatchBg(o) {
+    if (o.wood) return `repeating-linear-gradient(100deg, ${shade(o.c, -10)} 0 2px, ${o.c} 2px 7px, ${shade(o.c, 6)} 7px 9px)`;
+    if (o.metal) return `linear-gradient(135deg, ${shade(o.c, 22)}, ${o.c} 45%, ${shade(o.c, -18)})`;
+    return o.c;
+  }
+
+  function renderPanel() {
+    panel.textContent = "";
+    if (!selected) {
+      panel.insertAdjacentHTML("beforeend", `
+        <div>
+          <h1>Sett sammen <em>ditt</em> kontor</h1>
+          <p class="lede">Velg farger og materialer på møblene og i rommet. Trykk på et møbel i bildet, eller velg under.</p>
+        </div>`);
+      panel.appendChild(tabs());
+      const board = document.createElement("div");
+      board.className = "board";
+      for (const p of ORDER) {
+        const row = document.createElement("div");
+        row.className = "board-row";
+        const name = document.createElement("button");
+        name.className = "name"; name.type = "button"; name.textContent = PRODUCTS[p].name;
+        name.addEventListener("click", () => select(p));
+        const chips = document.createElement("div");
+        chips.className = "chips";
+        for (const part of PRODUCTS[p].parts) {
+          const o = opt(p, part.id);
+          const c = document.createElement("span");
+          c.className = "chip"; c.style.background = swatchBg(o); c.title = `${part.label}: ${o.n}`;
+          chips.appendChild(c);
+        }
+        const desc = document.createElement("div");
+        desc.className = "desc";
+        desc.textContent = PRODUCTS[p].parts.map((part) => `${part.label} ${opt(p, part.id).n.toLowerCase()}`).join(" · ");
+        row.append(name, chips, desc);
+        board.appendChild(row);
+      }
+      const h = document.createElement("div");
+      h.innerHTML = `<h2 style="font-size:1.25rem;margin-bottom:10px">Mitt moodboard</h2>`;
+      h.appendChild(board);
+      panel.appendChild(h);
+      const actions = document.createElement("div");
+      actions.className = "actions";
+      actions.innerHTML = `
+        <button class="btn btn-primary" type="button" id="sendBtn">Send til en rådgiver</button>
+        <button class="btn" type="button" id="snapBtn">Lag bilde av moodboardet</button>
+        <button class="btn-quiet" type="button" id="resetBtn">Start på nytt</button>`;
+      panel.appendChild(actions);
+      panel.insertAdjacentHTML("beforeend", `<p class="note">Møblene er generiske eksempler. En rådgiver finner produkter fra våre leverandører i fargene du har valgt.</p>`);
+      actions.querySelector("#sendBtn").addEventListener("click", () => openModal("sendModal"));
+      actions.querySelector("#snapBtn").addEventListener("click", snapshot);
+      actions.querySelector("#resetBtn").addEventListener("click", () => {
+        state = JSON.parse(JSON.stringify(DEFAULTS)); save(); applyAll(); renderPanel();
+      });
+      return;
+    }
+    const P = PRODUCTS[selected];
+    panel.insertAdjacentHTML("beforeend", `<div><h1>${P.name}</h1><p class="sub">${P.sub}</p></div>`);
+    panel.appendChild(tabs());
+    for (const part of P.parts) {
+      const wrap = document.createElement("div");
+      wrap.className = "part";
+      const o = opt(selected, part.id);
+      wrap.innerHTML = `<div class="part-head"><h3 id="lbl-${part.id}">${part.label}</h3><span class="chosen">${o.n} · ${o.m.toLowerCase()}</span></div>`;
+      const sw = document.createElement("div");
+      sw.className = "swatches"; sw.setAttribute("role", "radiogroup"); sw.setAttribute("aria-labelledby", `lbl-${part.id}`);
+      part.options.forEach((o2, i) => {
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "swatch"; b.setAttribute("role", "radio");
+        b.setAttribute("aria-checked", String(state[selected][part.id] === i));
+        b.setAttribute("aria-label", `${o2.n}, ${o2.m.toLowerCase()}`); b.title = `${o2.n} (${o2.m.toLowerCase()})`;
+        b.style.background = swatchBg(o2);
+        b.addEventListener("click", () => {
+          state[selected][part.id] = i; save(); applyAll(); renderPanel();
+          panel.querySelector(`[aria-labelledby="lbl-${part.id}"] [aria-checked="true"]`)?.focus();
+        });
+        sw.appendChild(b);
+      });
+      wrap.appendChild(sw);
+      panel.appendChild(wrap);
+    }
+    const done = document.createElement("div");
+    done.className = "actions";
+    done.innerHTML = `<button class="btn btn-primary" type="button">Ferdig, se hele rommet</button>`;
+    done.firstElementChild.addEventListener("click", () => select(null));
+    panel.appendChild(done);
+  }
+
+  function tabs() {
+    const t = document.createElement("div");
+    t.className = "tabs"; t.setAttribute("aria-label", "Velg møbel");
+    for (const p of ORDER) {
+      const b = document.createElement("button");
+      b.type = "button"; b.textContent = PRODUCTS[p].name;
+      b.setAttribute("aria-pressed", String(selected === p));
+      b.addEventListener("click", () => select(selected === p ? null : p));
+      t.appendChild(b);
+    }
+    return t;
+  }
+
+  // Dialoger
+  function openModal(id) {
+    const m = document.getElementById(id);
+    m.hidden = false;
+    m.querySelector("input, button")?.focus();
+  }
+  for (const m of document.querySelectorAll(".modal")) {
+    m.addEventListener("click", (e) => { if (e.target === m || e.target.closest("[data-close]")) m.hidden = true; });
+  }
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") for (const m of document.querySelectorAll(".modal")) m.hidden = true; });
+  document.getElementById("sendForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const f = e.currentTarget;
+    if (!f.checkValidity()) { f.reportValidity(); return; }
+    f.hidden = true;
+    document.getElementById("sendDone").hidden = false;
+  });
+
+  // ------------------------------------------------------------------
+  // 3D-scene
+  // ------------------------------------------------------------------
+  const viewport = document.getElementById("viewport");
+  if (!window.THREE) {
+    viewport.insertAdjacentHTML("beforeend", `<p style="position:absolute;inset:auto 16px 50% 16px;text-align:center">3D-visningen kunne ikke lastes. Prøv å laste siden på nytt.</p>`);
+    renderPanel();
+    return;
+  }
+  const T = window.THREE;
+  const renderer = new T.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputEncoding = T.sRGBEncoding;
+  renderer.toneMapping = T.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 0.82;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = T.PCFSoftShadowMap;
+  viewport.prepend(renderer.domElement);
+
+  const scene = new T.Scene();
+  scene.background = new T.Color("#E9E5DE").convertSRGBToLinear();
+  if (T.RoomEnvironment) {
+    const pmrem = new T.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new T.RoomEnvironment(), 0.04).texture;
+    // RoomEnvironment er lyst; demp det litt via materialenes envMapIntensity (settes i setMat)
+  }
+  const camera = new T.PerspectiveCamera(38, 1, 0.05, 50);
+  const controls = new T.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.minDistance = 0.9;
+  controls.maxDistance = 6.5;
+  controls.maxPolarAngle = Math.PI * 0.48;
+  controls.enablePan = false;
+
+  // Lys
+  scene.add(new T.HemisphereLight(0xffffff, 0xd8cfc2, 0.25));
+  const sun = new T.DirectionalLight(0xfff4e6, 1.0);
+  sun.position.set(3.5, 5, 2.5);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.camera.left = -4; sun.shadow.camera.right = 4; sun.shadow.camera.top = 4; sun.shadow.camera.bottom = -4;
+  sun.shadow.bias = -0.0004; sun.shadow.radius = 4;
+  scene.add(sun);
+
+  // Materialer
+  const lin = (hex) => new T.Color(hex).convertSRGBToLinear();
+  const texCache = new Map();
+  function woodTexture(hex, planks) {
+    const key = hex + (planks ? "p" : "");
+    if (texCache.has(key)) return texCache.get(key);
+    const c = document.createElement("canvas");
+    c.width = 512; c.height = 512;
+    const g = c.getContext("2d");
+    g.fillStyle = hex; g.fillRect(0, 0, 512, 512);
+    let seed = 7;
+    const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+    const rows = planks ? 4 : 1;
+    for (let r = 0; r < rows; r++) {
+      const y0 = (512 / rows) * r, h = 512 / rows;
+      if (planks) { g.fillStyle = shade(hex, (rnd() - 0.5) * 14); g.fillRect(0, y0, 512, h); }
+      for (let i = 0; i < 46; i++) {
+        const y = y0 + rnd() * h;
+        g.strokeStyle = shade(hex, -12 - rnd() * 12); g.globalAlpha = 0.18 + rnd() * 0.22; g.lineWidth = 0.6 + rnd() * 1.6;
+        g.beginPath(); g.moveTo(0, y);
+        for (let x = 0; x <= 512; x += 32) g.lineTo(x, y + Math.sin(x / (40 + rnd() * 40) + i) * (1 + rnd() * 3));
+        g.stroke();
+      }
+      g.globalAlpha = 1;
+      if (planks) {
+        g.fillStyle = shade(hex, -30); g.fillRect(0, y0, 512, 1.5);
+        const joint = rnd() * 512; g.fillRect(joint, y0, 1.5, h);
+      }
+    }
+    const t = new T.CanvasTexture(c);
+    t.encoding = T.sRGBEncoding; t.wrapS = t.wrapT = T.RepeatWrapping; t.anisotropy = 8;
+    texCache.set(key, t);
+    return t;
+  }
+  function setMat(mat, o, kind) {
+    mat.map = null;
+    if (o.wood) { mat.color.set(0xffffff); mat.map = woodTexture(o.c, kind === "floor"); }
+    else mat.color.copy(lin(o.c));
+    mat.metalness = o.metal ? 0.85 : 0;
+    mat.envMapIntensity = o.metal ? 1 : 0.55;
+    mat.roughness = o.metal ? 0.32 : kind === "fabric" || kind === "rug" ? 0.95 : o.m === "Linoleum" ? 0.75 : kind === "wall" ? 0.95 : 0.55;
+    mat.needsUpdate = true;
+  }
+  const M = {};
+  const mk = (name) => (M[name] = new T.MeshStandardMaterial({ color: 0xffffff }));
+  ["deskTop", "deskFrame", "chairFabric", "chairBase", "cabCarcass", "cabFronts", "cabHandles", "wall", "floor", "rug"].forEach(mk);
+  const black = new T.MeshStandardMaterial({ color: lin("#141414"), roughness: 0.6 });
+  const screenMat = new T.MeshStandardMaterial({ color: lin("#2A2D31"), roughness: 0.25, metalness: 0.2 });
+  const potMat = new T.MeshStandardMaterial({ color: lin("#D9D2C7"), roughness: 0.8 });
+  const leafMat = new T.MeshStandardMaterial({ color: lin("#4D6A3F"), roughness: 0.7, side: T.DoubleSide });
+  const paperMat = new T.MeshStandardMaterial({ color: lin("#F3F0EA"), roughness: 0.9 });
+
+  function applyAll() {
+    setMat(M.deskTop, opt("desk", "top"), "top");
+    setMat(M.deskFrame, opt("desk", "frame"), "frame");
+    setMat(M.chairFabric, opt("chair", "fabric"), "fabric");
+    setMat(M.chairBase, opt("chair", "base"), "base");
+    setMat(M.cabCarcass, opt("cabinet", "carcass"), "carcass");
+    setMat(M.cabFronts, opt("cabinet", "fronts"), "fronts");
+    setMat(M.cabHandles, opt("cabinet", "handles"), "handles");
+    setMat(M.wall, opt("room", "wall"), "wall");
+    setMat(M.floor, opt("room", "floor"), "floor");
+    setMat(M.rug, opt("room", "rug"), "rug");
+    if (M.floor.map) M.floor.map.repeat.set(3, 6);
+  }
+
+  // Geometrihjelpere
+  function roundedRect(w, h, r) {
+    const s = new T.Shape(), x = -w / 2, y = -h / 2;
+    s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r);
+    s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r);
+    s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y);
+    return s;
+  }
+  // Rundet kloss: w × h i XY-planet, dybde d langs Z
+  function rbox(w, h, d, r, bevel) {
+    const b = Math.min(bevel ?? r * 0.6, d / 2.2);
+    const g = new T.ExtrudeGeometry(roundedRect(w - 2 * b, h - 2 * b, Math.max(r - b, 0.001)), {
+      depth: d - 2 * b, bevelEnabled: true, bevelThickness: b, bevelSize: b, bevelSegments: 4, curveSegments: 10,
+    });
+    g.translate(0, 0, -(d - 2 * b) / 2);
+    return g;
+  }
+  // Liggende plate: w × dybde i gulvplanet, tykkelse t
+  function slab(w, depth, t, r) {
+    const g = rbox(w, depth, t, r, Math.min(0.006, t / 3));
+    g.rotateX(-Math.PI / 2);
+    return g;
+  }
+  function mesh(geo, mat, parent, x = 0, y = 0, z = 0) {
+    const m = new T.Mesh(geo, mat);
+    m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true;
+    parent.add(m);
+    return m;
+  }
+  const box = (w, h, d) => new T.BoxGeometry(w, h, d);
+  const cyl = (r1, r2, h, seg = 24) => new T.CylinderGeometry(r1, r2, h, seg);
+
+  const groups = {};
+  const pickables = [];
+  function group(id) {
+    const g = new T.Group();
+    g.userData.product = id;
+    groups[id] = g;
+    scene.add(g);
+    return g;
+  }
+
+  // Rommet
+  const room = group("room");
+  const floor = mesh(new T.PlaneGeometry(7, 7), M.floor, room);
+  floor.rotation.x = -Math.PI / 2; floor.castShadow = false;
+  const backWall = mesh(box(7, 3, 0.1), M.wall, room, 0, 1.5, -2.45); backWall.castShadow = false;
+  const sideWall = mesh(box(0.1, 3, 7), M.wall, room, -3.05, 1.5, 0.5); sideWall.castShadow = false;
+  mesh(box(7, 0.08, 0.02), M.wall, room, 0, 0.04, -2.39).castShadow = false; // fotlist
+  const rug = mesh(new T.CircleGeometry(1.15, 64), M.rug, room, 0.1, 0.004, -0.55);
+  rug.rotation.x = -Math.PI / 2; rug.castShadow = false;
+  // Bilde på veggen
+  mesh(box(0.62, 0.82, 0.025), black, room, 0.25, 1.62, -2.385);
+  mesh(box(0.56, 0.76, 0.01), paperMat, room, 0.25, 1.62, -2.37);
+  const art = mesh(new T.CircleGeometry(0.16, 48), M.cabFronts, room, 0.25, 1.68, -2.364);
+  art.castShadow = false;
+  pickables.push(floor, backWall, sideWall, rug);
+
+  // Skrivebord (hev/senk)
+  const desk = group("desk");
+  desk.position.set(0.1, 0, -1.55);
+  const TOP_H = 0.74;
+  mesh(slab(1.6, 0.8, 0.025, 0.04), M.deskTop, desk, 0, TOP_H, 0);
+  for (const sx of [-0.62, 0.62]) {
+    mesh(box(0.07, TOP_H - 0.07, 0.07), M.deskFrame, desk, sx, (TOP_H - 0.07) / 2 + 0.03, 0);
+    mesh(box(0.08, 0.035, 0.7), M.deskFrame, desk, sx, 0.0175, 0);
+    mesh(box(0.06, 0.03, 0.66), M.deskFrame, desk, sx, TOP_H - 0.03, 0);
+  }
+  mesh(box(1.24, 0.04, 0.05), M.deskFrame, desk, 0, TOP_H - 0.035, 0.15);
+  // Skjerm og tastatur
+  mesh(rbox(0.6, 0.36, 0.02, 0.01), screenMat, desk, 0, TOP_H + 0.3, -0.22);
+  mesh(box(0.05, 0.16, 0.03), black, desk, 0, TOP_H + 0.09, -0.24);
+  mesh(box(0.22, 0.01, 0.16), black, desk, 0, TOP_H + 0.018, -0.24);
+  mesh(rbox(0.42, 0.13, 0.012, 0.01), black, desk, 0, TOP_H + 0.02, 0.08).rotation.x = -Math.PI / 2;
+  mesh(cyl(0.045, 0.04, 0.1), potMat, desk, 0.6, TOP_H + 0.06, -0.25);
+
+  // Kontorstol (vender mot bordet, dvs. -Z)
+  const chair = group("chair");
+  chair.position.set(0.15, 0, -0.75);
+  chair.rotation.y = 0.18;
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2;
+    const arm = mesh(box(0.035, 0.03, 0.31), M.chairBase, chair, Math.sin(a) * 0.15, 0.085, Math.cos(a) * 0.15);
+    arm.rotation.y = a;
+    mesh(new T.SphereGeometry(0.028, 16, 12), black, chair, Math.sin(a) * 0.3, 0.03, Math.cos(a) * 0.3);
+  }
+  mesh(cyl(0.045, 0.06, 0.05), M.chairBase, chair, 0, 0.1, 0);
+  mesh(cyl(0.022, 0.022, 0.3), M.chairBase, chair, 0, 0.27, 0);
+  mesh(box(0.3, 0.04, 0.3), M.chairBase, chair, 0, 0.43, 0);
+  mesh(slab(0.5, 0.48, 0.075, 0.09), M.chairFabric, chair, 0, 0.485, -0.01);
+  mesh(box(0.06, 0.32, 0.03), M.chairBase, chair, 0, 0.6, 0.25).rotation.x = -0.12;
+  const back = mesh(rbox(0.46, 0.56, 0.06, 0.1), M.chairFabric, chair, 0, 0.86, 0.27);
+  back.rotation.x = -0.14;
+  for (const sx of [-0.27, 0.27]) {
+    mesh(box(0.03, 0.2, 0.03), M.chairBase, chair, sx, 0.58, 0.06);
+    mesh(rbox(0.06, 0.03, 0.24, 0.012), M.chairBase, chair, sx, 0.69, 0.03);
+  }
+
+  // Skap (to dører)
+  const cab = group("cabinet");
+  cab.position.set(-2.0, 0, -2.13);
+  const CW = 0.8, CH = 1.2, CD = 0.45;
+  mesh(box(CW - 0.04, 0.06, CD - 0.04), black, cab, 0, 0.03, 0);
+  mesh(box(CW, CH - 0.06, CD), M.cabCarcass, cab, 0, 0.06 + (CH - 0.06) / 2, 0);
+  for (const sx of [-1, 1]) {
+    mesh(rbox(CW / 2 - 0.012, CH - 0.1, 0.018, 0.006, 0.003), M.cabFronts, cab, sx * (CW / 4), 0.06 + (CH - 0.06) / 2, CD / 2 + 0.01);
+    mesh(box(0.012, 0.16, 0.02), M.cabHandles, cab, sx * 0.04, 0.72, CD / 2 + 0.03);
+  }
+  // Plante på skapet
+  mesh(cyl(0.09, 0.07, 0.18), potMat, cab, 0.18, CH + 0.09, 0);
+  for (let i = 0; i < 9; i++) {
+    const leaf = mesh(new T.SphereGeometry(0.06, 12, 8), leafMat, cab, 0.18 + Math.cos(i * 2.4) * 0.07, CH + 0.26 + (i % 3) * 0.06, Math.sin(i * 2.4) * 0.07);
+    leaf.scale.set(0.5, 1.6, 0.25); leaf.rotation.set(Math.sin(i) * 0.6, i * 0.7, Math.cos(i) * 0.5);
+  }
+  // Gulvplante til høyre
+  const plant = new T.Group(); plant.position.set(1.55, 0, -1.9); scene.add(plant);
+  mesh(cyl(0.17, 0.13, 0.42), potMat, plant, 0, 0.21, 0);
+  for (let i = 0; i < 16; i++) {
+    const leaf = mesh(new T.SphereGeometry(0.12, 12, 8), leafMat, plant, Math.cos(i * 2.4) * 0.16, 0.6 + (i % 4) * 0.16, Math.sin(i * 2.4) * 0.16);
+    leaf.scale.set(0.45, 1.5, 0.2); leaf.rotation.set(Math.sin(i) * 0.7, i * 0.9, Math.cos(i) * 0.6);
+  }
+
+  for (const id of ["desk", "chair", "cabinet"]) groups[id].traverse((o) => { if (o.isMesh) pickables.push(o); });
+
+  // ------------------------------------------------------------------
+  // Kamera, valg og animasjon
+  // ------------------------------------------------------------------
+  const OVERVIEW = { pos: new T.Vector3(3.3, 2.45, 2.9), target: new T.Vector3(-0.55, 0.6, -1.25) };
+  const VIEWS = {
+    desk: { pos: new T.Vector3(1.15, 1.45, -0.15), target: new T.Vector3(0.05, 0.62, -1.55) },
+    chair: { pos: new T.Vector3(1.05, 1.0, 0.45), target: new T.Vector3(0.12, 0.55, -0.75) },
+    cabinet: { pos: new T.Vector3(-1.75, 1.3, -0.3), target: new T.Vector3(-2.0, 0.72, -2.1) },
+    room: { pos: new T.Vector3(2.9, 1.7, 2.7), target: new T.Vector3(-0.8, 1.05, -1.4) },
+  };
+  let tween = null;
+  // Avstand til møblene tilpasses skjermformatet, så hele møbelet får plass
+  function fit(view) {
+    const narrow = camera.aspect < 0.9;
+    const k = view === OVERVIEW ? (narrow ? 1.35 : 1) : (narrow ? 1.5 : 1.4);
+    if (k === 1) return view;
+    const pos = view.target.clone().add(view.pos.clone().sub(view.target).multiplyScalar(k));
+    return { pos, target: view.target };
+  }
+  function flyTo(view) {
+    view = fit(view);
+    const from = { pos: camera.position.clone(), target: controls.target.clone() };
+    if (reduceMotion) { camera.position.copy(view.pos); controls.target.copy(view.target); controls.update(); return; }
+    tween = { from, to: view, start: performance.now() };
+    controls.enabled = false;
+  }
+  let firstFit = true;
+
+  function select(id) {
+    selected = id;
+    backBtn.hidden = !id;
+    flyTo(id ? VIEWS[id] : OVERVIEW);
+    renderPanel();
+    updateHotspots(true);
+  }
+  backBtn.addEventListener("click", () => select(null));
+
+  // Merkelapper i rommet
+  const HOT = {
+    desk: new T.Vector3(0.5, 0.9, -1.4),
+    chair: new T.Vector3(0.15, 1.25, -0.5),
+    cabinet: new T.Vector3(-2.0, 1.0, -1.85),
+    room: new T.Vector3(-1.0, 2.2, -2.38),
+  };
+  const hotEls = {};
+  for (const id of ORDER) {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "hotspot";
+    b.innerHTML = `<span class="dot"></span>${PRODUCTS[id].name}`;
+    b.addEventListener("click", () => select(id));
+    viewport.appendChild(b);
+    hotEls[id] = b;
+  }
+  const v = new T.Vector3();
+  function updateHotspots() {
+    const w = viewport.clientWidth, h = viewport.clientHeight;
+    for (const id of ORDER) {
+      const el = hotEls[id];
+      const hide = selected !== null;
+      v.copy(HOT[id]).project(camera);
+      const off = v.z > 1 || Math.abs(v.x) > 1.05 || Math.abs(v.y) > 1.05;
+      el.hidden = hide || off;
+      if (!el.hidden) el.style.transform = `translate(${(v.x * 0.5 + 0.5) * w}px, ${(-v.y * 0.5 + 0.5) * h}px) translate(-9px, -50%)`;
+    }
+  }
+
+  // Klikk på møbler (skiller klikk fra dra)
+  const ray = new T.Raycaster(), ptr = new T.Vector2();
+  let down = null;
+  function hit(e) {
+    const r = renderer.domElement.getBoundingClientRect();
+    ptr.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ptr, camera);
+    const h = ray.intersectObjects(pickables, false)[0];
+    if (!h) return null;
+    let o = h.object;
+    while (o && !o.userData.product) o = o.parent;
+    return o ? o.userData.product : null;
+  }
+  renderer.domElement.addEventListener("pointerdown", (e) => { down = { x: e.clientX, y: e.clientY }; });
+  renderer.domElement.addEventListener("pointerup", (e) => {
+    if (!down) return;
+    const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
+    down = null;
+    if (moved > 6) return;
+    const id = hit(e);
+    if (id && id !== selected) select(id);
+  });
+  renderer.domElement.addEventListener("pointermove", (e) => {
+    if (e.pointerType !== "mouse" || down) return;
+    renderer.domElement.classList.toggle("hovering", !!hit(e));
+  });
+  controls.addEventListener("start", () => { hint.hidden = true; });
+
+  // Størrelse
+  function resize() {
+    const w = viewport.clientWidth, h = viewport.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.fov = w / h < 0.9 ? 46 : 38;
+    camera.updateProjectionMatrix();
+    if (firstFit) { firstFit = false; const f = fit(OVERVIEW); camera.position.copy(f.pos); controls.target.copy(f.target); controls.update(); }
+  }
+  new ResizeObserver(resize).observe(viewport);
+  resize();
+
+  const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  function loop(now) {
+    if (tween) {
+      const p = Math.min((now - tween.start) / 900, 1);
+      const k = ease(p);
+      camera.position.lerpVectors(tween.from.pos, tween.to.pos, k);
+      controls.target.lerpVectors(tween.from.target, tween.to.target, k);
+      if (p >= 1) { tween = null; controls.enabled = true; }
+    }
+    controls.update();
+    renderer.render(scene, camera);
+    updateHotspots();
+    requestAnimationFrame(loop);
+  }
+
+  // ------------------------------------------------------------------
+  // Bilde av moodboardet: rommet + fargeliste i ett bilde
+  // ------------------------------------------------------------------
+  function snapshot() {
+    renderer.render(scene, camera);
+    const shot = renderer.domElement;
+    const W = 1600, H = 1000, side = 520;
+    const c = document.createElement("canvas"); c.width = W; c.height = H;
+    const g = c.getContext("2d");
+    g.fillStyle = "#F6F4F0"; g.fillRect(0, 0, W, H);
+    const iw = W - side, ih = H;
+    const s = Math.max(iw / shot.width, ih / shot.height);
+    const sw = iw / s, sh = ih / s;
+    g.drawImage(shot, (shot.width - sw) / 2, (shot.height - sh) / 2, sw, sh, 0, 0, iw, ih);
+    let y = 90;
+    const x = iw + 50;
+    g.fillStyle = "#75603F"; g.font = "500 15px Inter, system-ui, sans-serif";
+    g.fillText("KONTORCOMPANIET · MOODBOARD", x, y);
+    y += 58;
+    g.fillStyle = "#1E1C1A"; g.font = "400 46px 'Playfair Display', Georgia, serif";
+    g.fillText("Mitt kontor", x, y);
+    y += 50;
+    for (const p of ORDER) {
+      g.fillStyle = "#1E1C1A"; g.font = "600 21px Inter, system-ui, sans-serif";
+      g.fillText(PRODUCTS[p].name, x, y += 46);
+      for (const part of PRODUCTS[p].parts) {
+        const o = opt(p, part.id);
+        y += 40;
+        g.beginPath(); g.arc(x + 14, y - 7, 14, 0, Math.PI * 2);
+        if (o.wood) g.fillStyle = g.createPattern(woodTexture(o.c, false).image, "repeat"); else g.fillStyle = o.c;
+        g.fill(); g.strokeStyle = "rgba(30,28,26,.2)"; g.stroke();
+        g.fillStyle = "#5E5A54"; g.font = "400 18px Inter, system-ui, sans-serif";
+        g.fillText(`${part.label}: ${o.n} (${o.m.toLowerCase()})`, x + 42, y);
+      }
+    }
+    g.fillStyle = "#5E5A54"; g.font = "400 15px Inter, system-ui, sans-serif";
+    g.fillText("Generiske møbler. Rådgiveren finner ekte produkter i disse fargene.", x, H - 50);
+    document.getElementById("snapImg").src = c.toDataURL("image/png");
+    openModal("snapModal");
+  }
+
+  applyAll();
+  renderPanel();
+  requestAnimationFrame(loop);
+
+  function shade(hex, pct) {
+    const n = parseInt(hex.slice(1), 16);
+    const f = (v) => Math.max(0, Math.min(255, Math.round(v + (pct / 100) * 255)));
+    return `rgb(${f(n >> 16)}, ${f((n >> 8) & 255)}, ${f(n & 255)})`;
+  }
+})();
+</script>
